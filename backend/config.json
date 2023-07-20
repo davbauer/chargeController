@@ -1,0 +1,9 @@
+{
+    "Enabled": true,
+    "InverterHost": "asd",
+    "ChargerHost": "asd",
+    "CheckSeconds": 67,
+    "MinimumAmps": 6,
+    "MaximumAmps": 8,
+    "UsePowergrid": true
+}

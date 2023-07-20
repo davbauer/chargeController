@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"target": "ES2021",
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"lib": ["es5", "es6", "dom"],
+		"outDir": "comp",
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"moduleResolution": "NodeNext"
+	},
+	"include": ["*.*ts"],
+	"exclude": ["node_modules", "comp"]
+}
