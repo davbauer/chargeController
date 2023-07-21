@@ -6,8 +6,8 @@
 		"lib": ["es5", "es6", "dom"],
 		"outDir": "comp",
 		"allowJs": true,
-		"checkJs": true,
 		"esModuleInterop": true,
+		"checkJs": true,
 		"moduleResolution": "NodeNext"
 	},
 	"include": ["*.*ts"],

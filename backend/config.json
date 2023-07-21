@@ -1,9 +1,10 @@
 {
     "Enabled": true,
-    "InverterHost": "asd",
-    "ChargerHost": "asd",
-    "CheckSeconds": 67,
-    "MinimumAmps": 6,
-    "MaximumAmps": 8,
-    "UsePowergrid": true
+    "InverterHost": "192.168.10.17",
+    "ChargerHost": "192.168.10.18",
+    "CheckSeconds": 10,
+    "MinimumAmps": 7,
+    "MaximumAmps": 13,
+    "UsePowergrid": true,
+    "BatteryCapacity": 21000
 }

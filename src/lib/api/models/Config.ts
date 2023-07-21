@@ -6,5 +6,5 @@ export default interface Config {
     MinimumAmps: number;
     MaximumAmps: number;
     UsePowergrid: boolean;
-    BatteryCapacity: number;
+    BatteryCapacity: number
 }
