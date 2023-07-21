@@ -1,8 +1,8 @@
 {
-    "Enabled": true,
+    "Enabled": false,
     "InverterHost": "192.168.10.17",
     "ChargerHost": "192.168.10.18",
-    "CheckSeconds": 10,
+    "CheckSeconds": 11,
     "MinimumAmps": 7,
     "MaximumAmps": 13,
     "UsePowergrid": true,

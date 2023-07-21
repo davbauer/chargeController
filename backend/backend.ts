@@ -72,12 +72,13 @@ app.post('/charge-stop', (req, res) => {
     res.status(200).json({ msg: 'success' });
 });
 
-loopHandler.startLoop(loop);
+
 
 const server = app.listen(EXPRESS_PORT, '0.0.0.0', () => {
     console.info(`\n------------------------------------------\nExpress running at http://localhost:${EXPRESS_PORT}`);
     WebSocketManager.init(WEBSOCK_PORT);
     console.info(`WebSocket running at http://localhost:${WEBSOCK_PORT}\n------------------------------------------\n`);
+    loopHandler.startLoop(loop);
 });
 
 process.on('SIGINT', () => {
