@@ -50,10 +50,15 @@ app.post('/config', (req, res) => {
 app.post('/enabled', (req, res) => {
     const stateData: boolean = req.body.state;
     const configData: Config = ConfigFile.read();
+    const updateLoop = ConfigFile.read().Enabled !== stateData;
     configData.Enabled = stateData;
     const success = ConfigFile.write(configData);
     WebSocketManager.sendEvent("enabledStateUpdate", { state: stateData });
     if (success) {
+        if (updateLoop) {
+            console.log('Configuration updated. Restarting loop with new settings.');
+            loopHandler.updateLoop(loop)
+        }
         res.status(200).json({ msg: 'success' });
     } else {
         errorLog('Error writing enabled state to config file.');

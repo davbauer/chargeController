@@ -11,6 +11,9 @@ export default interface ChaStatus {
         boolean,
         boolean
     ]
+    fsp: boolean, // force_single_phase (shows if currently single phase charge is enforced
+    pwm: number // phase wish mode for debugging / only for pv optimizing / used for timers later (Force_3=0, Wish_1=1, Wish_3=2)
+    pnp: number, // Number of phases
     wh: number // Energy in Wh since car connected
     nrg: [
         number, //[0]  U  L1

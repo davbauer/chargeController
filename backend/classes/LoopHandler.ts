@@ -9,10 +9,7 @@ export default class LoopHandler {
 
     loopTick(callback: () => void): void {
         const config = ConfigFile.read();
-
-        if (config.Enabled) {
-            callback();
-        }
+        callback();
 
         this.currentCheckSeconds = config.CheckSeconds;
         this.lastLoopTimestamp = Date.now();
@@ -49,18 +46,14 @@ export default class LoopHandler {
                 if (timeSinceLastLoop < this.MIN_LOOP_DELAY) {
                     const delay = this.MIN_LOOP_DELAY - timeSinceLastLoop;
                     setTimeout(() => {
-                        if (config.Enabled) {
-                            callback(); // Run the loop after the delay.
-                        }
+                        callback(); // Run the loop after the delay.
                         this.startLoop(callback);
                     }, delay);
                     return;
                 }
             }
 
-            if (config.Enabled) {
-                callback(); // Run the loop immediately.
-            }
+            callback(); // Run the loop immediately.
 
             this.startLoop(callback);
         }

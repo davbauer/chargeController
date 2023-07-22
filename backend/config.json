@@ -1,10 +1,56 @@
 {
-    "Enabled": false,
+    "Enabled": true,
     "InverterHost": "192.168.10.17",
     "ChargerHost": "192.168.10.18",
-    "CheckSeconds": 11,
-    "MinimumAmps": 7,
-    "MaximumAmps": 13,
+    "CheckSeconds": 7,
+    "MinimumAmps": 8,
+    "MaximumAmps": 15,
     "UsePowergrid": true,
-    "BatteryCapacity": 21000
+    "BatteryCapacity": 21000,
+    "Mapping": [
+        {
+            "amp": 6,
+            "value": 300
+        },
+        {
+            "amp": 7,
+            "value": 300
+        },
+        {
+            "amp": 8,
+            "value": 4500
+        },
+        {
+            "amp": 9,
+            "value": 6000
+        },
+        {
+            "amp": 10,
+            "value": 6740
+        },
+        {
+            "amp": 11,
+            "value": 7000
+        },
+        {
+            "amp": 12,
+            "value": 7700
+        },
+        {
+            "amp": 13,
+            "value": 8000
+        },
+        {
+            "amp": 14,
+            "value": 8700
+        },
+        {
+            "amp": 15,
+            "value": 9700
+        },
+        {
+            "amp": 16,
+            "value": 10700
+        }
+    ]
 }

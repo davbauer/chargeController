@@ -1,54 +1,121 @@
 
-import InverterService from './api/services/InverterService.js'
-import ChargerService from './api/services/ChargerService.js'
-import LiveData from './classes/LiveData.js'
+import InverterService from './api/services/InverterService.js';
+import ChargerService from './api/services/ChargerService.js';
+import LiveData from './classes/LiveData.js';
 import WebSocketManager from './classes/WebSocketManager.js';
+import ConfigFile from './classes/ConfigFile.js';
+import Config from './models/Config.js';
+
+const CAR_NOT_CHARGING = 2;  // Replace with an appropriate descriptive constant
 
 export default async function (): Promise<void> {
     console.log("////////////////////////////");
-    console.log("////////////////////////////");
-    console.log("////////////////////////////");
 
-    LiveData.data = {
-        StatusInverter: 'OFFLINE',
-        StatusCharger: 'OFFLINE',
-        Export: -1,
-        ChargerReserved: -1,
-        ChargerAmp: -1,
-        ChargerUse: -1
-    }
+    initializeLiveData();
 
-    // Get data from the inverter
+    const config: Config = ConfigFile.read();
+
     const inverterData = await InverterService.getRealtimeData();
+    const chargerData = await ChargerService.getChargeInfo();
 
-    // Check if inverter data is available
-    if (inverterData !== undefined) {
-        LiveData.data.StatusInverter = 1 // Idle;
+    if (inverterData) {
+        LiveData.data.StatusInverter = 1; // Idle;
         const exportEnergy = inverterData.Body.Data["0"].PowerReal_P_Sum * -1;
         LiveData.data.Export = exportEnergy;
     }
 
-    // Get data from the charger
-    const chargerData = await ChargerService.getChargeInfo();
-
-    // Check if charger data is available
-    if (chargerData !== undefined) {
+    if (chargerData) {
         LiveData.data.StatusCharger = chargerData.car;
-        LiveData.data.ChargerAmp = chargerData.amp;
+        LiveData.data.LiveChargerAmp = chargerData.amp;
         LiveData.data.ChargerUse = chargerData.nrg[11];
-        console.log(JSON.stringify(chargerData, null, 4));
-        // Perform other charger-related calculations or actions here
     }
 
-    console.log(JSON.stringify(LiveData.data, null, 4));
+    const result = calculateChargeSettings(config);
+    Object.assign(LiveData.data, result);
+    if (!config.Enabled) {
+        console.log("Control not enabled!");
+        WebSocketManager.sendEvent("liveDataUpdate", LiveData.data);
+        return;
+    }
 
-    // Stop when one of these things not available
-    if (chargerData === undefined || inverterData === undefined) {
-        console.log("Stop charging one not available")
+    if (!chargerData || !inverterData) {
+        console.log("Stop charging - one not available");
         ChargerService.setChargeStop();
         WebSocketManager.sendEvent("liveDataUpdate", LiveData.data);
-        return
+        return;
     }
+
+    if (LiveData.data.ShouldStop && !config.UsePowergrid) {
+        console.log("Should stop is true and use powergrid set to false");
+        await ChargerService.setChargeStop();
+        WebSocketManager.sendEvent("liveDataUpdate", LiveData.data);
+        return;
+    }
+
+    if (chargerData.car !== CAR_NOT_CHARGING) {
+        console.log("Car is not charging, setting charge true!");
+        await ChargerService.setChargeStart();
+    }
+
+    if (chargerData.amp !== LiveData.data.CalcChargerAmp) {
+        console.log("Amp was corrected");
+        await ChargerService.setChargeAmp(LiveData.data.CalcChargerAmp);
+    }
+
+
+
     WebSocketManager.sendEvent("liveDataUpdate", LiveData.data);
-    console.log("my calculations etc etc")
+    console.log("Done");
+}
+
+function initializeLiveData() {
+    LiveData.data = {
+        StatusInverter: 'OFFLINE',
+        StatusCharger: 'OFFLINE',
+        Export: -1,
+        ShouldStop: true,
+        ChargerReserved: -1,
+        LiveChargerAmp: -1,
+        ChargerUse: -1,
+        CalcChargerAmp: -1,
+    };
+}
+
+function findClosestValue(key: number, mappingArray: any[]): any {
+    return mappingArray.reduce((prev, curr) => {
+        // If the current value is closer or the same distance to the key than the previous
+        // and is not more than the key, then consider it as the closest value.
+        if (Math.abs(curr.value - key) <= Math.abs(prev.value - key) && curr.value <= key) {
+            return curr;
+        }
+        return prev;
+    });
+}
+
+function calculateChargeSettings(config) {
+    const availablePower = LiveData.data.Export - LiveData.data.ChargerUse;
+
+    // Find the amp value that matches the available power the closest
+    const optimalAmpereMapping = findClosestValue(availablePower, config.Mapping);
+
+    let determinedAmp = optimalAmpereMapping.amp;
+
+    // Ensure the calculated amp value lies between the Minimum and Maximum values
+    if (determinedAmp < config.MinimumAmps) {
+        determinedAmp = config.MinimumAmps;
+    } else if (determinedAmp > config.MaximumAmps) {
+        determinedAmp = config.MaximumAmps;
+    }
+
+    let shouldStop = false;
+
+    // If the available power is less than the value for MinimumAmps, then consider stopping
+    if (availablePower < findClosestValue(determinedAmp, config.Mapping).value) {
+        shouldStop = true;
+    }
+    return {
+        ChargerReserved: availablePower,
+        CalcChargerAmp: determinedAmp,
+        ShouldStop: shouldStop
+    };
 }

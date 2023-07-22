@@ -3,7 +3,9 @@ export default interface LiveData {
     // (Unknown/Error=0, Idle=1, Charging=2, WaitCar=3, Complete=4, Error=5)
     StatusCharger: 0 | 1 | 2 | 3 | 4 | 5 | "OFFLINE"
     Export: number,
+    ShouldStop: boolean,
     ChargerReserved: number,
-    ChargerAmp: number,
-    ChargerUse: number
+    ChargerUse: number,
+    LiveChargerAmp: number,
+    CalcChargerAmp: number,
 }

@@ -1,4 +1,5 @@
 import * as ws from 'ws';
+import LiveData from './LiveData.js';
 
 export default class WebSocketManager {
     private static wss: ws.WebSocketServer | null = null;
@@ -13,7 +14,11 @@ export default class WebSocketManager {
 
         this.wss.on('connection', (clientWs: ws.WebSocket) => {
             this.clients.push(clientWs);
-
+            // Send initial data to the client immediately upon connection.
+            clientWs.send(JSON.stringify({
+                event: "liveDataUpdate",
+                data: LiveData.data
+            }));
             clientWs.on('close', () => {
                 const index = this.clients.indexOf(clientWs);
                 if (index !== -1) {

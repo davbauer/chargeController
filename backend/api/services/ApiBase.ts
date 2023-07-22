@@ -18,7 +18,7 @@ export default class ApiService {
 
     protected static async get<T>(baseURL: string, endpoint: string): Promise<T> {
         try {
-            console.info(`http://${baseURL}/${endpoint}`)
+            //console.info(`http://${baseURL}/${endpoint}`)
             const response = await this.instance.get<T>(endpoint, {
                 baseURL: `http://${baseURL}/`
             });
