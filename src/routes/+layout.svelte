@@ -4,7 +4,7 @@
 
 <div class="min-h-screen flex flex-col">
 	<div class="w-full navbar bg-neutral flex justify-center items-center">
-		<p class="font-mono text-xl">chargeController updateTest</p>
+		<p class="font-mono text-xl">chargeController</p>
 	</div>
 
 	<div class="flex-grow">
