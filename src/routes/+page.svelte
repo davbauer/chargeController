@@ -138,6 +138,7 @@
 						break;
 					case 'liveDataUpdate':
 						console.info('received: liveDataUpdate');
+						console.log(JSON.stringify(message.data, null, 4));
 						liveData = message.data as LiveData;
 						break;
 				}

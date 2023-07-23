@@ -1,0 +1,24 @@
+name: Docker build and push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Docker registry
+        uses: docker/login-action@v2
+        with:
+          registry: registry.zec.one
+          username: ${{ secrets.REGISTRY_ZEC_ONE_USERNAME }}
+          password: ${{ secrets.REGISTRY_ZEC_ONE_PASSWORD }}
+
+      - name: Dockerize and Push Image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: registry.zec.one/charge-controller

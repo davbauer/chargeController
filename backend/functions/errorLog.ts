@@ -1,4 +1,4 @@
 export default function (input: any) {
-    const ts = new Date().toLocaleString("en-US");
-    console.error(`[ERR] ${ts} -> ${input}`)
+	const ts = new Date().toLocaleString('en-US');
+	console.error(`[ERR] ${ts} -> ${input}`);
 }

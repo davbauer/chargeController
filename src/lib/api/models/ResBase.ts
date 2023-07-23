@@ -1,3 +1,3 @@
 export default interface ResBase {
-    msg: string
+	msg: string;
 }
