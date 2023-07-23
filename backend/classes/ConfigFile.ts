@@ -1,13 +1,13 @@
 import * as fs from 'fs';
-import Config from '../models/Config.js';
+import ConfigInterface from '../models/ConfigInterface.js';
 import errorLog from '../functions/errorLog.js'
 import infoLog from '../functions/infoLog.js';
 
 export default class {
-    private static cachedConfig: Config | null = null;
+    private static cachedConfig: ConfigInterface | null = null;
     private static filePath = "./config.json";
 
-    static read(): Config {
+    static read(): ConfigInterface {
         if (this.cachedConfig) {
             return this.cachedConfig;
         }
@@ -16,7 +16,7 @@ export default class {
             const fileContents = fs.readFileSync(this.filePath, 'utf-8');
             const data: any = JSON.parse(fileContents);
             if (this.isValidConfig(data)) {
-                return data as Config;
+                return data as ConfigInterface;
             } else {
                 errorLog('ConfigFile.read: Config validation failed');
                 return null;
@@ -27,7 +27,7 @@ export default class {
         }
     }
 
-    static write(config: Config): boolean {
+    static write(config: ConfigInterface): boolean {
         try {
             const jsonData = JSON.stringify(config, null, 4);
             fs.writeFileSync(this.filePath, jsonData, 'utf-8');
@@ -39,7 +39,7 @@ export default class {
         }
     }
 
-    private static isValidConfig(data: any): data is Config {
+    private static isValidConfig(data: any): data is ConfigInterface {
         return typeof data.Enabled === 'boolean' &&
             typeof data.InverterHost === 'string' &&
             typeof data.ChargerHost === 'string' &&

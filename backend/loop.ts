@@ -4,7 +4,7 @@ import ChargerService from './api/services/ChargerService.js';
 import LiveData from './classes/LiveData.js';
 import WebSocketManager from './classes/WebSocketManager.js';
 import ConfigFile from './classes/ConfigFile.js';
-import Config from './models/Config.js';
+import ConfigInterface from './models/ConfigInterface.js';
 
 const CAR_NOT_CHARGING = 2;  // Replace with an appropriate descriptive constant
 
@@ -13,7 +13,7 @@ export default async function (): Promise<void> {
 
     initializeLiveData();
 
-    const config: Config = ConfigFile.read();
+    const config: ConfigInterface = ConfigFile.read();
 
     const inverterData = await InverterService.getRealtimeData();
     const chargerData = await ChargerService.getChargeInfo();
@@ -34,21 +34,21 @@ export default async function (): Promise<void> {
     Object.assign(LiveData.data, result);
     if (!config.Enabled) {
         console.log("Control not enabled!");
-        WebSocketManager.sendEvent("liveDataUpdate", LiveData.data);
+        WebSocketManager.sendEventLiveData();
         return;
     }
 
     if (!chargerData || !inverterData) {
         console.log("Stop charging - one not available");
         ChargerService.setChargeStop();
-        WebSocketManager.sendEvent("liveDataUpdate", LiveData.data);
+        WebSocketManager.sendEventLiveData();
         return;
     }
 
     if (LiveData.data.ShouldStop && !config.UsePowergrid) {
         console.log("Should stop is true and use powergrid set to false");
         await ChargerService.setChargeStop();
-        WebSocketManager.sendEvent("liveDataUpdate", LiveData.data);
+        WebSocketManager.sendEventLiveData();
         return;
     }
 
@@ -59,12 +59,15 @@ export default async function (): Promise<void> {
 
     if (chargerData.amp !== LiveData.data.CalcChargerAmp) {
         console.log("Amp was corrected");
-        await ChargerService.setChargeAmp(LiveData.data.CalcChargerAmp);
+        const response = await ChargerService.setChargeAmp(LiveData.data.CalcChargerAmp);
+        if (response.amp === true) {
+            LiveData.data.LiveChargerAmp = LiveData.data.CalcChargerAmp;
+        }
     }
 
 
 
-    WebSocketManager.sendEvent("liveDataUpdate", LiveData.data);
+    WebSocketManager.sendEventLiveData();
     console.log("Done");
 }
 
@@ -72,6 +75,7 @@ function initializeLiveData() {
     LiveData.data = {
         StatusInverter: 'OFFLINE',
         StatusCharger: 'OFFLINE',
+        Timestamp: null,
         Export: -1,
         ShouldStop: true,
         ChargerReserved: -1,

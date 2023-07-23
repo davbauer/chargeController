@@ -1,5 +1,6 @@
 import * as ws from 'ws';
 import LiveData from './LiveData.js';
+import LiveDataInterface from '../models/LiveDataInterface.js';
 
 export default class WebSocketManager {
     private static wss: ws.WebSocketServer | null = null;
@@ -27,6 +28,14 @@ export default class WebSocketManager {
             });
         });
     }
+    public static sendEventLiveData() {
+        LiveData.data.Timestamp = new Date();
+        this.sendEvent("liveDataUpdate", LiveData.data);
+    }
+
+    public static sendEventEnabledState(state: boolean) {
+        this.sendEvent("enabledStateUpdate", { state });
+    }
 
     public static sendEvent(eventType: string, data: any): void {
         const jsonData = JSON.stringify({ event: eventType, data });
@@ -37,4 +46,23 @@ export default class WebSocketManager {
             }
         }
     }
+
+    public static close(): void {
+        // Close all client connections
+        for (let clientWs of this.clients) {
+            if (clientWs.readyState !== clientWs.CLOSED) {
+                clientWs.close();
+            }
+        }
+        this.clients = []; // Clear the clients array
+
+        // Close the WebSocket server
+        if (this.wss) {
+            this.wss.close();
+            this.wss = null;
+        }
+    }
+
+
+
 }

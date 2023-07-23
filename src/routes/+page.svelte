@@ -7,11 +7,15 @@
 	import { goto } from '$app/navigation';
 	import type LiveData from '$lib/api/models/LiveData';
 	import ChargeControlService from '$lib/api/services/ChargeControlService';
+	import { AxiosError } from 'axios';
+	import { redirect } from '@sveltejs/kit';
 
 	let config: Config;
+	let errorOnLoad: boolean = false;
 	let liveData: LiveData = {
 		StatusInverter: 'OFFLINE',
 		StatusCharger: 'OFFLINE',
+		Timestamp: null,
 		Export: -1,
 		ShouldStop: true,
 		ChargerReserved: -1,
@@ -19,14 +23,12 @@
 		LiveChargerAmp: -1,
 		CalcChargerAmp: -1
 	};
-	let liveTimestamp = new Date();
 
 	async function onEnabledChange(event: any) {
 		await EnabledService.postEnabled(window.location.hostname, event.target.checked);
 	}
 
 	async function startCharge() {
-		console.log('start charge');
 		await ChargeControlService.chargeStart(window.location.hostname);
 	}
 	async function stopCharge() {
@@ -35,7 +37,7 @@
 
 	// Utility function to sort the mapping by amp value
 	function sortMapping(mapping: any[]) {
-		return mapping.sort((a, b) => a.value - b.value);
+		return mapping.sort((a, b) => a.amp - b.amp);
 	}
 
 	// Utility function to ensure there's an empty row at the end
@@ -74,7 +76,14 @@
 		config.Mapping = ensureEmptyRowAtEnd(config.Mapping);
 	}
 
-	function handleTableInput(index: number, field: string, value: number): void {
+	function handleTableInput(
+		e: Event,
+		index: number,
+		field: keyof (typeof config.Mapping)[0]
+	): void {
+		const target = e.target as HTMLInputElement;
+		const value = +target.value;
+
 		if (field === 'amp' && !isAmpUnique(value, index, config.Mapping)) {
 			console.error(`AMP value ${value} already exists!`);
 			return; // exit early if amp value isn't unique
@@ -95,10 +104,17 @@
 	}
 
 	onMount(async () => {
-		config = await ConfigService.getConfig(window.location.hostname);
+		try {
+			config = await ConfigService.getConfig(window.location.hostname);
+		} catch (error: any) {
+			if (error instanceof AxiosError) {
+				errorOnLoad = true;
+				return;
+			}
+		}
+
 		// Sort the mapping and ensure empty row at the end
 		config.Mapping = ensureEmptyRowAtEnd(sortMapping(config.Mapping));
-		console.log(config);
 
 		const WS_URL = 'ws://' + window.location.hostname + ':2001';
 
@@ -122,7 +138,6 @@
 						break;
 					case 'liveDataUpdate':
 						console.info('received: liveDataUpdate');
-						liveTimestamp = new Date();
 						liveData = message.data as LiveData;
 						break;
 				}
@@ -149,8 +164,15 @@
 </script>
 
 {#if !config}
-	<div class="flex justify-center items-center min-h-screen">
-		<span class="loading loading-spinner h-44 w-44" />
+	<div class="flex justify-center flex-col items-center min-h-screen">
+		{#if errorOnLoad}
+			<p class="mb-10 text-3xl">Connection to backend failed!</p>
+			<button class="btn btn-lg btn-error" on:click={() => window.location.reload()}
+				>Retry again</button
+			>
+		{:else}
+			<span class="loading loading-spinner h-44 w-44" />
+		{/if}
 	</div>
 {:else}
 	<form on:submit|preventDefault={handleSaveSettings}>
@@ -224,7 +246,11 @@
 
 				<div class="flex flex-row items-center">
 					<p class="pr-10 w-48">Timestamp</p>
-					<p class="font-mono">{liveTimestamp.toLocaleTimeString('en-US')}</p>
+					<p class="font-mono">
+						{typeof liveData.Timestamp === 'string'
+							? new Date(liveData.Timestamp).toLocaleTimeString('en-US')
+							: ''}
+					</p>
 				</div>
 				<div class="flex flex-row items-center">
 					<p class="pr-10 w-48">Export</p>
@@ -280,6 +306,9 @@
 							{#each config.Mapping as row, index}
 								<tr
 									class="transition-colors duration-300
+							{row.amp === liveData.CalcChargerAmp && liveData.CalcChargerAmp !== liveData.LiveChargerAmp
+										? 'bg-neutral-focus border-l-2'
+										: ''}
 							{row.amp === liveData.LiveChargerAmp ? 'bg-secondary' : ''}
 							{row.amp < config.MinimumAmps || row.amp > config.MaximumAmps ? 'opacity-40' : ''}
 							"
@@ -289,7 +318,7 @@
 											min="0"
 											max="32"
 											bind:value={row.amp}
-											on:input={(e) => handleTableInput(index, 'amp', +e.target.value)}
+											on:input={(e) => handleTableInput(e, index, 'amp')}
 											class="input input-bordered w-full"
 											type="number"
 										/>
@@ -299,7 +328,7 @@
 											min="0"
 											max="20000"
 											bind:value={row.value}
-											on:input={(e) => handleTableInput(index, 'value', +e.target.value)}
+											on:input={(e) => handleTableInput(e, index, 'value')}
 											class="input input-bordered w-full"
 											type="number"
 										/>

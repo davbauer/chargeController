@@ -3,8 +3,8 @@
     "InverterHost": "192.168.10.17",
     "ChargerHost": "192.168.10.18",
     "CheckSeconds": 7,
-    "MinimumAmps": 8,
-    "MaximumAmps": 15,
+    "MinimumAmps": 7,
+    "MaximumAmps": 16,
     "UsePowergrid": true,
     "BatteryCapacity": 21000,
     "Mapping": [

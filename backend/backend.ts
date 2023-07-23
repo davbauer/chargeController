@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import ConfigFile from './classes/ConfigFile.js';
-import Config from './models/Config.js';
+import ConfigInterface from './models/ConfigInterface.js';
 import infoLog from './functions/infoLog.js';
 import errorLog from './functions/errorLog.js';
 import morgan from 'morgan';
@@ -24,12 +24,12 @@ app.use(cors({
 const loopHandler = new LoopHandler();
 
 app.get('/config', (req, res) => {
-    const configObject: Config = ConfigFile.read();
+    const configObject: ConfigInterface = ConfigFile.read();
     res.json(configObject);
 });
 
 app.post('/config', (req, res) => {
-    const configData: Config = req.body;
+    const configData: ConfigInterface = req.body;
     const updateLoop = ConfigFile.read().CheckSeconds !== configData.CheckSeconds;
     const success = ConfigFile.write(configData);
     if (success) {
@@ -49,11 +49,11 @@ app.post('/config', (req, res) => {
 
 app.post('/enabled', (req, res) => {
     const stateData: boolean = req.body.state;
-    const configData: Config = ConfigFile.read();
+    const configData: ConfigInterface = ConfigFile.read();
     const updateLoop = ConfigFile.read().Enabled !== stateData;
     configData.Enabled = stateData;
     const success = ConfigFile.write(configData);
-    WebSocketManager.sendEvent("enabledStateUpdate", { state: stateData });
+    WebSocketManager.sendEventEnabledState(stateData);
     if (success) {
         if (updateLoop) {
             console.log('Configuration updated. Restarting loop with new settings.');
@@ -89,6 +89,7 @@ const server = app.listen(EXPRESS_PORT, '0.0.0.0', () => {
 process.on('SIGINT', () => {
     infoLog('Gracefully shutting down from SIGINT (Ctrl+C)');
     loopHandler.stopLoop();
+    WebSocketManager.close();
     server.close(() => {
         process.exit();
     });
