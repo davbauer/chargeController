@@ -17,6 +17,9 @@ jobs:
           username: ${{ secrets.REGISTRY_ZEC_ONE_USERNAME }}
           password: ${{ secrets.REGISTRY_ZEC_ONE_PASSWORD }}
 
+      - name: Install TypeScript
+        run: yarn add typescript
+
       - name: Dockerize and Push Image
         uses: docker/build-push-action@v4
         with:
