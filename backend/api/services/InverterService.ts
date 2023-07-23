@@ -1,6 +1,6 @@
 import ApiBase from './ApiBase.js';
 import ConfigFile from '../../classes/ConfigFile.js';
-import InvRealtimeData from '../models/InvRealTimeData.js';
+import InvRealtimeData from '../models/InvRealtimeData.js';
 export default class extends ApiBase {
 	static async getRealtimeData(): Promise<InvRealtimeData> {
 		return this.get<InvRealtimeData>(
