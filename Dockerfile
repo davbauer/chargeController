@@ -28,4 +28,4 @@ RUN yarn install --frozen-lockfile && yarn cache clean
 
 COPY --from=svelte /app/build ./svelte-build
 EXPOSE 2000
-CMD node backend.js
+CMD node ./comp/backend.js
