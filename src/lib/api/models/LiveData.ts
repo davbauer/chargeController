@@ -1,12 +1,23 @@
 export default interface LiveData {
-	StatusInverter: 1 | 'OFFLINE';
-	// (Unknown/Error=0, Idle=1, Charging=2, WaitCar=3, Complete=4, Error=5)
-	StatusCharger: 0 | 1 | 2 | 3 | 4 | 5 | 'OFFLINE';
-	Timestamp: Date | null;
-	Export: number;
-	ShouldStop: boolean;
-	ChargerReserved: number;
-	ChargerUse: number;
-	LiveChargerAmp: number;
-	CalcChargerAmp: number;
+    Timestamp: Date | null;
+    Inverter: {
+        Status: 1 | 'OFFLINE';
+        Export: number,
+        SunPower: number
+    },
+    Charger: {
+        // (Unknown/Error=0, Idle=1, Charging=2, WaitCar=3, Complete=4, Error=5)
+        Status: 0 | 1 | 2 | 3 | 4 | 5 | 'OFFLINE';
+        ShouldStop: boolean;
+        AmpCalc: number,
+        Amp: number;
+        Consumption: number;
+        Reserved: number;
+    },
+    Battery: {
+        // (Busy=0, Ready=1, Charging=2, Discharging=3, Standby=4, Error=5, Service/Update=6, Emergency Power=7)
+        Status: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 'OFFLINE'
+        Percent: number,
+        Power: number
+    }
 }

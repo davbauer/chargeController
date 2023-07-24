@@ -1,11 +1,11 @@
 import ApiBase from './ApiBase.js';
 import ConfigFile from '../../classes/ConfigFile.js';
-import InvRealtimeData from '../models/InvRealtimeData.js';
+import InvPowerFlowRealtimeData from '../models/InvPowerFlowRealtimeData.js'
 export default class extends ApiBase {
-	static async getRealtimeData(): Promise<InvRealtimeData> {
-		return this.get<InvRealtimeData>(
+	static async getPowerFlowRealtimeData(): Promise<InvPowerFlowRealtimeData> {
+		return this.get<InvPowerFlowRealtimeData>(
 			ConfigFile.read().InverterHost,
-			'solar_api/v1/GetMeterRealtimeData.cgi?Scope=System'
+			'solar_api/v1/GetPowerFlowRealtimeData.fcgi'
 		);
 	}
 }

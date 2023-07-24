@@ -13,15 +13,26 @@
 	let config: Config;
 	let errorOnLoad: boolean = false;
 	let liveData: LiveData = {
-		StatusInverter: 'OFFLINE',
-		StatusCharger: 'OFFLINE',
 		Timestamp: null,
-		Export: -1,
-		ShouldStop: true,
-		ChargerReserved: -1,
-		ChargerUse: -1,
-		LiveChargerAmp: -1,
-		CalcChargerAmp: -1
+		Inverter: {
+			Status: 'OFFLINE',
+			Export: -1,
+			SunPower: -1
+		},
+		Charger: {
+			// (Unknown/Error=0, Idle=1, Charging=2, WaitCar=3, Complete=4, Error=5)
+			Status: 'OFFLINE',
+			ShouldStop: true,
+			AmpCalc: -1,
+			Amp: -1,
+			Consumption: -1,
+			Reserved: -1
+		},
+		Battery: {
+			Status: 'OFFLINE',
+			Percent: -1,
+			Power: -1
+		}
 	};
 
 	async function onEnabledChange(event: any) {
@@ -138,7 +149,6 @@
 						break;
 					case 'liveDataUpdate':
 						console.info('received: liveDataUpdate');
-						console.log(JSON.stringify(message.data, null, 4));
 						liveData = message.data as LiveData;
 						break;
 				}
@@ -177,7 +187,7 @@
 	</div>
 {:else}
 	<form on:submit|preventDefault={handleSaveSettings}>
-		<div class="m-3 leading-loose text-xl">
+		<div class="m-3 leading-loose text-lg">
 			<!-- Enabled Section -->
 			<div class="mt-3 p-3 bg-neutral rounded-md">
 				<p class="text-2xl underline">Enabled</p>
@@ -209,86 +219,148 @@
 			<div class="mt-3 p-3 bg-neutral rounded-md">
 				<p class="text-2xl underline">Live</p>
 
-				<!-- Inverter Data -->
 				<div class="flex flex-row items-center">
-					<p class="pr-10 w-48">Inverter</p>
-					{#if liveData.StatusInverter === 1}
-						<input checked type="radio" class="radio radio-success" readonly />
-						<p class="ml-2 opacity-60">{'Online'}</p>
-					{:else if liveData.StatusInverter === 'OFFLINE'}
-						<input checked type="radio" class="radio radio-error" readonly />
-						<p class="ml-2 opacity-60">{'Offline'}</p>
-					{/if}
-				</div>
-
-				<!-- Charger Data -->
-				<div class="flex flex-row items-center">
-					<p class="pr-10 w-48">Charger</p>
-					{#if liveData.StatusCharger === 0}
-						<input checked type="radio" class="radio radio-primary" readonly />
-						<p class="ml-2 opacity-60">{'Unknown/Error'}</p>
-					{:else if liveData.StatusCharger === 1 || liveData.StatusCharger === 3}
-						<input checked type="radio" class="radio radio-info" readonly />
-						<p class="ml-2 opacity-60">{'Idle/WaitCar'}</p>
-					{:else if liveData.StatusCharger === 2}
-						<input checked type="radio" class="radio radio-secondary" readonly />
-						<p class="ml-2 opacity-60">{'Charging'}</p>
-					{:else if liveData.StatusCharger === 4}
-						<input checked type="radio" class="radio radio-success" readonly />
-						<p class="ml-2 opacity-60">{'Plugged In'}</p>
-					{:else if liveData.StatusCharger === 5}
-						<input checked type="radio" class="radio radio-error" readonly />
-						<p class="ml-2 opacity-60">{'Error'}</p>
-					{:else if liveData.StatusCharger === 'OFFLINE'}
-						<input checked type="radio" class="radio radio-error" readonly />
-						<p class="ml-2 opacity-60">{'Offline'}</p>
-					{/if}
-				</div>
-
-				<div class="flex flex-row items-center">
-					<p class="pr-10 w-48">Timestamp</p>
+					<p class="pr-10 w-56">Timestamp</p>
 					<p class="font-mono">
 						{typeof liveData.Timestamp === 'string'
 							? new Date(liveData.Timestamp).toLocaleTimeString('en-US')
 							: ''}
 					</p>
 				</div>
+
+				<!-- Inverter Data -->
 				<div class="flex flex-row items-center">
-					<p class="pr-10 w-48">Export</p>
-					<p class="font-mono {liveData.Export < 0 ? 'text-red-400' : 'text-green-400'}">
-						{liveData.Export !== -1 ? liveData.Export.toFixed(2) : '?'} W
+					<p class="pr-10 w-56">Inverter</p>
+					{#if liveData.Inverter.Status === 1}
+						<input checked type="radio" class="radio radio-success" readonly />
+						<p class="ml-2 opacity-60">{'Online'}</p>
+					{:else if liveData.Inverter.Status === 'OFFLINE'}
+						<input checked type="radio" class="radio radio-error" readonly />
+						<p class="ml-2 opacity-60">{'Offline'}</p>
+					{/if}
+				</div>
+
+				<div class="flex flex-row items-center">
+					<p class="pr-10 w-56">Sun Power</p>
+					<p class="font-mono {liveData.Inverter.SunPower < 0 ? 'text-red-400' : 'text-green-400'}">
+						{liveData.Inverter.SunPower !== -1 ? liveData.Inverter.SunPower.toFixed(2) : '?'} W
 					</p>
 				</div>
 
 				<div class="flex flex-row items-center">
-					<p class="pr-10 w-48">ChargerUse</p>
+					<p class="pr-10 w-56">Export</p>
+					<p class="font-mono {liveData.Inverter.Export < 0 ? 'text-red-400' : 'text-green-400'}">
+						{liveData.Inverter.Export !== -1 ? liveData.Inverter.Export.toFixed(2) : '?'} W
+					</p>
+				</div>
+
+				<hr />
+
+				<!-- Battery Data -->
+				<div class="flex flex-row items-center">
+					<p class="pr-10 w-56">Battery</p>
+					{#if liveData.Battery.Status === 0}
+						<input checked type="radio" class="radio radio-primary" readonly />
+						<p class="ml-2 opacity-60">{'Unknown/Error'}</p>
+					{:else if liveData.Battery.Status === 1}
+						<input checked type="radio" class="radio radio-info" readonly />
+						<p class="ml-2 opacity-60">{'Idle'}</p>
+					{:else if liveData.Battery.Status === 2}
+						<input checked type="radio" class="radio radio-secondary" readonly />
+						<p class="ml-2 opacity-60">{'Charging'}</p>
+					{:else if liveData.Battery.Status === 3}
+						<input checked type="radio" class="radio radio-info" readonly />
+						<p class="ml-2 opacity-60">{'Discharging'}</p>
+					{:else if liveData.Battery.Status === 4}
+						<input checked type="radio" class="radio radio-success" readonly />
+						<p class="ml-2 opacity-60">{'Full'}</p>
+					{:else if liveData.Battery.Status === 5}
+						<input checked type="radio" class="radio radio-error" readonly />
+						<p class="ml-2 opacity-60">{'Error'}</p>
+					{:else if liveData.Battery.Status === 6}
+						<input checked type="radio" class="radio radio-info" readonly />
+						<p class="ml-2 opacity-60">{'Service/Update'}</p>
+					{:else if liveData.Battery.Status === 7}
+						<input checked type="radio" class="radio radio-error" readonly />
+						<p class="ml-2 opacity-60">{'Emergency Power'}</p>
+					{:else if liveData.Battery.Status === 'OFFLINE'}
+						<input checked type="radio" class="radio radio-error" readonly />
+						<p class="ml-2 opacity-60">{'Offline'}</p>
+					{/if}
+				</div>
+
+				<div class="flex flex-row items-center">
+					<p class="pr-10 w-56">Percent</p>
+					<p class="font-mono opacity-60">
+						{liveData.Battery.Percent !== -1 ? liveData.Battery.Percent.toFixed(0) : '?'} %
+					</p>
+				</div>
+
+				<div class="flex flex-row items-center">
+					<p class="pr-10 w-56">Power</p>
+					<p class="font-mono opacity-60">
+						{liveData.Battery.Percent !== -1 ? liveData.Battery.Power.toFixed(2) : '?'} W
+					</p>
+				</div>
+
+				<hr />
+
+				<!-- Charger Data -->
+				<div class="flex flex-row items-center">
+					<p class="pr-10 w-56">Charger</p>
+					{#if liveData.Charger.Status === 0}
+						<input checked type="radio" class="radio radio-primary" readonly />
+						<p class="ml-2 opacity-60">{'Unknown/Error'}</p>
+					{:else if liveData.Charger.Status === 1 || liveData.Charger.Status === 3}
+						<input checked type="radio" class="radio radio-info" readonly />
+						<p class="ml-2 opacity-60">{'Idle/WaitCar'}</p>
+					{:else if liveData.Charger.Status === 2}
+						<input checked type="radio" class="radio radio-secondary" readonly />
+						<p class="ml-2 opacity-60">{'Charging'}</p>
+					{:else if liveData.Charger.Status === 4}
+						<input checked type="radio" class="radio radio-success" readonly />
+						<p class="ml-2 opacity-60">{'Plugged In'}</p>
+					{:else if liveData.Charger.Status === 5}
+						<input checked type="radio" class="radio radio-error" readonly />
+						<p class="ml-2 opacity-60">{'Error'}</p>
+					{:else if liveData.Charger.Status === 'OFFLINE'}
+						<input checked type="radio" class="radio radio-error" readonly />
+						<p class="ml-2 opacity-60">{'Offline'}</p>
+					{/if}
+				</div>
+
+				<div class="flex flex-row items-center">
+					<p class="pr-10 w-56">Consumption</p>
 					<p class="font-mono text-secondary">
-						{liveData.ChargerUse !== -1 ? liveData.ChargerUse.toFixed(2) : '?'} W
+						{liveData.Charger.Consumption !== -1 ? liveData.Charger.Consumption.toFixed(2) : '?'} W
 					</p>
 				</div>
 				<div class="flex flex-row items-center">
-					<p class="pr-10 w-48">LiveChargerAmp</p>
+					<p class="pr-10 w-56">Charger Ampere</p>
 					<p class="font-mono text-secondary">
-						{liveData.LiveChargerAmp !== -1 ? liveData.LiveChargerAmp : '?'} Ampere
+						{liveData.Charger.Amp !== -1 ? liveData.Charger.Amp : '?'} Ampere
 					</p>
 				</div>
 				<div class="opacity-60 flex flex-row items-center">
-					<p class="pr-10 w-48">ChargerReserved</p>
+					<p class="pr-10 w-56">Charger Reserved</p>
 					<p class="font-mono">
-						{liveData.ChargerReserved !== -1 ? liveData.ChargerReserved.toFixed(2) : '?'} W
+						{liveData.Charger.Reserved !== -1 ? liveData.Charger.Reserved.toFixed(2) : '?'} W
 					</p>
 				</div>
 				<div class="opacity-60 flex flex-row items-center">
-					<p class="pr-10 w-48">CalcChargerAmp</p>
+					<p class="pr-10 w-56">Charger Ampere Calc</p>
 					<p class="font-mono">
-						{liveData.CalcChargerAmp !== -1 ? liveData.CalcChargerAmp : '?'} Ampere
+						{liveData.Charger.AmpCalc !== -1 ? liveData.Charger.AmpCalc : '?'} Ampere
 					</p>
 				</div>
 				<div class="opacity-60 flex flex-row items-center">
-					<p class="pr-10 w-48">ShouldStop</p>
-					<p class="font-mono">
-						{liveData.ShouldStop ? '✔️' : '✖️'}
-					</p>
+					<p class="pr-10 w-56">ShouldStop</p>
+					<input
+						checked
+						type="radio"
+						class="radio {liveData.Charger.ShouldStop ? 'radio-success' : 'radio'}"
+						readonly
+					/>
 				</div>
 			</div>
 
@@ -307,10 +379,10 @@
 							{#each config.Mapping as row, index}
 								<tr
 									class="transition-colors duration-300
-							{row.amp === liveData.CalcChargerAmp && liveData.CalcChargerAmp !== liveData.LiveChargerAmp
+							{row.amp === liveData.Charger.AmpCalc && liveData.Charger.AmpCalc !== liveData.Charger.Amp
 										? 'bg-neutral-focus border-l-2'
 										: ''}
-							{row.amp === liveData.LiveChargerAmp ? 'bg-secondary' : ''}
+							{row.amp === liveData.Charger.Amp ? 'bg-secondary' : ''}
 							{row.amp < config.MinimumAmps || row.amp > config.MaximumAmps ? 'opacity-40' : ''}
 							"
 								>
@@ -368,6 +440,18 @@
 									<input
 										required
 										bind:value={config.ChargerHost}
+										type="string"
+										placeholder="192.168.0.1"
+										class="input input-bordered w-full max-w-xs"
+									/></td
+								>
+							</tr>
+							<tr>
+								<td class="w-1/2 text-left">Battery Host</td>
+								<td class="w-1/2 text-left">
+									<input
+										required
+										bind:value={config.BatteryHost}
 										type="string"
 										placeholder="192.168.0.1"
 										class="input input-bordered w-full max-w-xs"
