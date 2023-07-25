@@ -259,10 +259,10 @@
 					<p class="pr-10 w-56">Battery</p>
 					{#if liveData.Battery.Status === 0}
 						<input checked type="radio" class="radio radio-primary" readonly />
-						<p class="ml-2 opacity-60">{'Unknown/Error'}</p>
+						<p class="ml-2 opacity-60">{'Busy/Checking'}</p>
 					{:else if liveData.Battery.Status === 1}
 						<input checked type="radio" class="radio radio-info" readonly />
-						<p class="ml-2 opacity-60">{'Idle'}</p>
+						<p class="ml-2 opacity-60">{'Ready'}</p>
 					{:else if liveData.Battery.Status === 2}
 						<input checked type="radio" class="radio radio-secondary" readonly />
 						<p class="ml-2 opacity-60">{'Charging'}</p>
@@ -271,7 +271,7 @@
 						<p class="ml-2 opacity-60">{'Discharging'}</p>
 					{:else if liveData.Battery.Status === 4}
 						<input checked type="radio" class="radio radio-success" readonly />
-						<p class="ml-2 opacity-60">{'Full'}</p>
+						<p class="ml-2 opacity-60">{'Standby'}</p>
 					{:else if liveData.Battery.Status === 5}
 						<input checked type="radio" class="radio radio-error" readonly />
 						<p class="ml-2 opacity-60">{'Error'}</p>
