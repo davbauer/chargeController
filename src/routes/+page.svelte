@@ -146,7 +146,6 @@
 						config.Enabled = message.data.state as boolean;
 						break;
 					case 'liveDataUpdate':
-						console.log(JSON.stringify(liveData, null, 4));
 						console.info('received: liveDataUpdate');
 						liveData = message.data as LiveData;
 						break;
