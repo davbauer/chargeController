@@ -16,14 +16,15 @@ export default async function (): Promise<void> {
 
 	const config: ConfigInterface = ConfigFile.read();
 
-	const inverterData = await InverterService.getPowerFlowRealtimeData();
+	//const inverterPowerFlow = await InverterService.getPowerFlowRealtimeData();
+	const inverterMeter = await InverterService.getMeterRealtimeData();
 	const chargerData = await ChargerService.getChargeInfo();
 	const batteryData = await BatteryService.getEMSDATA();
 
-	if (inverterData) {
+	if (inverterMeter) {
 		LiveData.data.Inverter.Status = 1; // Idle;
-		LiveData.data.Inverter.Export = inverterData.Body.Data.Site.P_Grid * -1;
-		LiveData.data.Inverter.SunPower = inverterData.Body.Data.Site.P_PV;
+		LiveData.data.Inverter.Export = inverterMeter.Body.Data.PowerReal_P_Sum * -1;
+		LiveData.data.Inverter.SunPower = inverterMeter.Body.Data.PowerFactor_Sum;
 	}
 
 	if (chargerData) {
@@ -45,7 +46,8 @@ export default async function (): Promise<void> {
 		};
 		const batteryStatus = stateMappings[batteryData.root.inverter.var.find(v => v.name === "State").value] || 'OFFLINE';
 		LiveData.data.Battery.Status = batteryStatus;
-		LiveData.data.Battery.Percent = parseFloat(batteryData.root.inverter.var.find(v => v.name === "SOC").value.slice(0, -1));
+		const parsedValue = parseFloat(batteryData.root.inverter.var.find(v => v.name === "SOC").value);
+		LiveData.data.Battery.Percent = !isNaN(parsedValue) ? Math.round(parsedValue) : 0;
 		LiveData.data.Battery.Power = parseFloat(batteryData.root.inverter.var.find(v => v.name === "P").value)
 	}
 
@@ -57,7 +59,7 @@ export default async function (): Promise<void> {
 		return;
 	}
 
-	if (!chargerData || !inverterData) {
+	if (!chargerData || !inverterMeter) {
 		console.log('Stop charging - one not available');
 		ChargerService.setChargeStop();
 		WebSocketManager.sendEventLiveData();

@@ -8,7 +8,6 @@
 	import type LiveData from '$lib/api/models/LiveData';
 	import ChargeControlService from '$lib/api/services/ChargeControlService';
 	import { AxiosError } from 'axios';
-	import { redirect } from '@sveltejs/kit';
 
 	let config: Config;
 	let errorOnLoad: boolean = false;
@@ -144,10 +143,10 @@
 				const message = JSON.parse(event.data);
 				switch (message.event) {
 					case 'enabledStateUpdate':
-						console.info('received: enabledStateUpdate');
 						config.Enabled = message.data.state as boolean;
 						break;
 					case 'liveDataUpdate':
+						console.log(JSON.stringify(liveData, null, 4));
 						console.info('received: liveDataUpdate');
 						liveData = message.data as LiveData;
 						break;
