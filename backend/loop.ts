@@ -46,9 +46,16 @@ export default async function (): Promise<void> {
 		};
 		const batteryStatus = stateMappings[batteryData.root.inverter.var.find(v => v.name === "State").value] || 'OFFLINE';
 		LiveData.data.Battery.Status = batteryStatus;
-		const parsedValue = parseFloat(batteryData.root.inverter.var.find(v => v.name === "SOC").value);
-		LiveData.data.Battery.Percent = !isNaN(parsedValue) ? Math.round(parsedValue) : 0;
-		LiveData.data.Battery.Power = parseFloat(batteryData.root.inverter.var.find(v => v.name === "P").value)
+
+		let val = parseFloat(batteryData.root.inverter.var.find(v => v.name === "SOC").value);
+		LiveData.data.Battery.Percent = !isNaN(val)
+			? Math.min(Math.max(0, Math.round(val > 100 ? val / 10 : val)), 100)
+			: 0;
+
+		LiveData.data.Battery.Power = parseFloat(batteryData.root.inverter.var.find(v => v.name === "P").value);
+
+		console.log(LiveData.data.Battery.Percent)
+
 	}
 
 	const result = calculateChargeSettings(config);
