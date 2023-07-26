@@ -47,7 +47,7 @@ app.post('/config', (req, res) => {
         });
     }
 });
-app.post('/enabled', (req, res) => {
+app.post('/enabled', async (req, res) => {
     const stateData: boolean = req.body.state;
     const configData: ConfigInterface = ConfigFile.read();
     const updateLoop = ConfigFile.read().Enabled !== stateData;
@@ -55,6 +55,9 @@ app.post('/enabled', (req, res) => {
     const success = ConfigFile.write(configData);
     WebSocketManager.sendEventEnabledState(stateData);
     if (success) {
+        if (stateData === false) {
+            await ChargerService.setChargeStop();
+        }
         if (updateLoop) {
             console.log('Configuration updated. Restarting loop with new settings.');
             loopHandler.updateLoop(loop);
