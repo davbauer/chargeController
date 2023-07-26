@@ -1,0 +1,16 @@
+{
+	"short_name": "chargeController",
+	"name": "chargeController",
+	"description": "chargeController written in SvelteKit with NodeJS backend",
+	"icons": [
+		{
+			"src": "/favicon.png",
+			"sizes": "128x128",
+			"type": "image/png"
+		}
+	],
+	"start_url": "/",
+	"background_color": "#ffffff",
+	"theme_color": "#000000",
+	"display": "standalone"
+}
