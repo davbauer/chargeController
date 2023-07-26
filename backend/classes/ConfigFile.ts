@@ -15,7 +15,8 @@ export default class {
 		const defaultConfig = {
 			Mapping: [],
 			Enabled: false,
-			InverterHost: 'myhostname',
+			MainInverterHost: 'myhostname',
+			InverterHost1: 'myhostname',
 			ChargerHost: 'myhostname',
 			BatteryHost: 'myhostname',
 			CheckSeconds: 30,
@@ -73,7 +74,8 @@ export default class {
 			Array.isArray(data.Mapping) &&
 			data.Mapping.every(item => typeof item.amp === 'number' && typeof item.value === 'number') &&
 			typeof data.Enabled === 'boolean' &&
-			typeof data.InverterHost === 'string' &&
+			typeof data.MainInverterHost === 'string' &&
+			typeof data.InverterHost1 === 'string' &&
 			typeof data.ChargerHost === 'string' &&
 			typeof data.BatteryHost === 'string' &&
 			typeof data.CheckSeconds === 'number' &&

@@ -14,9 +14,14 @@
 	let liveData: LiveData = {
 		Timestamp: null,
 		Inverter: {
-			Status: 'OFFLINE',
 			Export: -1,
 			SunPower: -1
+		},
+		MainInverter: {
+			Status: 'OFFLINE'
+		},
+		Inverter1: {
+			Status: 'OFFLINE'
 		},
 		Charger: {
 			// (Unknown/Error=0, Idle=1, Charging=2, WaitCar=3, Complete=4, Error=5)
@@ -228,11 +233,22 @@
 
 				<!-- Inverter Data -->
 				<div class="flex flex-row items-center">
-					<p class="pr-10 w-56">Inverter</p>
-					{#if liveData.Inverter.Status === 1}
+					<p class="pr-10 w-56">MainInverter</p>
+					{#if liveData.MainInverter.Status === 1}
 						<input checked type="radio" class="radio radio-success" readonly />
 						<p class="ml-2 opacity-60">{'Online'}</p>
-					{:else if liveData.Inverter.Status === 'OFFLINE'}
+					{:else if liveData.MainInverter.Status === 'OFFLINE'}
+						<input checked type="radio" class="radio radio-error" readonly />
+						<p class="ml-2 opacity-60">{'Offline'}</p>
+					{/if}
+				</div>
+
+				<div class="flex flex-row items-center">
+					<p class="pr-10 w-56">Inverter1</p>
+					{#if liveData.Inverter1.Status === 1}
+						<input checked type="radio" class="radio radio-success" readonly />
+						<p class="ml-2 opacity-60">{'Online'}</p>
+					{:else if liveData.Inverter1.Status === 'OFFLINE'}
 						<input checked type="radio" class="radio radio-error" readonly />
 						<p class="ml-2 opacity-60">{'Offline'}</p>
 					{/if}
@@ -421,12 +437,24 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td class="w-1/2 text-left">Inverter Host</td>
+								<td class="w-1/2 text-left">MainInverter Host</td>
 								<td class="w-1/2 text-left">
 									<input
 										type="string"
 										required
-										bind:value={config.InverterHost}
+										bind:value={config.MainInverterHost}
+										placeholder="192.168.0.1"
+										class="input input-bordered w-full max-w-xs"
+									/></td
+								>
+							</tr>
+							<tr>
+								<td class="w-1/2 text-left">Inverter1 Host</td>
+								<td class="w-1/2 text-left">
+									<input
+										type="string"
+										required
+										bind:value={config.InverterHost1}
 										placeholder="192.168.0.1"
 										class="input input-bordered w-full max-w-xs"
 									/></td

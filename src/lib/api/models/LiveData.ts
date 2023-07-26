@@ -1,10 +1,15 @@
 export default interface LiveData {
     Timestamp: Date | null;
     Inverter: {
-        Status: 1 | 'OFFLINE';
         Export: number,
         SunPower: number
+    }
+    MainInverter: {
+        Status: 1 | 'OFFLINE';
     },
+    Inverter1: {
+        Status: 1 | 'OFFLINE';
+    }
     Charger: {
         // (Unknown/Error=0, Idle=1, Charging=2, WaitCar=3, Complete=4, Error=5)
         Status: 0 | 1 | 2 | 3 | 4 | 5 | 'OFFLINE';

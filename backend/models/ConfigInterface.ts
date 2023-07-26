@@ -1,7 +1,8 @@
 export default interface Config {
 	Mapping: { amp: number; value: number }[];
 	Enabled: boolean;
-	InverterHost: string;
+	MainInverterHost: string;
+	InverterHost1: string;
 	ChargerHost: string;
 	BatteryHost: string;
 	CheckSeconds: number;

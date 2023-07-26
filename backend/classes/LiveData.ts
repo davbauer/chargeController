@@ -4,9 +4,14 @@ export default class {
 	static defaultData: LiveDataInterface = {
 		Timestamp: null,
 		Inverter: {
-			Status: 'OFFLINE',
 			Export: -1,
 			SunPower: -1
+		},
+		MainInverter: {
+			Status: 'OFFLINE',
+		},
+		Inverter1: {
+			Status: 'OFFLINE',
 		},
 		Charger: {
 			// (Unknown/Error=0, Idle=1, Charging=2, WaitCar=3, Complete=4, Error=5)
