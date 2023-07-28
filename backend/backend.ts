@@ -9,6 +9,8 @@ import LoopHandler from './classes/LoopHandler.js';
 import loop from './loop.js';
 import WebSocketManager from './classes/WebSocketManager.js';
 import ChargerService from './api/services/ChargerService.js';
+import LiveDataInterface from './models/LiveDataInterface.js';
+import LiveData from './classes/LiveData.js';
 
 const WEBSOCK_PORT = 2001;
 const EXPRESS_PORT = 2000;
@@ -28,6 +30,11 @@ const loopHandler = new LoopHandler();
 app.get('/config', (req, res) => {
     const configObject: ConfigInterface = ConfigFile.read();
     res.json(configObject);
+});
+
+app.get('/livedata', (req, res) => {
+    const liveDataObject: LiveDataInterface = LiveData.data;
+    res.json(liveDataObject);
 });
 
 app.post('/config', (req, res) => {
