@@ -1,53 +1,53 @@
 import ConfigFile from './ConfigFile.js';
 
 export default class LoopHandler {
-	currentCheckSeconds: number | null = null;
-	loopTimeout: NodeJS.Timeout | null = null;
-	configMonitor: NodeJS.Timeout | null = null;
-	lastLoopTimestamp: number | null = null;
-	MIN_LOOP_DELAY = 3000; // 3 seconds
+	static currentCheckSeconds = null;
+	static loopTimeout = null;
+	static configMonitor = null;
+	static lastLoopTimestamp = null;
+	static MIN_LOOP_DELAY = 3000; // 3 seconds
 
-	loopTick(callback: () => void): void {
+	static loopTick(callback) {
 		const config = ConfigFile.read();
 		callback();
 
-		this.currentCheckSeconds = config.CheckSeconds;
-		this.lastLoopTimestamp = Date.now();
-		this.startLoop(callback);
+		LoopHandler.currentCheckSeconds = config.CheckSeconds;
+		LoopHandler.lastLoopTimestamp = Date.now();
+		LoopHandler.startLoop(callback);
 	}
 
-	startLoop(callback: () => void): void {
-		if (this.loopTimeout) {
-			clearTimeout(this.loopTimeout);
+	static startLoop(callback) {
+		if (LoopHandler.loopTimeout) {
+			clearTimeout(LoopHandler.loopTimeout);
 		}
 
 		const config = ConfigFile.read();
-		this.loopTimeout = setTimeout(() => this.loopTick(callback), config.CheckSeconds * 1000);
+		LoopHandler.loopTimeout = setTimeout(() => LoopHandler.loopTick(callback), config.CheckSeconds * 1000);
 	}
 
-	stopLoop(): void {
-		if (this.loopTimeout) {
-			clearTimeout(this.loopTimeout);
-			this.loopTimeout = null;
+	static stopLoop() {
+		if (LoopHandler.loopTimeout) {
+			clearTimeout(LoopHandler.loopTimeout);
+			LoopHandler.loopTimeout = null;
 		}
 	}
 
-	updateLoop(callback: () => void): void {
+	static updateLoop(callback) {
 		const config = ConfigFile.read();
 
-		if (this.currentCheckSeconds !== config.CheckSeconds) {
+		if (LoopHandler.currentCheckSeconds !== config.CheckSeconds) {
 			console.log('Configuration change detected.');
-			this.stopLoop();
+			LoopHandler.stopLoop();
 
-			if (this.lastLoopTimestamp) {
-				const timeSinceLastLoop = Date.now() - this.lastLoopTimestamp;
+			if (LoopHandler.lastLoopTimestamp) {
+				const timeSinceLastLoop = Date.now() - LoopHandler.lastLoopTimestamp;
 
 				// If the last loop was less than 3 seconds ago, delay the immediate execution.
-				if (timeSinceLastLoop < this.MIN_LOOP_DELAY) {
-					const delay = this.MIN_LOOP_DELAY - timeSinceLastLoop;
+				if (timeSinceLastLoop < LoopHandler.MIN_LOOP_DELAY) {
+					const delay = LoopHandler.MIN_LOOP_DELAY - timeSinceLastLoop;
 					setTimeout(() => {
 						callback(); // Run the loop after the delay.
-						this.startLoop(callback);
+						LoopHandler.startLoop(callback);
 					}, delay);
 					return;
 				}
@@ -55,7 +55,7 @@ export default class LoopHandler {
 
 			callback(); // Run the loop immediately.
 
-			this.startLoop(callback);
+			LoopHandler.startLoop(callback);
 		}
 	}
 }
