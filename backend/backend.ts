@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpecs from './routes/swaggerOptions.js';
 import loop from './loop.js';
 import infoLog from './functions/infoLog.js';
 import LoopHandler from './classes/LoopHandler.js';
@@ -21,6 +23,11 @@ app.use(
         origin: '*' // Only allow requests from this origin
     })
 );
+app.get('/api-docs.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpecs);
+});
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use(express.static('./svelte-build'));
 app.use('/', chargeRoutes);
 app.use('/', configRoutes);
