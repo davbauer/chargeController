@@ -1,5 +1,7 @@
 import express from 'express';
 import ChargerService from '../api/services/ChargerService.js';
+import { AxiosError } from 'axios';
+import errorLog from '../functions/errorLog.js';
 
 const r = express.Router();
 
@@ -23,8 +25,16 @@ const r = express.Router();
  *                   example: success
  */
 r.post('/charge-start', (req, res) => {
-    ChargerService.setChargeStart();
-    res.status(200).json({ msg: 'success' });
+    ChargerService.setChargeStart().then((x) => {
+        if (x.frc === true) {
+            res.status(200).json({ msg: 'success' });
+        } else {
+            throw new AxiosError()
+        }
+    }).catch(() => {
+        errorLog("Charge state could not be changed");
+        res.status(500).json({ msg: 'error' });
+    });
 });
 
 /**
@@ -47,8 +57,16 @@ r.post('/charge-start', (req, res) => {
  *                   example: success
  */
 r.post('/charge-stop', (req, res) => {
-    ChargerService.setChargeStop();
-    res.status(200).json({ msg: 'success' });
+    ChargerService.setChargeStop().then((x) => {
+        if (x.frc === true) {
+            res.status(200).json({ msg: 'success' });
+        } else {
+            throw new AxiosError()
+        }
+    }).catch(() => {
+        errorLog("Charge state could not be changed");
+        res.status(500).json({ msg: 'error' });
+    });
 });
 
 export default r;

@@ -5,6 +5,11 @@
 	import ConfigService from '$lib/api/services/ConfigService';
 	import type LiveData from '$lib/api/models/LiveData';
 	import ChargeControlService from '$lib/api/services/ChargeControlService';
+	import {
+		newInfoToast,
+		newSuccessToast,
+		newErrorToast
+	} from '$lib/api/Utilities/ToastUtilService';
 	import { AxiosError } from 'axios';
 	import moment from 'moment';
 
@@ -41,14 +46,32 @@
 	};
 
 	async function onEnabledChange(event: any) {
-		await EnabledService.postEnabled(window.location.hostname, event.target.checked);
+		await EnabledService.postEnabled(window.location.hostname, event.target.checked)
+			.then(() => {
+				newSuccessToast('State changed: ' + event.target.checked);
+			})
+			.catch((err) => {
+				newErrorToast('State change error: ' + err.message);
+			});
 	}
 
 	async function startCharge() {
-		await ChargeControlService.chargeStart(window.location.hostname);
+		await ChargeControlService.chargeStart(window.location.hostname)
+			.then(() => {
+				newSuccessToast('Started charging');
+			})
+			.catch((err) => {
+				newErrorToast('Error starting charging: ' + err.message);
+			});
 	}
 	async function stopCharge() {
-		await ChargeControlService.chargeStop(window.location.hostname);
+		await ChargeControlService.chargeStop(window.location.hostname)
+			.then(() => {
+				newSuccessToast('Stopped charging');
+			})
+			.catch((err) => {
+				newErrorToast('Error stopping charging: ' + err.message);
+			});
 	}
 
 	// Utility function to sort the mapping by amp value
@@ -86,8 +109,13 @@
 
 		// Sort the mapping and save
 		config.Mapping = sortMapping(config.Mapping);
-		await ConfigService.postConfig(window.location.hostname, config);
-
+		await ConfigService.postConfig(window.location.hostname, config)
+			.then(() => {
+				newSuccessToast('Saved settings');
+			})
+			.catch((err) => {
+				newErrorToast('Error saving settings: ' + err.message);
+			});
 		// Ensure there's always an empty row at the end after saving
 		config.Mapping = ensureEmptyRowAtEnd(config.Mapping);
 	}
@@ -121,7 +149,15 @@
 
 	onMount(async () => {
 		try {
-			config = await ConfigService.getConfig(window.location.hostname);
+			await ConfigService.getConfig(window.location.hostname)
+				.then((result) => {
+					config = result;
+					newSuccessToast('Loaded config');
+				})
+				.catch((err) => {
+					newErrorToast('Error loading config: ' + err.message);
+					errorOnLoad = true;
+				});
 		} catch (error: any) {
 			if (error instanceof AxiosError) {
 				errorOnLoad = true;
@@ -149,9 +185,11 @@
 				const message = JSON.parse(event.data);
 				switch (message.event) {
 					case 'enabledStateUpdate':
+						newInfoToast('Received enabledStateUpdate');
 						config.Enabled = message.data.state as boolean;
 						break;
 					case 'liveDataUpdate':
+						newInfoToast('Received liveDataUpdate');
 						console.log(JSON.stringify(message.data, null, 4));
 						console.info('received: liveDataUpdate');
 						liveData = message.data as LiveData;
@@ -172,6 +210,7 @@
 
 			socket.onerror = (error) => {
 				console.error(`[WebSocket Error] ${error}`);
+				newErrorToast(`Websocket Error: ${error.type}`);
 			};
 		};
 
@@ -182,12 +221,12 @@
 {#if !config}
 	<div class="flex justify-center flex-col items-center min-h-screen">
 		{#if errorOnLoad}
-			<p class="mb-10 text-3xl">Connection to backend failed!</p>
+			<p class="mb-10 text-3xl">Connection to backend failed</p>
 			<button class="btn btn-lg btn-error" on:click={() => window.location.reload()}
 				>Retry again</button
 			>
 		{:else}
-			<span class="loading loading-spinner h-44 w-44" />
+			<span class="loading loading-spinner h-36 w-36" />
 		{/if}
 	</div>
 {:else}
