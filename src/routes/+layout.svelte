@@ -17,7 +17,7 @@
 	<footer class="footer footer-center p-4 bg-neutral text-base-content">
 		<div class="align-baseline text-l font-mono underline">
 			<!-- Only works in production not in dev!!-->
-			<button on:click={() => window.location.replace('/api-docs')}>/api-docs</button>
+			<button on:click={() => (window.location.href = '/api-docs')}>/api-docs</button>
 			<a href="https://github.com/davbauer" class="">github/davbauer</a>
 		</div>
 	</footer>
