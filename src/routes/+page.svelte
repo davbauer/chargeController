@@ -6,6 +6,7 @@
 	import type LiveData from '$lib/api/models/LiveData';
 	import ChargeControlService from '$lib/api/services/ChargeControlService';
 	import { AxiosError } from 'axios';
+	import moment from 'moment';
 
 	let config: Config;
 	let errorOnLoad: boolean = false;
@@ -28,7 +29,9 @@
 			AmpCalc: -1,
 			Amp: -1,
 			Consumption: -1,
-			Reserved: -1
+			Reserved: -1,
+			LinkTime: -1,
+			ChargedSinceLink: -1
 		},
 		Battery: {
 			Status: 'OFFLINE',
@@ -348,24 +351,51 @@
 						{liveData.Charger.Consumption !== -1 ? liveData.Charger.Consumption.toFixed(2) : '?'} W
 					</p>
 				</div>
+
 				<div class="flex flex-row items-center">
 					<p class="pr-10 w-56">Charger Ampere</p>
 					<p class="font-mono text-secondary">
 						{liveData.Charger.Amp !== -1 ? liveData.Charger.Amp : '?'} Ampere
 					</p>
 				</div>
+
+				<div class="opacity-60 flex flex-row items-center">
+					<p class="pr-10 w-56">Charged Since Link</p>
+					<p class="font-mono text-primary">
+						{liveData.Charger.ChargedSinceLink !== -1
+							? liveData.Charger.ChargedSinceLink.toFixed(2)
+							: '?'} W ({(
+							(liveData.Charger.ChargedSinceLink / config.BatteryCapacity) *
+							100
+						).toFixed(2)} %) ~ {(liveData.Charger.ChargedSinceLink / config.CarEfficiency).toFixed(
+							2
+						)} km
+					</p>
+				</div>
+
+				<div class="opacity-60 flex flex-row items-center">
+					<p class="pr-10 w-56">Link Time</p>
+					<p class="font-mono">
+						{liveData.Charger.LinkTime !== -1
+							? moment(Date.now() - liveData.Charger.LinkTime).fromNow()
+							: '?'}
+					</p>
+				</div>
+
 				<div class="opacity-60 flex flex-row items-center">
 					<p class="pr-10 w-56">Charger Reserved</p>
 					<p class="font-mono">
 						{liveData.Charger.Reserved !== -1 ? liveData.Charger.Reserved.toFixed(2) : '?'} W
 					</p>
 				</div>
+
 				<div class="opacity-60 flex flex-row items-center">
 					<p class="pr-10 w-56">Charger Ampere Calc</p>
 					<p class="font-mono">
 						{liveData.Charger.AmpCalc !== -1 ? liveData.Charger.AmpCalc : '?'} Ampere
 					</p>
 				</div>
+
 				<div class="opacity-60 flex flex-row items-center">
 					<p class="pr-10 w-56">ShouldStop</p>
 					<input
@@ -435,6 +465,23 @@
 							</tr>
 						</thead>
 						<tbody>
+							<tr>
+								<td colspan="2">
+									<button class="w-full flex self-center btn btn-outline btn-success"
+										>Save Settings</button
+									>
+								</td>
+							</tr>
+							<tr>
+								<td class="w-1/2 text-left">Use Powergrid</td>
+								<td class="w-1/2 text-left">
+									<input
+										bind:checked={config.UsePowergrid}
+										type="checkbox"
+										class="toggle toggle-secondary"
+									/></td
+								>
+							</tr>
 							<tr>
 								<td class="w-1/2 text-left">MainInverter Host</td>
 								<td class="w-1/2 text-left">
@@ -534,27 +581,24 @@
 										min="1000"
 										bind:value={config.BatteryCapacity}
 										max="50000"
-										placeholder="20000"
+										placeholder="21000"
 										class="input input-bordered w-full max-w-xs"
 									/></td
 								>
 							</tr>
 							<tr>
-								<td class="w-1/2 text-left">Use Powergrid</td>
+								<td class="w-1/2 text-left">Car Efficiency</td>
 								<td class="w-1/2 text-left">
 									<input
-										bind:checked={config.UsePowergrid}
-										type="checkbox"
-										class="toggle toggle-secondary"
+										required
+										type="number"
+										min="10"
+										bind:value={config.CarEfficiency}
+										max="1000"
+										placeholder="150"
+										class="input input-bordered w-full max-w-xs"
 									/></td
 								>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<button class="w-full flex self-center btn btn-outline btn-success"
-										>Save Settings</button
-									>
-								</td>
 							</tr>
 						</tbody>
 					</table>

@@ -5,7 +5,7 @@ export default class extends ApiBase {
 	static async getChargeInfo(): Promise<ChaStatus> {
 		return this.get<ChaStatus>(
 			ConfigFile.read().ChargerHost,
-			`api/status?filter=rssi,amp,ama,car,pha,wh,nrg,pnp,pwm,fsp`
+			`api/status?filter=rssi,amp,ama,car,pha,wh,nrg,pnp,pwm,fsp,lccfi`
 		);
 	}
 	static async setChargeStart(): Promise<setChargeState> {

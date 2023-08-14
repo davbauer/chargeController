@@ -10,4 +10,5 @@ export default interface Config {
 	MaximumAmps: number;
 	UsePowergrid: boolean;
 	BatteryCapacity: number;
+	CarEfficiency: number;
 }

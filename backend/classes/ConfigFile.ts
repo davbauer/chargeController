@@ -23,7 +23,8 @@ export default class {
 			MinimumAmps: 6,
 			MaximumAmps: 14,
 			UsePowergrid: false,
-			BatteryCapacity: 21000
+			BatteryCapacity: 21000,
+			CarEfficiency: 150,
 		};
 		const dirPath = path.dirname(this.filePath);
 		if (!fs.existsSync(dirPath)) {
@@ -82,6 +83,7 @@ export default class {
 			typeof data.MinimumAmps === 'number' &&
 			typeof data.MaximumAmps === 'number' &&
 			typeof data.UsePowergrid === 'boolean' &&
+			typeof data.CarEfficiency === 'number' &&
 			typeof data.BatteryCapacity === 'number'
 		);
 	}
