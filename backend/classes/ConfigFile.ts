@@ -23,7 +23,7 @@ export default class {
 			MinimumAmps: 6,
 			MaximumAmps: 14,
 			UsePowergrid: false,
-			BatteryCapacity: 21000,
+			BatteryCapacity: 52000,
 			CarEfficiency: 150,
 		};
 		const dirPath = path.dirname(this.filePath);

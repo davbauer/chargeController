@@ -580,8 +580,8 @@
 										type="number"
 										min="1000"
 										bind:value={config.BatteryCapacity}
-										max="50000"
-										placeholder="21000"
+										max="100000"
+										placeholder="52000"
 										class="input input-bordered w-full max-w-xs"
 									/></td
 								>
