@@ -11,6 +11,7 @@
 yarn dev
 
 # Run the backend application
-yarn backend
+cd ./backend
+yarn dev
 ```
 
