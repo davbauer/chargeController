@@ -416,7 +416,9 @@
 					<p class="pr-10 w-56">Link Time</p>
 					<p class="font-mono">
 						{liveData.Charger.LinkTime !== -1
-							? moment(Date.now() - liveData.Charger.LinkTime).fromNow()
+							? liveData.Charger.LinkTime === 0
+								? '/'
+								: moment(Date.now() - liveData.Charger.LinkTime).fromNow()
 							: '?'}
 					</p>
 				</div>
@@ -437,12 +439,11 @@
 
 				<div class="opacity-60 flex flex-row items-center">
 					<p class="pr-10 w-56">ShouldStop</p>
-					<input
-						checked
-						type="radio"
-						class="radio {liveData.Charger.ShouldStop ? 'radio-success' : 'radio'}"
-						readonly
-					/>
+					{#if liveData.Charger.ShouldStop}
+						<input checked type="radio" class="radio" readonly />
+					{:else}
+						<input type="radio" class="radio" readonly />
+					{/if}
 				</div>
 			</div>
 
