@@ -1,4 +1,4 @@
 interface Toast {
-    alertType: string;
-    message: string;
+	alertType: string;
+	message: string;
 }

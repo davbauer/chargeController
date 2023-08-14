@@ -5,11 +5,9 @@ import infoLog from '../functions/infoLog.js';
 import * as path from 'path';
 // ... other imports ...
 
-
 export default class {
 	private static cachedConfig: ConfigInterface | null = null;
 	private static filePath = './config/config.json';
-
 
 	private static createDefaultConfig(): ConfigInterface {
 		const defaultConfig = {
@@ -24,7 +22,7 @@ export default class {
 			MaximumAmps: 14,
 			UsePowergrid: false,
 			BatteryCapacity: 52000,
-			CarEfficiency: 150,
+			CarEfficiency: 150
 		};
 		const dirPath = path.dirname(this.filePath);
 		if (!fs.existsSync(dirPath)) {
@@ -50,7 +48,8 @@ export default class {
 				return this.createDefaultConfig();
 			}
 		} catch (error) {
-			if (error.code === 'ENOENT') { // Check if the error is because the file doesn't exist
+			if (error.code === 'ENOENT') {
+				// Check if the error is because the file doesn't exist
 				infoLog('ConfigFile.read: Config file not found. Creating default config.');
 				return this.createDefaultConfig();
 			}
@@ -73,7 +72,9 @@ export default class {
 	private static isValidConfig(data: any): data is ConfigInterface {
 		return (
 			Array.isArray(data.Mapping) &&
-			data.Mapping.every(item => typeof item.amp === 'number' && typeof item.value === 'number') &&
+			data.Mapping.every(
+				(item) => typeof item.amp === 'number' && typeof item.value === 'number'
+			) &&
 			typeof data.Enabled === 'boolean' &&
 			typeof data.MainInverterHost === 'string' &&
 			typeof data.InverterHost1 === 'string' &&

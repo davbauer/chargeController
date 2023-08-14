@@ -22,7 +22,10 @@ export default class LoopHandler {
 		}
 
 		const config = ConfigFile.read();
-		LoopHandler.loopTimeout = setTimeout(() => LoopHandler.loopTick(callback), config.CheckSeconds * 1000);
+		LoopHandler.loopTimeout = setTimeout(
+			() => LoopHandler.loopTick(callback),
+			config.CheckSeconds * 1000
+		);
 	}
 
 	static stopLoop() {

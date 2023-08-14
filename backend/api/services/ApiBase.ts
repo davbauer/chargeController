@@ -43,7 +43,7 @@ export default class ApiService {
 			if (this.isXml(response)) {
 				return this.xmlToJson<T>(response.data);
 			} else {
-				console.log(`API Error on getXML2JSON:${endpoint} (xml check failed)`)
+				console.log(`API Error on getXML2JSON:${endpoint} (xml check failed)`);
 			}
 		} catch (error) {
 			console.error(`API Error on getXML2JSON:${endpoint}`);
@@ -52,22 +52,27 @@ export default class ApiService {
 
 	private static isXml(response: AxiosResponse<any>): boolean {
 		const contentType = response.headers['content-type'];
-		return contentType && (contentType.includes('application/xml') || contentType.includes('text/xml'));
+		return (
+			contentType && (contentType.includes('application/xml') || contentType.includes('text/xml'))
+		);
 	}
-
 
 	private static async xmlToJson<T>(xml: string): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
-			xml2js.parseString(xml, {
-				explicitArray: false,
-				mergeAttrs: true
-			}, (err, result) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(result as T);
+			xml2js.parseString(
+				xml,
+				{
+					explicitArray: false,
+					mergeAttrs: true
+				},
+				(err, result) => {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(result as T);
+					}
 				}
-			});
+			);
 		});
 	}
 }

@@ -2,8 +2,7 @@ import express from 'express';
 import LiveDataInterface from '../models/LiveDataInterface.js';
 import LiveData from '../classes/LiveData.js';
 
-
-const r = express.Router()
+const r = express.Router();
 
 /**
  * @swagger
@@ -22,8 +21,8 @@ const r = express.Router()
  *               $ref: '#/components/schemas/LiveDataInterface'
  */
 r.get('/livedata', (req, res) => {
-    const liveDataObject: LiveDataInterface = LiveData.data;
-    res.json(liveDataObject);
+	const liveDataObject: LiveDataInterface = LiveData.data;
+	res.json(liveDataObject);
 });
 
 export default r;

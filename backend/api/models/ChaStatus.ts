@@ -11,14 +11,14 @@ export default interface ChaStatus {
 	/** The maximum current available for charging in Ampere. */
 	ama: number;
 
-	/** 
+	/**
 	 * State of the car's charging process:
-	 * 0=Unknown/Error, 1=Idle, 2=Charging, 3=WaitCar, 4=Complete, 5=Error 
+	 * 0=Unknown/Error, 1=Idle, 2=Charging, 3=WaitCar, 4=Complete, 5=Error
 	 */
 	car: 0 | 1 | 2 | 3 | 4 | 5;
 
-	/** 
-	 * Boolean flags indicating the status of each phase. 
+	/**
+	 * Boolean flags indicating the status of each phase.
 	 * Indices 0-2 represent L1-L3, and 3-5 represent Neutral for L1-L3 respectively.
 	 */
 	pha: [boolean, boolean, boolean, boolean, boolean, boolean];
@@ -46,9 +46,21 @@ export default interface ChaStatus {
 	 * [12], [13], [14], [15] - Power factor for L1, L2, L3, and N respectively.
 	 */
 	nrg: [
-		number, number, number, number,
-		number, number, number, number,
-		number, number, number, number,
-		number, number, number, number
+		number,
+		number,
+		number,
+		number,
+		number,
+		number,
+		number,
+		number,
+		number,
+		number,
+		number,
+		number,
+		number,
+		number,
+		number,
+		number
 	];
 }

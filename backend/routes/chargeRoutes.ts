@@ -25,16 +25,18 @@ const r = express.Router();
  *                   example: success
  */
 r.post('/charge-start', (req, res) => {
-    ChargerService.setChargeStart().then((x) => {
-        if (x.frc === true) {
-            res.status(200).json({ msg: 'success' });
-        } else {
-            throw new AxiosError()
-        }
-    }).catch(() => {
-        errorLog("Charge state could not be changed");
-        res.status(500).json({ msg: 'error' });
-    });
+	ChargerService.setChargeStart()
+		.then((x) => {
+			if (x.frc === true) {
+				res.status(200).json({ msg: 'success' });
+			} else {
+				throw new AxiosError();
+			}
+		})
+		.catch(() => {
+			errorLog('Charge state could not be changed');
+			res.status(500).json({ msg: 'error' });
+		});
 });
 
 /**
@@ -57,16 +59,18 @@ r.post('/charge-start', (req, res) => {
  *                   example: success
  */
 r.post('/charge-stop', (req, res) => {
-    ChargerService.setChargeStop().then((x) => {
-        if (x.frc === true) {
-            res.status(200).json({ msg: 'success' });
-        } else {
-            throw new AxiosError()
-        }
-    }).catch(() => {
-        errorLog("Charge state could not be changed");
-        res.status(500).json({ msg: 'error' });
-    });
+	ChargerService.setChargeStop()
+		.then((x) => {
+			if (x.frc === true) {
+				res.status(200).json({ msg: 'success' });
+			} else {
+				throw new AxiosError();
+			}
+		})
+		.catch(() => {
+			errorLog('Charge state could not be changed');
+			res.status(500).json({ msg: 'error' });
+		});
 });
 
 export default r;

@@ -8,10 +8,10 @@ export default class {
 			SunPower: -1
 		},
 		MainInverter: {
-			Status: 'OFFLINE',
+			Status: 'OFFLINE'
 		},
 		Inverter1: {
-			Status: 'OFFLINE',
+			Status: 'OFFLINE'
 		},
 		Charger: {
 			// (Unknown/Error=0, Idle=1, Charging=2, WaitCar=3, Complete=4, Error=5)
@@ -27,7 +27,7 @@ export default class {
 		Battery: {
 			Status: 'OFFLINE',
 			Percent: -1,
-			Power: -1,
+			Power: -1
 		}
 	};
 	static data: LiveDataInterface = this.defaultData;
