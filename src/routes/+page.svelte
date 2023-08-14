@@ -415,7 +415,11 @@
 					{liveData.Charger.LinkTime !== -1
 						? liveData.Charger.LinkTime === 0
 							? '/'
-							: moment(Date.now() - liveData.Charger.LinkTime).fromNow()
+							: moment(
+									typeof liveData.Timestamp === 'string'
+										? new Date(liveData.Timestamp).getTime()
+										: Date.now() - liveData.Charger.LinkTime
+							  ).fromNow()
 						: '?'}
 				</p>
 			</div>
