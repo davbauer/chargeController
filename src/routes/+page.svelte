@@ -510,9 +510,7 @@
 						<tbody>
 							<tr>
 								<td colspan="2">
-									<button class="w-full flex self-center btn btn-outline btn-success"
-										>Save Settings</button
-									>
+									<button class="w-full flex self-center btn btn-success">Save Settings</button>
 								</td>
 							</tr>
 							<tr>
