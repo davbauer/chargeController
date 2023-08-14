@@ -6,11 +6,13 @@ import WebSocketManager from './classes/WebSocketManager.js';
 import ConfigFile from './classes/ConfigFile.js';
 import ConfigInterface from './models/ConfigInterface.js';
 import LiveDataInterface from './models/LiveDataInterface.js';
+import infoLog from './functions/infoLog.js';
 
 const CAR_NOT_CHARGING = 2; // Replace with an appropriate descriptive constant
 
 export default async function (): Promise<void> {
-	console.log('////////////////////////////');
+	console.log("\n---------------------------------------------------------------");
+	infoLog('LOOP (' + ConfigFile.read().CheckSeconds + 's) --------------------|');
 
 	LiveData.data = LiveData.defaultData;
 
@@ -65,32 +67,33 @@ export default async function (): Promise<void> {
 	const result = calculateChargeSettings(config);
 	Object.assign(LiveData.data.Charger, result);
 	if (!config.Enabled) {
-		console.log('Control not enabled!');
+
+		infoLog('Control not enabled!');
 		WebSocketManager.sendEventLiveData();
 		return;
 	}
 
 	if (!chargerData || !mainInverterPowerFlow) {
-		console.log('Stop charging - one not available');
+		infoLog('Stop charging - one not available');
 		ChargerService.setChargeStop();
 		WebSocketManager.sendEventLiveData();
 		return;
 	}
 
 	if (LiveData.data.Charger.ShouldStop && !config.UsePowergrid) {
-		console.log('Should stop is true and use powergrid set to false');
+		infoLog('Should stop is true and use powergrid set to false');
 		await ChargerService.setChargeStop();
 		WebSocketManager.sendEventLiveData();
 		return;
 	}
 
 	if (chargerData.car !== CAR_NOT_CHARGING) {
-		console.log('Car is not charging, setting charge true!');
+		infoLog('Car is not charging, setting charge true!');
 		await ChargerService.setChargeStart();
 	}
 
 	if (chargerData.amp !== LiveData.data.Charger.AmpCalc) {
-		console.log('Amp was corrected');
+		infoLog('Amp was corrected');
 		const response = await ChargerService.setChargeAmp(LiveData.data.Charger.AmpCalc);
 		if (response.amp === true) {
 			LiveData.data.Charger.Amp = LiveData.data.Charger.AmpCalc;
@@ -98,7 +101,7 @@ export default async function (): Promise<void> {
 	}
 
 	WebSocketManager.sendEventLiveData();
-	console.log('Done');
+	infoLog('Done');
 }
 
 function findClosestValue(key: number, mappingArray: any[]): any {

@@ -2,9 +2,7 @@
 	import type Config from '$lib/api/models/Config';
 	import EnabledService from '$lib/api/services/EnabledService';
 	import { onMount } from 'svelte';
-	import type { PageData } from './$types';
 	import ConfigService from '$lib/api/services/ConfigService';
-	import { goto } from '$app/navigation';
 	import type LiveData from '$lib/api/models/LiveData';
 	import ChargeControlService from '$lib/api/services/ChargeControlService';
 	import { AxiosError } from 'axios';

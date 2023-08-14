@@ -17,7 +17,6 @@ const EXPRESS_PORT = 2000;
 const app = express();
 app.use(morgan('tiny'));
 app.use(express.json());
-process.env.Staging;
 app.use(
     cors({
         origin: '*' // Only allow requests from this origin
@@ -36,13 +35,11 @@ app.use('/', livedataRoutes);
 
 
 const server = app.listen(EXPRESS_PORT, '0.0.0.0', () => {
-    console.info(
-        `\n------------------------------------------\nExpress running at http://localhost:${EXPRESS_PORT}`
-    );
+    console.log("");
+    infoLog(`STARTED CHANGECONTROLLER -------------|`);
+    infoLog(`EXPRESS PORT:${EXPRESS_PORT} --------------------|`);
     WebSocketManager.init(WEBSOCK_PORT);
-    console.info(
-        `WebSocket running at http://localhost:${WEBSOCK_PORT}\n------------------------------------------\n`
-    );
+    infoLog(`WEBSOCK PORT:${WEBSOCK_PORT} --------------------|\n\n`);
     LoopHandler.startLoop(loop);
 });
 
