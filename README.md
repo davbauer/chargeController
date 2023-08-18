@@ -7,10 +7,12 @@
 ## Setting up
 
 ```bash
-# Run the svelte application
-yarn dev
-
-# Run the backend application
-cd ./backend
-yarn dev
+yarn           # Install packages
+yarn dev       # Run frontend
+```
+Open new terminal window
+```bash
+cd ./backend   # Change dir to 'backend'
+yarn           # Install packages
+yarn dev       # Run backend
 ```
