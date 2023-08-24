@@ -27,4 +27,4 @@ jobs:
         with:
           push: true
           platforms: linux/arm64,linux/amd64
-          tags: registry.zec.one/charge-controller-dev
+          tags: registry.zec.one/charge-controller
