@@ -7,9 +7,6 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        architecture: [arm64, amd64]
     runs-on: ubuntu-latest
 
     steps:
@@ -30,4 +27,4 @@ jobs:
         with:
           push: true
           platforms: linux/arm64,linux/amd64
-          tags: registry.zec.one/charge-controller-dev:${{ matrix.architecture }}
+          tags: registry.zec.one/charge-controller-dev
