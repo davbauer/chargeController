@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"module": "NodeNext",
 		"target": "ES2021",
 		"removeComments": true,
 		"preserveConstEnums": true,
