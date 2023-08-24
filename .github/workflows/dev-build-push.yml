@@ -1,3 +1,5 @@
+name: dev docker build & push
+
 on:
   push:
     branches:
@@ -5,11 +7,12 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        architecture: [arm64, amd64]
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
 
+    steps:
       - name: Login to Docker registry
         uses: docker/login-action@v2
         with:
@@ -17,22 +20,8 @@ jobs:
           username: ${{ secrets.REGISTRY_ZEC_ONE_USERNAME }}
           password: ${{ secrets.REGISTRY_ZEC_ONE_PASSWORD }}
 
-      - name: Determine platform
-        id: determine_platform
-        run: |
-          if [ ${{ runner.architecture }} == "arm64" ]; then
-            echo "Platform=linux/arm64"
-            echo "::set-output name=platform::linux/arm64"
-          else
-            echo "Platform=linux/amd64"
-            echo "::set-output name=platform::linux/amd64"
-          fi
-
-      - name: Build and push Docker image
-        run: |
-          platform=${{ steps.determine_platform.outputs.platform }}
-          docker buildx create --use
-          docker buildx build \
-            --platform $platform \
-            -t registry.zec.one/charge-controller-dev:latest .
-          docker push registry.zec.one/charge-controller-dev:latest
+      - name: Dockerize and Push Image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: registry.zec.one/charge-controller-dev
