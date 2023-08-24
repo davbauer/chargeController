@@ -34,5 +34,5 @@ jobs:
           docker buildx create --use
           docker buildx build \
             --platform $platform \
-            -t registry.zec.one/charge-controller-dev:$platform-latest .
-          docker push registry.zec.one/charge-controller-dev:$platform-latest
+            -t registry.zec.one/charge-controller-dev:latest .
+          docker push registry.zec.one/charge-controller-dev:latest
