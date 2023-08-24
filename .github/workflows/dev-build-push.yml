@@ -1,4 +1,4 @@
-name: dev docker build & push
+name: dev Docker Build & Push
 
 on:
   push:
@@ -10,6 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup QEMU for multi-architecture support
+        run: |
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+
       - name: Login to Docker registry
         uses: docker/login-action@v2
         with:
@@ -17,8 +24,10 @@ jobs:
           username: ${{ secrets.REGISTRY_ZEC_ONE_USERNAME }}
           password: ${{ secrets.REGISTRY_ZEC_ONE_PASSWORD }}
 
-      - name: Dockerize and Push Image
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: registry.zec.one/charge-controller-dev
+      - name: Build and push Docker images
+        run: |
+          docker buildx create --use
+          docker buildx build \
+            --platform linux/arm/v7,linux/arm64/v8,linux/amd64 \
+            -t registry.zec.one/charge-controller-dev:latest .
+          docker push registry.zec.one/charge-controller-dev:latest
