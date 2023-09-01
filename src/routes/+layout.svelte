@@ -4,6 +4,10 @@
 	import Toast from '$lib/components/Toast.svelte';
 </script>
 
+<svelte:head>
+	<title>chargeController</title>
+</svelte:head>
+
 <div class="min-h-screen flex flex-col">
 	<div class="w-full navbar bg-neutral flex justify-center items-center">
 		<p class="font-mono text-xl">chargeController</p>
