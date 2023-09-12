@@ -9,6 +9,7 @@ RUN apk add --no-cache git jq
 RUN echo "FRONTEND_GIT_COMMIT=$(git rev-parse HEAD)" >> .env
 RUN echo "FRONTEND_GIT_BRANCH=$(git symbolic-ref --short HEAD || git rev-parse --short HEAD)" >> .env
 COPY . .
+COPY .git .git
 RUN yarn build
 
 
