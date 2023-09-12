@@ -4,7 +4,8 @@
 	import Toast from '$lib/components/Toast.svelte';
 	import { onMount } from 'svelte';
 
-	let gitInfo: { branch: string | null; commit: string | null } = {
+	let gitInfo: { branch: string | null; commit: string | null; debug: boolean } = {
+		debug: false,
 		branch: null,
 		commit: null
 	};
@@ -18,12 +19,14 @@
 </script>
 
 <svelte:head>
-	<title>chargeController</title>
+	<title>{gitInfo.debug ? 'DEBUG' : ''}-chargeController</title>
 </svelte:head>
 
 <div class="min-h-screen flex flex-col">
 	<div class="w-full navbar bg-neutral flex justify-center items-center">
-		<p class="font-mono text-xl">chargeController</p>
+		<p class="font-mono text-xl">
+			{gitInfo.debug ? 'DEBUG' : ''}-chargeController
+		</p>
 	</div>
 
 	<div class="flex-grow">
