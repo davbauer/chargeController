@@ -11,7 +11,28 @@ export default class {
 
 	private static createDefaultConfig(): ConfigInterface {
 		const defaultConfig = {
-			Mapping: [],
+			Mapping: [
+				{
+					amp: 6,
+					value: 300
+				},
+				{
+					amp: 7,
+					value: 300
+				},
+				{
+					amp: 8,
+					value: 4400
+				},
+				{
+					amp: 9,
+					value: 6000
+				},
+				{
+					amp: 10,
+					value: 6740
+				}
+			],
 			Enabled: false,
 			MainInverterHost: 'myhostname',
 			InverterHost1: 'myhostname',
@@ -22,7 +43,7 @@ export default class {
 			MaximumAmps: 14,
 			UsePowergrid: false,
 			BatteryCapacity: 52000,
-			CarEfficiency: 150
+			CarEfficiency: 200
 		};
 		const dirPath = path.dirname(this.filePath);
 		if (!fs.existsSync(dirPath)) {
