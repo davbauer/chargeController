@@ -7,8 +7,7 @@ COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
 ARG GIT_COMMIT
 ARG GIT_BRANCH
-RUN echo "FRONTEND_GIT_COMMIT=${GIT_COMMIT}" >> .env
-RUN echo "FRONTEND_GIT_BRANCH=${GIT_BRANCH}" >> .env
+RUN echo "{\"commit\": \"${GIT_COMMIT}\", \"branch\": \"${GIT_BRANCH}\"}" > static/git-info.json
 COPY . .
 RUN yarn build
 

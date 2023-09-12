@@ -2,9 +2,19 @@
 	import '../app.css';
 	import { toasts } from '$lib/store';
 	import Toast from '$lib/components/Toast.svelte';
+	import { onMount } from 'svelte';
 
-	const gitCommit = import.meta.env.FRONTEND_GIT_COMMIT;
-	const gitBranch = import.meta.env.FRONTEND_GIT_BRANCH;
+	let gitInfo: { branch: string | null; commit: string | null } = {
+		branch: null,
+		commit: null
+	};
+	onMount(() => {
+		fetch('/git-info.json')
+			.then((response) => response.json())
+			.then((data) => {
+				gitInfo = data;
+			});
+	});
 </script>
 
 <svelte:head>
@@ -30,9 +40,8 @@
 			<a class="underline" href="https://github.com/davbauer">github/davbauer</a>
 
 			<p class="text-gray-500">
-				Branch: {gitBranch === undefined ? '/' : gitBranch} CommitId: {gitCommit === undefined
-					? '/'
-					: gitCommit}
+				Branch: {gitInfo.branch === null ? '/' : gitInfo.branch}
+				CommitId: {gitInfo.commit === null ? '/' : gitInfo.commit}
 			</p>
 			<p />
 		</div>
