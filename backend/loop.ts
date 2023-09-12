@@ -113,6 +113,14 @@ export default async function (): Promise<void> {
 }
 
 function findClosestValue(key: number, mappingArray: any[]): any {
+	// if length is zero just return a preset value indicating 'None'
+	if (mappingArray.length === 0) {
+		// Find the amp value that matches the available power the closest
+		type MappingItemType = ConfigInterface['Mapping'][0];
+		const response: MappingItemType = { value: 0, amp: 0 }
+		return response;
+	}
+
 	return mappingArray.reduce((prev, curr) => {
 		// If the current value is closer or the same distance to the key than the previous
 		// and is not more than the key, then consider it as the closest value.
