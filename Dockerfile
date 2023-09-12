@@ -8,7 +8,7 @@ RUN yarn install --frozen-lockfile
 ARG GIT_COMMIT
 ARG GIT_BRANCH
 COPY . .
-RUN echo "{\"commit\": \"${GIT_COMMIT}\", \"branch\": \"${GIT_BRANCH}\", \"debug\": true}" > static/git-info.json
+RUN echo "{\"commit\": \"${GIT_COMMIT}\", \"branch\": \"${GIT_BRANCH}\", \"debug\": false}" > static/git-info.json
 RUN yarn build
 
 
