@@ -1,0 +1,6 @@
+{
+	"recommendations": [
+		"oven.bun-vscode", // Bun for VSCODE
+		"esbenp.prettier-vscode" // Prettier
+	]
+}

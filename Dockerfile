@@ -5,7 +5,10 @@ WORKDIR /app
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
+ARG GIT_COMMIT
+ARG GIT_BRANCH
 COPY . .
+RUN echo "{\"commit\": \"${GIT_COMMIT}\", \"branch\": \"${GIT_BRANCH}\", \"debug\": false}" > static/git-info.json
 RUN yarn build
 
 

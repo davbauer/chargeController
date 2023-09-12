@@ -27,7 +27,8 @@ export default class ApiService {
 			this.handleResponse(response, `get:${endpoint}`);
 			return response.data;
 		} catch (error) {
-			console.error(`API Error on get:${endpoint}`);
+			console.error(`API Error on get:${endpoint}`, error);
+			throw new Error(`API Error on get:${endpoint}`);
 		}
 	}
 
@@ -44,9 +45,11 @@ export default class ApiService {
 				return this.xmlToJson<T>(response.data);
 			} else {
 				console.log(`API Error on getXML2JSON:${endpoint} (xml check failed)`);
+				throw new Error(`API Error on getXML2JSON: ${endpoint}(xml check failed)`);
 			}
 		} catch (error) {
-			console.error(`API Error on getXML2JSON:${endpoint}`);
+			console.error(`API Error on getXML2JSON: ${endpoint}`, error);
+			throw new Error(`API Error on getXML2JSON: ${endpoint}`);
 		}
 	}
 
