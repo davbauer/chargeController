@@ -41,6 +41,8 @@
 
 			<p class="text-gray-500">
 				Branch: {gitInfo.branch === null ? '/' : gitInfo.branch}
+			</p>
+			<p class="text-gray-500">
 				CommitId: {gitInfo.commit === null ? '/' : gitInfo.commit}
 			</p>
 			<p />
