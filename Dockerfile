@@ -5,11 +5,11 @@ WORKDIR /app
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
-RUN apk add --no-cache git jq
-RUN echo "FRONTEND_GIT_COMMIT=$(git rev-parse HEAD)" >> .env
-RUN echo "FRONTEND_GIT_BRANCH=$(git symbolic-ref --short HEAD || git rev-parse --short HEAD)" >> .env
+ARG GIT_COMMIT
+ARG GIT_BRANCH
+RUN echo "FRONTEND_GIT_COMMIT=${GIT_COMMIT}" >> .env
+RUN echo "FRONTEND_GIT_BRANCH=${GIT_BRANCH}" >> .env
 COPY . .
-COPY .git .git
 RUN yarn build
 
 
