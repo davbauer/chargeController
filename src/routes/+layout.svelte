@@ -19,13 +19,13 @@
 </script>
 
 <svelte:head>
-	<title>{gitInfo.debug ? 'DEBUG' : ''}-chargeController</title>
+	<title>{gitInfo.debug ? 'DEBUG-' : ''}chargeController</title>
 </svelte:head>
 
 <div class="min-h-screen flex flex-col">
 	<div class="w-full navbar bg-neutral flex justify-center items-center">
 		<p class="font-mono text-xl">
-			{gitInfo.debug ? 'DEBUG' : ''}-chargeController
+			{gitInfo.debug ? 'DEBUG-' : ''}chargeController
 		</p>
 	</div>
 
