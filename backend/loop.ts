@@ -117,7 +117,7 @@ function findClosestValue(key: number, mappingArray: any[]): any {
 	if (mappingArray.length === 0) {
 		// Find the amp value that matches the available power the closest
 		type MappingItemType = ConfigInterface['Mapping'][0];
-		const response: MappingItemType = { value: 0, amp: 0 }
+		const response: MappingItemType = { value: 0, amp: 0 };
 		return response;
 	}
 
