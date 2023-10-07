@@ -5,8 +5,6 @@ WORKDIR /app
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
-ARG GIT_COMMIT
-ARG GIT_BRANCH
 COPY . .
 RUN yarn build
 

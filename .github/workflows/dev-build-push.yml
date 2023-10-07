@@ -27,16 +27,10 @@ jobs:
           username: ${{ secrets.REGISTRY_ZEC_ONE_USERNAME }}
           password: ${{ secrets.REGISTRY_ZEC_ONE_PASSWORD }}
 
-      - name: Set up Docker Buildx
-        run: |
-          docker buildx version
-          docker buildx create --use
-
       - name: Dockerize and Push Image
         uses: docker/build-push-action@v4
         with:
           push: true
-          platforms: linux/arm64,linux/amd64
           tags: registry.zec.one/charge-controller-dev
           build-args: |
             GIT_COMMIT=${{ env.GIT_COMMIT }}
