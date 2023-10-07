@@ -13,7 +13,6 @@ COPY ./backend/package.json ./
 COPY ./backend/yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY ./backend .
-RUN ls -alR /app | grep -v "node_modules"
 RUN yarn build
 
 
