@@ -8,7 +8,8 @@ import InterfaceConfig from './models/InterfaceConfig.js';
 import LiveDataInterface from './models/InterfaceLiveData.js';
 import infoLog from './functions/infoLog.js';
 
-const CAR_NOT_CHARGING = 2; // Replace with an appropriate descriptive constant
+const CAR_NOT_CHARGING = 2;
+const CAR_WAIT = 3;
 
 export default async function (): Promise<void> {
 	console.log('\n---------------------------------------------------------------');
@@ -90,7 +91,7 @@ export default async function (): Promise<void> {
 	}
 
 	if (!chargerData || !mainInverterPowerFlow) {
-		infoLog('Stop charging - one not available');
+		infoLog('Stop charging - no charger- or inverterdata available');
 		ChargerService.setChargeStop();
 		WebSocketManager.sendEventLiveData();
 		return;
@@ -104,6 +105,10 @@ export default async function (): Promise<void> {
 	}
 
 	if (chargerData.car !== CAR_NOT_CHARGING) {
+		if (chargerData.car === CAR_WAIT) {
+			infoLog('No car to charger connected, cant charge!');
+			return;
+		}
 		infoLog('Car is not charging, setting charge true!');
 		await ChargerService.setChargeStart();
 	}
