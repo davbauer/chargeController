@@ -4,8 +4,8 @@ import BatteryService from './api/services/BatteryService.js';
 import LiveData from './classes/LiveData.js';
 import WebSocketManager from './classes/WebSocketManager.js';
 import ConfigFile from './classes/ConfigFile.js';
-import ConfigInterface from './models/ConfigInterface.js';
-import LiveDataInterface from './models/LiveDataInterface.js';
+import InterfaceConfig from './models/InterfaceConfig.js';
+import InterfaceLiveData from './models/InterfaceLiveData.js';
 import infoLog from './functions/infoLog.js';
 
 const CAR_NOT_CHARGING = 2; // Replace with an appropriate descriptive constant
@@ -16,7 +16,7 @@ export default async function (): Promise<void> {
 
 	LiveData.data = LiveData.defaultData;
 
-	const config: ConfigInterface = ConfigFile.read();
+	const config: InterfaceConfig = ConfigFile.read();
 
 	const mainInverterPowerFlow = await InverterService.getPowerFlowRealtimeData(
 		ConfigFile.read().MainInverterHost
@@ -48,7 +48,7 @@ export default async function (): Promise<void> {
 	}
 
 	if (batteryData) {
-		const stateMappings: { [key: string]: LiveDataInterface['Battery']['Status'] } = {
+		const stateMappings: { [key: string]: InterfaceLiveData['Battery']['Status'] } = {
 			'0': 0, // Busy
 			'1': 1, // Activ-Modus
 			'2': 2, // Laden
@@ -116,7 +116,7 @@ function findClosestValue(key: number, mappingArray: any[]): any {
 	// if length is zero just return a preset value indicating 'None'
 	if (mappingArray.length === 0) {
 		// Find the amp value that matches the available power the closest
-		type MappingItemType = ConfigInterface['Mapping'][0];
+		type MappingItemType = InterfaceConfig['Mapping'][0];
 		const response: MappingItemType = { value: 0, amp: 0 };
 		return response;
 	}

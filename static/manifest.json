@@ -1,5 +1,6 @@
 {
 	"short_name": "chargeController",
+	"orientation": "portrait",
 	"name": "chargeController",
 	"description": "chargeController written in SvelteKit with NodeJS backend",
 	"icons": [
@@ -9,6 +10,7 @@
 			"type": "image/png"
 		}
 	],
+	"scope": "/",
 	"start_url": "/",
 	"background_color": "#ffffff",
 	"theme_color": "#000000",

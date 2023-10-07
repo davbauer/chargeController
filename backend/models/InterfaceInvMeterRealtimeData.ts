@@ -1,4 +1,4 @@
-export default interface InvMeterRealtimeData {
+export default interface InterfaceInvMeterRealtimeData {
 	Body: {
 		Data: {
 			Current_AC_Phase_1: number;

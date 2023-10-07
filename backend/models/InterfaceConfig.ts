@@ -1,4 +1,4 @@
-export default interface ConfigInterface {
+export default interface InterfaceConfig {
 	Mapping: { amp: number; value: number }[];
 	Enabled: boolean;
 	MainInverterHost: string;

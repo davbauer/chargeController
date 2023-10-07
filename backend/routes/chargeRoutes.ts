@@ -14,7 +14,7 @@ const r = express.Router();
  *       - Charger
  *     responses:
  *       200:
- *         description: Charge process started successfully
+ *         description: Success
  *         content:
  *           application/json:
  *             schema:
@@ -24,7 +24,7 @@ const r = express.Router();
  *                   type: string
  *                   example: success
  */
-r.post('/charge-start', (req, res) => {
+r.post('/charge-start', (_req, res) => {
 	ChargerService.setChargeStart()
 		.then((x) => {
 			if (x.frc === true) {
@@ -48,7 +48,7 @@ r.post('/charge-start', (req, res) => {
  *       - Charger
  *     responses:
  *       200:
- *         description: Charge process stopped successfully
+ *         description: Success
  *         content:
  *           application/json:
  *             schema:
@@ -58,7 +58,7 @@ r.post('/charge-start', (req, res) => {
  *                   type: string
  *                   example: success
  */
-r.post('/charge-stop', (req, res) => {
+r.post('/charge-stop', (_req, res) => {
 	ChargerService.setChargeStop()
 		.then((x) => {
 			if (x.frc === true) {

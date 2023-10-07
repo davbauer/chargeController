@@ -1,7 +1,7 @@
 /**
  * Charging unit status.
  */
-export default interface ChaStatus {
+export default interface InterfaceChaStatus {
 	/** Signal strength of the RSSI. */
 	rssi: number;
 

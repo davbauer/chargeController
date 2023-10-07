@@ -9,7 +9,9 @@
 		"allowJs": true,
 		"esModuleInterop": true,
 		"checkJs": true,
-		"moduleResolution": "NodeNext"
+		"moduleResolution": "NodeNext",
+		"noUnusedLocals": true,
+		"noUnusedParameters": true
 	},
 	"include": ["*.*ts"],
 	"exclude": ["node_modules", "comp"]

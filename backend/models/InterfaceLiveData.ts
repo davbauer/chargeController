@@ -1,4 +1,4 @@
-export default interface LiveDataInterface {
+export default interface InterfaceLiveData {
 	Timestamp: Date | null;
 	Inverter: {
 		Export: number;

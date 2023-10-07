@@ -1,6 +1,6 @@
 import * as ws from 'ws';
 import LiveData from './LiveData.js';
-import LiveDataInterface from '../models/LiveDataInterface.js';
+import infoLog from '../functions/infoLog.js';
 
 export default class WebSocketManager {
 	private static wss: ws.WebSocketServer | null = null;
@@ -15,6 +15,7 @@ export default class WebSocketManager {
 
 		this.wss.on('connection', (clientWs: ws.WebSocket) => {
 			this.clients.push(clientWs);
+			infoLog(`WS Client connection established (Id: ${this.clients.length - 1})`);
 			// Send initial data to the client immediately upon connection.
 			clientWs.send(
 				JSON.stringify({
@@ -28,6 +29,7 @@ export default class WebSocketManager {
 				if (index !== -1) {
 					this.clients.splice(index, 1);
 				}
+				infoLog(`WS Client connection closed (Id: ${index})`);
 			});
 		});
 	}

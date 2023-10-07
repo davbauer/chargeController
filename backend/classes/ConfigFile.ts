@@ -1,15 +1,15 @@
 import * as fs from 'fs';
-import ConfigInterface from '../models/ConfigInterface.js';
+import InterfaceConfig from '../models/InterfaceConfig.js';
 import errorLog from '../functions/errorLog.js';
 import infoLog from '../functions/infoLog.js';
 import * as path from 'path';
 // ... other imports ...
 
 export default class {
-	private static cachedConfig: ConfigInterface | null = null;
+	private static cachedConfig: InterfaceConfig | null = null;
 	private static filePath = './config/config.json';
 
-	private static createDefaultConfig(): ConfigInterface {
+	private static createDefaultConfig(): InterfaceConfig {
 		const defaultConfig = {
 			Mapping: [
 				{
@@ -54,7 +54,7 @@ export default class {
 		return defaultConfig;
 	}
 
-	static read(): ConfigInterface {
+	static read(): InterfaceConfig {
 		if (this.cachedConfig) {
 			return this.cachedConfig;
 		}
@@ -63,7 +63,7 @@ export default class {
 			const fileContents = fs.readFileSync(this.filePath, 'utf-8');
 			const data: any = JSON.parse(fileContents);
 			if (this.isValidConfig(data)) {
-				return data as ConfigInterface;
+				return data as InterfaceConfig;
 			} else {
 				errorLog('ConfigFile.read: Config validation failed');
 				return this.createDefaultConfig();
@@ -78,7 +78,7 @@ export default class {
 			return null;
 		}
 	}
-	static write(config: ConfigInterface): boolean {
+	static write(config: InterfaceConfig): boolean {
 		try {
 			const jsonData = JSON.stringify(config, null, 4);
 			fs.writeFileSync(this.filePath, jsonData, 'utf-8');
@@ -90,7 +90,7 @@ export default class {
 		}
 	}
 
-	private static isValidConfig(data: any): data is ConfigInterface {
+	private static isValidConfig(data: any): data is InterfaceConfig {
 		return (
 			Array.isArray(data.Mapping) &&
 			data.Mapping.every(

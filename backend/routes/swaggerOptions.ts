@@ -1,8 +1,10 @@
 import swaggerJsdoc from 'swagger-jsdoc';
-import ConfigInterface from '../models/ConfigInterface.js';
+import InterfaceConfig from '../models/InterfaceConfig.js';
 import Configfile from '../classes/ConfigFile.js';
-import LiveDataInterface from '../models/LiveDataInterface.js';
+import InterfaceLiveData from '../models/InterfaceLiveData.js';
 import LiveData from '../classes/LiveData.js';
+import InterfaceAppInfo from '../models/InterfaceAppInfo.js'
+import AppInfo from '../classes/AppInfo.js'
 
 function getSwaggerSchemaFromTypeScript<T extends object>(sampleObject: T): object {
 	const schema: any = {
@@ -28,8 +30,9 @@ const options = {
 		},
 		components: {
 			schemas: {
-				ConfigInterface: getSwaggerSchemaFromTypeScript<ConfigInterface>(Configfile.read()),
-				LiveDataInterface: getSwaggerSchemaFromTypeScript<LiveDataInterface>(LiveData.data)
+				InterfaceConfig: getSwaggerSchemaFromTypeScript<InterfaceConfig>(Configfile.read()),
+				InterfaceLiveData: getSwaggerSchemaFromTypeScript<InterfaceLiveData>(LiveData.data),
+				InterfaceAppInfo: getSwaggerSchemaFromTypeScript<InterfaceAppInfo>(AppInfo.get())
 			}
 		}
 	},

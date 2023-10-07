@@ -8,7 +8,6 @@ RUN yarn install --frozen-lockfile
 ARG GIT_COMMIT
 ARG GIT_BRANCH
 COPY . .
-RUN echo "{\"commit\": \"${GIT_COMMIT}\", \"branch\": \"${GIT_BRANCH}\", \"debug\": false}" > static/git-info.json
 RUN yarn build
 
 
@@ -28,7 +27,10 @@ WORKDIR /app
 COPY --from=backend /app/ ./
 COPY --from=backend /app/yarn.lock ./
 RUN yarn install --frozen-lockfile && yarn cache clean
-
 COPY --from=svelte /app/build ./svelte-build
-EXPOSE 2000
+
+ARG COMMITID=${GIT_COMMIT}
+ARG BRANCH=${GIT_BRANCH}
+EXPOSE 8080
+EXPOSE 80
 CMD node ./comp/backend.js
