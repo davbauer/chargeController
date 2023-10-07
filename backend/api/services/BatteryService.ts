@@ -1,6 +1,6 @@
-import ApiBase from './ApiBase.js';
-import ConfigFile from '../../classes/ConfigFile.js';
-import InterfaceBatEMSData from '../../models/InterfaceBatEMSData.js';
+import ApiBase from './ApiBase';
+import ConfigFile from '../../classes/ConfigFile';
+import InterfaceBatEMSData from '../../models/InterfaceBatEMSData';
 
 export default class extends ApiBase {
     static async getEMSDATA(): Promise<InterfaceBatEMSData> {
