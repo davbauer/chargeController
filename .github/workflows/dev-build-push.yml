@@ -17,7 +17,7 @@ jobs:
 
       - name: Extract Git info
         run: |
-          echo "GIT_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          echo "GIT_COMMITID=$(git rev-parse HEAD)" >> $GITHUB_ENV
           echo "GIT_BRANCH=$(git symbolic-ref --short HEAD)" >> $GITHUB_ENV
 
       - name: Login to Docker registry
@@ -39,5 +39,5 @@ jobs:
           platforms: linux/arm64,linux/amd64
           tags: registry.zec.one/charge-controller-dev
           build-args: |
-            GIT_COMMIT=${{ env.GIT_COMMIT }}
+            GIT_COMMITID=${{ env.GIT_COMMITID }}
             GIT_BRANCH=${{ env.GIT_BRANCH }}
