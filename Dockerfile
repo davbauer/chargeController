@@ -5,7 +5,6 @@ COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
-RUN ls -alR /app
 RUN yarn build
 
 FROM node:20-alpine as backend
@@ -14,7 +13,7 @@ COPY ./backend/package.json ./
 COPY ./backend/yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY ./backend .
-RUN ls -alR /app
+RUN ls -alR /app | grep -v "node_modules"
 RUN yarn build
 
 
