@@ -46,6 +46,7 @@ export default async function (): Promise<void> {
 		LiveData.data.Charger.Consumption = chargerData.nrg[11];
 		LiveData.data.Charger.LinkTime = chargerData.lccfi ?? 0;
 		LiveData.data.Charger.ChargedSinceLink = chargerData.wh;
+		LiveData.data.Charger.PhaseMode = chargerData.psm;
 	}
 
 	if (batteryData) {

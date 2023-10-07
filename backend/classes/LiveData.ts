@@ -22,7 +22,8 @@ export default class {
 			Consumption: -1,
 			Reserved: -1,
 			LinkTime: -1,
-			ChargedSinceLink: -1
+			ChargedSinceLink: -1,
+			PhaseMode: 0
 		},
 		Battery: {
 			Status: 'OFFLINE',

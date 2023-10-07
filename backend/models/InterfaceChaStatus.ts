@@ -63,4 +63,10 @@ export default interface InterfaceChaStatus {
 		number,
 		number
 	];
+
+	/**
+	 * State of the car's phase configuration:
+	 * 0=Auto, 1=Force 1 Phase, 2=Force 3 Phases
+	 */
+	psm: 0 | 1 | 2;
 }

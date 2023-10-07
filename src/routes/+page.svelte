@@ -331,6 +331,23 @@
 			</p>
 		</div>
 
+		<div class="flex flex-row items-center">
+			<p class="pr-10 w-56">Charger Phase Mode</p>
+			<p class="font-mono badge badge-info gap-2">
+				{#if $liveData.Charger.Amp === -1}
+					?
+				{:else}
+					{$liveData.Charger.PhaseMode === 0
+						? 'Auto'
+						: $liveData.Charger.PhaseMode === 1
+						? '1P'
+						: $liveData.Charger.PhaseMode === 2
+						? '3P'
+						: 'unknown'}
+				{/if}
+			</p>
+		</div>
+
 		<div class="opacity-60 flex flex-row items-center">
 			<p class="pr-10 w-56">Charged Since Link</p>
 			<p class="font-mono text-primary">
