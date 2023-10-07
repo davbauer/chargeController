@@ -32,4 +32,5 @@ ENV COMMITID=${GIT_COMMITID}
 ENV BRANCH=${GIT_BRANCH}
 RUN printenv
 EXPOSE 80
+EXPOSE 81
 CMD node ./comp/backend.js
