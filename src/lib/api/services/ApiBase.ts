@@ -12,7 +12,6 @@ export default class ApiService {
 
 	private static BACKEND_PORT = 80;
 
-
 	private static handleResponse(response: AxiosResponse, info: string | undefined = undefined) {
 		if (response.status < 200 || response.status >= 300) {
 			console.error(
@@ -24,7 +23,9 @@ export default class ApiService {
 	protected static async get<T>(endpoint: string): Promise<T> {
 		try {
 			const response = await this.instance.get<T>(endpoint, {
-				baseURL: `http://${dev ? `${window.location.hostname}:${this.BACKEND_PORT}` : window.location.host}/`
+				baseURL: `http://${
+					dev ? `${window.location.hostname}:${this.BACKEND_PORT}` : window.location.host
+				}/`
 			});
 			this.handleResponse(response, `get:${endpoint}`);
 			return response.data;
@@ -37,7 +38,9 @@ export default class ApiService {
 	protected static async post<T>(endpoint: string, body: any): Promise<T> {
 		try {
 			const response = await this.instance.post<T>(endpoint, body, {
-				baseURL: `http://${dev ? `${window.location.hostname}:${this.BACKEND_PORT}` : window.location.host}/`
+				baseURL: `http://${
+					dev ? `${window.location.hostname}:${this.BACKEND_PORT}` : window.location.host
+				}/`
 			});
 			this.handleResponse(response, `post:${endpoint}`);
 			return response.data;

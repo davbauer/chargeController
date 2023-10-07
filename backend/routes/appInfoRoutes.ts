@@ -20,7 +20,7 @@ const r = express.Router();
  *               $ref: '#/components/schemas/InterfaceAppInfo'
  */
 r.get('/appinfo', (_req, res) => {
-    res.json(AppInfo.get());
+	res.json(AppInfo.get());
 });
 
 export default r;

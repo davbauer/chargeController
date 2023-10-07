@@ -3,8 +3,8 @@ import InterfaceConfig from '../models/InterfaceConfig.js';
 import Configfile from '../classes/ConfigFile.js';
 import InterfaceLiveData from '../models/InterfaceLiveData.js';
 import LiveData from '../classes/LiveData.js';
-import InterfaceAppInfo from '../models/InterfaceAppInfo.js'
-import AppInfo from '../classes/AppInfo.js'
+import InterfaceAppInfo from '../models/InterfaceAppInfo.js';
+import AppInfo from '../classes/AppInfo.js';
 
 function getSwaggerSchemaFromTypeScript<T extends object>(sampleObject: T): object {
 	const schema: { type: string; properties: Record<string, { type: string }> } = {

@@ -12,12 +12,12 @@ import chargeRoutes from './routes/chargeRoutes.js';
 import configRoutes from './routes/configRoutes.js';
 import enabledRoutes from './routes/enabledRoutes.js';
 import livedataRoutes from './routes/livedataRoutes.js';
-import appInfoRoutes from './routes/appInfoRoutes.js'
+import appInfoRoutes from './routes/appInfoRoutes.js';
 import AppInfo from './classes/AppInfo.js';
 
 dotenv.config();
 
-const WEBSOCK_PORT: number = AppInfo.get().webSocketPort
+const WEBSOCK_PORT: number = AppInfo.get().webSocketPort;
 const EXPRESS_PORT = 80;
 const app = express();
 app.use(morgan('tiny'));

@@ -74,7 +74,7 @@ export default class {
 				return this.createDefaultConfig();
 			}
 			errorLog(`ConfigFile.read: Error reading or parsing config: ${error}`);
-			throw ("`ConfigFile.read: Error reading or parsing config: ${error}`");
+			throw '`ConfigFile.read: Error reading or parsing config: ${error}`';
 		}
 	}
 	static write(config: InterfaceConfig): boolean {

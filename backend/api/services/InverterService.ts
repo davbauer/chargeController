@@ -3,7 +3,10 @@ import InterfaceInvPowerFlowRealtimeData from '../../models/InterfaceInvPowerFlo
 import InterfaceInvMeterRealtimeData from '../../models/InterfaceInvMeterRealtimeData.js';
 export default class extends ApiBase {
 	static async getPowerFlowRealtimeData(host: string): Promise<InterfaceInvPowerFlowRealtimeData> {
-		return this.get<InterfaceInvPowerFlowRealtimeData>(host, 'solar_api/v1/GetPowerFlowRealtimeData.fcgi');
+		return this.get<InterfaceInvPowerFlowRealtimeData>(
+			host,
+			'solar_api/v1/GetPowerFlowRealtimeData.fcgi'
+		);
 	}
 	static async getMeterRealtimeData(host: string): Promise<InterfaceInvMeterRealtimeData> {
 		return this.get<InterfaceInvMeterRealtimeData>(
