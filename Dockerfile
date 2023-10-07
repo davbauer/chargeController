@@ -1,5 +1,3 @@
-
-
 # build environment
 FROM node:20-alpine as svelte
 WORKDIR /app
@@ -14,7 +12,6 @@ RUN yarn build
 
 FROM node:20-alpine as backend
 WORKDIR /app
-
 COPY ./backend/package.json ./
 COPY ./backend/yarn.lock ./
 RUN yarn install --frozen-lockfile
@@ -28,13 +25,11 @@ WORKDIR /app
 COPY --from=backend /app/ ./
 COPY --from=backend /app/yarn.lock ./
 RUN yarn install --frozen-lockfile && yarn cache clean
-
 COPY --from=svelte /app/build ./svelte-build
 ARG GIT_COMMITID
 ARG GIT_BRANCH
-ENV COMMITID=""${GIT_COMMITID}""
+ENV COMMITID=${GIT_COMMITID}
 ENV BRANCH=${GIT_BRANCH}
 RUN printenv
-RUN echo "Build ARGs - GIT_COMMIT: ${GIT_COMMIT}, GIT_BRANCH: ${GIT_BRANCH}"
 EXPOSE 80
 CMD node ./comp/backend.js
