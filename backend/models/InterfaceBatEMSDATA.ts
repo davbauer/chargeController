@@ -1,4 +1,4 @@
-export default interface InterfaceBatEMSDATA {
+export default interface InterfaceBatEMSData {
 	root: {
 		Timestamp: string;
 		id: string;
