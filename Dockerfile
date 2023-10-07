@@ -29,7 +29,7 @@ COPY --from=backend /app/yarn.lock ./
 RUN yarn install --frozen-lockfile && yarn cache clean
 
 COPY --from=svelte /app/build ./svelte-build
-ARG COMMITID=${GIT_COMMIT}
-ARG BRANCH=${GIT_BRANCH}
+ENV COMMITID=${GIT_COMMIT}
+ENV BRANCH=${GIT_BRANCH}
 EXPOSE 80
 CMD node ./comp/backend.js
