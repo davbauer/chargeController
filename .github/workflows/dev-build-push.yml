@@ -31,6 +31,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: registry.zec.one/charge-controller-dev
           build-args: |
             GIT_COMMIT=${{ env.GIT_COMMIT }}
