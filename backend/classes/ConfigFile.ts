@@ -3,7 +3,6 @@ import InterfaceConfig from '../models/InterfaceConfig.js';
 import errorLog from '../functions/errorLog.js';
 import infoLog from '../functions/infoLog.js';
 import * as path from 'path';
-// ... other imports ...
 
 export default class {
 	private static cachedConfig: InterfaceConfig | null = null;
