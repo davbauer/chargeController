@@ -21,7 +21,7 @@ export default class ApiService {
 	protected static async get<T>(endpoint: string): Promise<T> {
 		try {
 			const response = await this.instance.get<T>(endpoint, {
-				baseURL: `http://${window.location.hostname}:80/`
+				baseURL: `http://${window.location.host}/`
 			});
 			this.handleResponse(response, `get:${endpoint}`);
 			return response.data;
@@ -34,7 +34,7 @@ export default class ApiService {
 	protected static async post<T>(endpoint: string, body: any): Promise<T> {
 		try {
 			const response = await this.instance.post<T>(endpoint, body, {
-				baseURL: `http://${window.location.hostname}:80/`
+				baseURL: `http://${window.location.host}/`
 			});
 			this.handleResponse(response, `post:${endpoint}`);
 			return response.data;
