@@ -7,13 +7,14 @@ import InterfaceAppInfo from '../models/InterfaceAppInfo.js'
 import AppInfo from '../classes/AppInfo.js'
 
 function getSwaggerSchemaFromTypeScript<T extends object>(sampleObject: T): object {
-	const schema: any = {
+	const schema: { type: string; properties: Record<string, { type: string }> } = {
 		type: 'object',
 		properties: {}
 	};
 
 	for (const key of Object.keys(sampleObject)) {
-		const type = typeof sampleObject[key];
+		const value = sampleObject[key as keyof T];
+		const type = typeof value;
 		schema.properties[key] = { type: type };
 	}
 

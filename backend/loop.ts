@@ -5,7 +5,7 @@ import LiveData from './classes/LiveData.js';
 import WebSocketManager from './classes/WebSocketManager.js';
 import ConfigFile from './classes/ConfigFile.js';
 import InterfaceConfig from './models/InterfaceConfig.js';
-import InterfaceLiveData from './models/InterfaceLiveData.js';
+import LiveDataInterface from './models/InterfaceLiveData.js';
 import infoLog from './functions/infoLog.js';
 
 const CAR_NOT_CHARGING = 2; // Replace with an appropriate descriptive constant
@@ -48,7 +48,7 @@ export default async function (): Promise<void> {
 	}
 
 	if (batteryData) {
-		const stateMappings: { [key: string]: InterfaceLiveData['Battery']['Status'] } = {
+		const stateMappings: { [key: string]: LiveDataInterface['Battery']['Status'] } = {
 			'0': 0, // Busy
 			'1': 1, // Activ-Modus
 			'2': 2, // Laden
@@ -58,19 +58,27 @@ export default async function (): Promise<void> {
 			'6': 6, // Passiv-Modus
 			'7': 7 // Notstrombetrieb
 		};
-		const batteryStatus =
-			stateMappings[batteryData.root.inverter.var.find((v) => v.name === 'State').value] ||
-			'OFFLINE';
-		LiveData.data.Battery.Status = batteryStatus;
+		let stateVar = batteryData.root.inverter.var.find((v) => v.name === 'State')?.value;
 
-		let val = parseFloat(batteryData.root.inverter.var.find((v) => v.name === 'SOC').value);
-		LiveData.data.Battery.Percent = !isNaN(val)
-			? Math.min(Math.max(0, Math.round(val > 100 ? val / 10 : val)), 100)
-			: 0;
+		if (stateVar) {
+			LiveData.data.Battery.Status = stateMappings[stateVar] || 'OFFLINE';
+		} else {
+			LiveData.data.Battery.Status = 'OFFLINE';
+		}
 
-		LiveData.data.Battery.Power = parseFloat(
-			batteryData.root.inverter.var.find((v) => v.name === 'P').value
-		);
+		const socVar = batteryData.root.inverter.var.find((v) => v.name === 'SOC')?.value;
+		if (socVar) {
+			const val = parseFloat(socVar);
+			LiveData.data.Battery.Percent = !isNaN(val)
+				? Math.min(Math.max(0, Math.round(val > 100 ? val / 10 : val)), 100)
+				: 0;
+		}
+
+		const pVar = batteryData.root.inverter.var.find((v) => v.name === 'P')?.value;
+
+		if (pVar) {
+			LiveData.data.Battery.Power = parseFloat(pVar);
+		}
 	}
 
 	const result = calculateChargeSettings(config);
@@ -131,7 +139,7 @@ function findClosestValue(key: number, mappingArray: any[]): any {
 	});
 }
 
-function calculateChargeSettings(config) {
+function calculateChargeSettings(config: InterfaceConfig) {
 	const availablePower = LiveData.data.Inverter.Export + LiveData.data.Charger.Consumption;
 
 	// Find the amp value that matches the available power the closest

@@ -68,14 +68,14 @@ export default class {
 				errorLog('ConfigFile.read: Config validation failed');
 				return this.createDefaultConfig();
 			}
-		} catch (error) {
+		} catch (error: any) {
 			if (error.code === 'ENOENT') {
 				// Check if the error is because the file doesn't exist
 				infoLog('ConfigFile.read: Config file not found. Creating default config.');
 				return this.createDefaultConfig();
 			}
 			errorLog(`ConfigFile.read: Error reading or parsing config: ${error}`);
-			return null;
+			throw ("`ConfigFile.read: Error reading or parsing config: ${error}`");
 		}
 	}
 	static write(config: InterfaceConfig): boolean {
@@ -94,7 +94,7 @@ export default class {
 		return (
 			Array.isArray(data.Mapping) &&
 			data.Mapping.every(
-				(item) => typeof item.amp === 'number' && typeof item.value === 'number'
+				(item: any) => typeof item.amp === 'number' && typeof item.value === 'number'
 			) &&
 			typeof data.Enabled === 'boolean' &&
 			typeof data.MainInverterHost === 'string' &&

@@ -1,13 +1,13 @@
 import ConfigFile from './ConfigFile.js';
 
 export default class LoopHandler {
-	static currentCheckSeconds = null;
-	static loopTimeout = null;
+	static currentCheckSeconds: number | null = null;
+	static loopTimeout: null | NodeJS.Timeout = null;
 	static configMonitor = null;
-	static lastLoopTimestamp = null;
+	static lastLoopTimestamp: null | number = null;
 	static MIN_LOOP_DELAY = 3000; // 3 seconds
 
-	static loopTick(callback) {
+	static loopTick(callback: () => void) {
 		const config = ConfigFile.read();
 		callback();
 
@@ -16,7 +16,7 @@ export default class LoopHandler {
 		LoopHandler.startLoop(callback);
 	}
 
-	static startLoop(callback) {
+	static startLoop(callback: () => void) {
 		if (LoopHandler.loopTimeout) {
 			clearTimeout(LoopHandler.loopTimeout);
 		}
@@ -35,7 +35,7 @@ export default class LoopHandler {
 		}
 	}
 
-	static updateLoop(callback) {
+	static updateLoop(callback: () => void) {
 		const config = ConfigFile.read();
 
 		if (LoopHandler.currentCheckSeconds !== config.CheckSeconds) {
