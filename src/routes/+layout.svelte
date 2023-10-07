@@ -3,15 +3,15 @@
 	import { appInfo, config, toasts } from '$lib/store';
 	import Toast from '$lib/components/Toast.svelte';
 	import { onMount } from 'svelte';
-	import AppInfo from '$lib/api/services/AppInfo';
+	import ServiceAppInfo from '$lib/api/services/ServiceAppInfo';
 	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/StoreToastUtil';
-	import ConfigService from '$lib/api/services/ConfigService';
+	import ServiceConfig from '$lib/api/services/ServiceConfig';
 	import { dev } from '$app/environment';
 
 	let initApplication: 'ERROR' | 'SUCCESS' | 'LOADING' = 'LOADING';
 
 	onMount(() => {
-		Promise.all([AppInfo.getAppInfo(), ConfigService.getConfig()])
+		Promise.all([ServiceAppInfo.getAppInfo(), ServiceConfig.getConfig()])
 			.then(([appInfoResponse, configResponse]) => {
 				appInfo.set(appInfoResponse);
 				config.set(configResponse);
