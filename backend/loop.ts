@@ -58,7 +58,7 @@ export default async function (): Promise<void> {
 			'6': 6, // Passiv-Modus
 			'7': 7 // Notstrombetrieb
 		};
-		let stateVar = batteryData.root.inverter.var.find((v) => v.name === 'State')?.value;
+		let stateVar = batteryData.root.inverter.var.find((v: any) => v.name === 'State')?.value;
 
 		if (stateVar) {
 			LiveData.data.Battery.Status = stateMappings[stateVar] || 'OFFLINE';
@@ -66,7 +66,7 @@ export default async function (): Promise<void> {
 			LiveData.data.Battery.Status = 'OFFLINE';
 		}
 
-		const socVar = batteryData.root.inverter.var.find((v) => v.name === 'SOC')?.value;
+		const socVar = batteryData.root.inverter.var.find((v: any) => v.name === 'SOC')?.value;
 		if (socVar) {
 			const val = parseFloat(socVar);
 			LiveData.data.Battery.Percent = !isNaN(val)
@@ -74,7 +74,7 @@ export default async function (): Promise<void> {
 				: 0;
 		}
 
-		const pVar = batteryData.root.inverter.var.find((v) => v.name === 'P')?.value;
+		const pVar = batteryData.root.inverter.var.find((v: any) => v.name === 'P')?.value;
 
 		if (pVar) {
 			LiveData.data.Battery.Power = parseFloat(pVar);
