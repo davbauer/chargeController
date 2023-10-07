@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ServiceConfig from '$lib/api/services/ServiceConfig';
-	import { newSuccessToast, newErrorToast } from '$lib/api/Utilities/StoreToastUtil';
+	import { newSuccessToast, newErrorToast } from '$lib/api/Utilities/UtilStoreToast';
 	import { config } from '$lib/store';
 	import { onMount } from 'svelte';
 

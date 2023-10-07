@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/StoreToastUtil';
+	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/UtilStoreToast';
 	import ServiceChargeControl from '$lib/api/services/ServiceChargeControl';
 
 	async function startCharge() {

@@ -1,6 +1,6 @@
 import { appInfo, config, liveData } from '$lib/store';
 import { get } from 'svelte/store';
-import { newErrorToast, newInfoToast } from '../Utilities/StoreToastUtil';
+import { newErrorToast, newInfoToast } from '../Utilities/UtilStoreToast';
 import type LiveData from '../models/LiveData';
 
 export default class {

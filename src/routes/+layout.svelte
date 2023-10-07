@@ -4,7 +4,7 @@
 	import Toast from '$lib/components/Toast.svelte';
 	import { onMount } from 'svelte';
 	import ServiceAppInfo from '$lib/api/services/ServiceAppInfo';
-	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/StoreToastUtil';
+	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/UtilStoreToast';
 	import ServiceConfig from '$lib/api/services/ServiceConfig';
 	import { dev } from '$app/environment';
 

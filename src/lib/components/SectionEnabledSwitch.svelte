@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ServiceEnabled from '$lib/api/services/ServiceEnabled';
-	import { newSuccessToast, newErrorToast } from '$lib/api/Utilities/StoreToastUtil';
+	import { newSuccessToast, newErrorToast } from '$lib/api/Utilities/UtilStoreToast';
 	import { config } from '$lib/store';
 
 	async function onEnabledChange(event: any) {
