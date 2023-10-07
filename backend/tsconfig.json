@@ -1,16 +1,19 @@
 {
 	"compilerOptions": {
-		"module": "NodeNext",
+		"module": "CommonJS",
 		"target": "ES2021",
 		"removeComments": true,
 		"preserveConstEnums": true,
-		"lib": ["es5", "es6", "dom"],
+		"lib": ["ES2021", "dom"],
 		"outDir": "comp",
-		"allowJs": true,
 		"esModuleInterop": true,
-		"checkJs": true,
-		"moduleResolution": "NodeNext"
+		"moduleResolution": "node",
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"forceConsistentCasingInFileNames": true,
+		"rootDir": "./",
+		"strict": true
 	},
-	"include": ["*.*ts"],
+	"include": ["**/*.ts"],
 	"exclude": ["node_modules", "comp"]
 }

@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpecs from './routes/swaggerOptions.js';
@@ -11,9 +12,13 @@ import chargeRoutes from './routes/chargeRoutes.js';
 import configRoutes from './routes/configRoutes.js';
 import enabledRoutes from './routes/enabledRoutes.js';
 import livedataRoutes from './routes/livedataRoutes.js';
+import appInfoRoutes from './routes/appInfoRoutes.js';
+import AppInfo from './classes/AppInfo.js';
 
-const WEBSOCK_PORT = 2001;
-const EXPRESS_PORT = 2000;
+dotenv.config();
+
+const WEBSOCK_PORT: number = AppInfo.get().webSocketPort;
+const EXPRESS_PORT = 80;
 const app = express();
 app.use(morgan('tiny'));
 app.use(express.json());
@@ -22,7 +27,7 @@ app.use(
 		origin: '*' // Only allow requests from this origin
 	})
 );
-app.get('/api-docs.json', (req, res) => {
+app.get('/api-docs.json', (_req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	res.send(swaggerSpecs);
 });
@@ -32,6 +37,7 @@ app.use('/', chargeRoutes);
 app.use('/', configRoutes);
 app.use('/', enabledRoutes);
 app.use('/', livedataRoutes);
+app.use('/', appInfoRoutes);
 
 const server = app.listen(EXPRESS_PORT, '0.0.0.0', () => {
 	console.log('');

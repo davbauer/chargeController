@@ -10,8 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract Git info
+        run: |
+          echo "GIT_COMMITID=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          echo "GIT_BRANCH=$(git symbolic-ref --short HEAD)" >> $GITHUB_ENV
+
       - name: Login to Docker registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: registry.zec.one
           username: ${{ secrets.REGISTRY_ZEC_ONE_USERNAME }}
@@ -23,8 +33,11 @@ jobs:
           docker buildx create --use
 
       - name: Dockerize and Push Image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           push: true
           platforms: linux/arm64,linux/amd64
           tags: registry.zec.one/charge-controller
+          build-args: |
+            GIT_COMMITID=${{ env.GIT_COMMITID }}
+            GIT_BRANCH=${{ env.GIT_BRANCH }}

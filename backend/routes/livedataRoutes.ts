@@ -1,5 +1,5 @@
 import express from 'express';
-import LiveDataInterface from '../models/LiveDataInterface.js';
+import InterfaceLiveData from '../models/InterfaceLiveData.js';
 import LiveData from '../classes/LiveData.js';
 
 const r = express.Router();
@@ -11,17 +11,17 @@ const r = express.Router();
  *     summary: Retrieve live data
  *     tags:
  *       - LiveData
- *     description: Fetches and returns live data based on the LiveDataInterface model.
+ *     description: Get data based on InterfaceLiveData model.
  *     responses:
  *       200:
- *         description: Live data fetched successfully.
+ *         description: Success
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/LiveDataInterface'
+ *               $ref: '#/components/schemas/InterfaceLiveData'
  */
-r.get('/livedata', (req, res) => {
-	const liveDataObject: LiveDataInterface = LiveData.data;
+r.get('/livedata', (_req, res) => {
+	const liveDataObject: InterfaceLiveData = LiveData.data;
 	res.json(liveDataObject);
 });
 

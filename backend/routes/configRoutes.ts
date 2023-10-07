@@ -1,25 +1,11 @@
 import express from 'express';
 import ConfigFile from '../classes/ConfigFile.js';
-import ConfigInterface from '../models/ConfigInterface.js';
+import InterfaceConfig from '../models/InterfaceConfig.js';
 import LoopHandler from '../classes/LoopHandler.js';
 import loop from '../loop.js';
 import errorLog from '../functions/errorLog.js';
 
 const r = express.Router();
-
-function getSwaggerSchemaFromTypeScript<T extends object>(sampleObject: T): object {
-	const schema: any = {
-		type: 'object',
-		properties: {}
-	};
-
-	for (const key of Object.keys(sampleObject)) {
-		const type = typeof sampleObject[key];
-		schema.properties[key] = { type: type };
-	}
-
-	return schema;
-}
 
 /**
  * @swagger
@@ -30,15 +16,15 @@ function getSwaggerSchemaFromTypeScript<T extends object>(sampleObject: T): obje
  *       - Configuration
  *     responses:
  *       200:
- *         description: Current configuration object
+ *         description: Success
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ConfigInterface'
+ *               $ref: '#/components/schemas/InterfaceConfig'
  *
  */
-r.get('/config', (req, res) => {
-	const configObject: ConfigInterface = ConfigFile.read();
+r.get('/config', (_req, res) => {
+	const configObject: InterfaceConfig = ConfigFile.read();
 	res.json(configObject);
 });
 
@@ -57,12 +43,12 @@ r.get('/config', (req, res) => {
  *             $ref: '#/components/schemas/ConfigInterface'
  *     responses:
  *       200:
- *         description: Configuration updated successfully
+ *         description: Success
  *       500:
- *         description: Error writing to config file
+ *         description: Error
  */
 r.post('/config', (req, res) => {
-	const configData: ConfigInterface = req.body;
+	const configData: InterfaceConfig = req.body;
 	const updateLoop = ConfigFile.read().CheckSeconds !== configData.CheckSeconds;
 	const success = ConfigFile.write(configData);
 	if (success) {

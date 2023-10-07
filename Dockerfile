@@ -1,5 +1,4 @@
 # build environment
-
 FROM node:20-alpine as svelte
 WORKDIR /app
 COPY package.json ./
@@ -8,13 +7,11 @@ RUN yarn install --frozen-lockfile
 ARG GIT_COMMIT
 ARG GIT_BRANCH
 COPY . .
-RUN echo "{\"commit\": \"${GIT_COMMIT}\", \"branch\": \"${GIT_BRANCH}\", \"debug\": false}" > static/git-info.json
 RUN yarn build
 
 
 FROM node:20-alpine as backend
 WORKDIR /app
-
 COPY ./backend/package.json ./
 COPY ./backend/yarn.lock ./
 RUN yarn install --frozen-lockfile
@@ -28,7 +25,11 @@ WORKDIR /app
 COPY --from=backend /app/ ./
 COPY --from=backend /app/yarn.lock ./
 RUN yarn install --frozen-lockfile && yarn cache clean
-
 COPY --from=svelte /app/build ./svelte-build
-EXPOSE 2000
+ARG GIT_COMMITID
+ARG GIT_BRANCH
+ENV COMMITID=${GIT_COMMITID}
+ENV BRANCH=${GIT_BRANCH}
+RUN printenv
+EXPOSE 80
 CMD node ./comp/backend.js

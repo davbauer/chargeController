@@ -1,4 +1,4 @@
-export default interface BatEMSDATA {
+export default interface InterfaceBatData {
 	root: {
 		Timestamp: string;
 		id: string;

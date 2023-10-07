@@ -1,7 +1,7 @@
-import LiveDataInterface from '../models/LiveDataInterface.js';
+import InterfaceLiveData from '../models/InterfaceLiveData.js';
 
 export default class {
-	static defaultData: LiveDataInterface = {
+	static defaultData: InterfaceLiveData = {
 		Timestamp: null,
 		Inverter: {
 			Export: -1,
@@ -22,7 +22,8 @@ export default class {
 			Consumption: -1,
 			Reserved: -1,
 			LinkTime: -1,
-			ChargedSinceLink: -1
+			ChargedSinceLink: -1,
+			PhaseMode: 0
 		},
 		Battery: {
 			Status: 'OFFLINE',
@@ -30,5 +31,5 @@ export default class {
 			Power: -1
 		}
 	};
-	static data: LiveDataInterface = this.defaultData;
+	static data: InterfaceLiveData = this.defaultData;
 }

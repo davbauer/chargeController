@@ -4,11 +4,12 @@ import BatteryService from './api/services/BatteryService.js';
 import LiveData from './classes/LiveData.js';
 import WebSocketManager from './classes/WebSocketManager.js';
 import ConfigFile from './classes/ConfigFile.js';
-import ConfigInterface from './models/ConfigInterface.js';
-import LiveDataInterface from './models/LiveDataInterface.js';
+import InterfaceConfig from './models/InterfaceConfig.js';
+import LiveDataInterface from './models/InterfaceLiveData.js';
 import infoLog from './functions/infoLog.js';
 
-const CAR_NOT_CHARGING = 2; // Replace with an appropriate descriptive constant
+const CAR_NOT_CHARGING = 2;
+const CAR_WAIT = 3;
 
 export default async function (): Promise<void> {
 	console.log('\n---------------------------------------------------------------');
@@ -16,7 +17,7 @@ export default async function (): Promise<void> {
 
 	LiveData.data = LiveData.defaultData;
 
-	const config: ConfigInterface = ConfigFile.read();
+	const config: InterfaceConfig = ConfigFile.read();
 
 	const mainInverterPowerFlow = await InverterService.getPowerFlowRealtimeData(
 		ConfigFile.read().MainInverterHost
@@ -45,6 +46,7 @@ export default async function (): Promise<void> {
 		LiveData.data.Charger.Consumption = chargerData.nrg[11];
 		LiveData.data.Charger.LinkTime = chargerData.lccfi ?? 0;
 		LiveData.data.Charger.ChargedSinceLink = chargerData.wh;
+		LiveData.data.Charger.PhaseMode = chargerData.psm;
 	}
 
 	if (batteryData) {
@@ -58,19 +60,27 @@ export default async function (): Promise<void> {
 			'6': 6, // Passiv-Modus
 			'7': 7 // Notstrombetrieb
 		};
-		const batteryStatus =
-			stateMappings[batteryData.root.inverter.var.find((v) => v.name === 'State').value] ||
-			'OFFLINE';
-		LiveData.data.Battery.Status = batteryStatus;
+		let stateVar = batteryData.root.inverter.var.find((v: any) => v.name === 'State')?.value;
 
-		let val = parseFloat(batteryData.root.inverter.var.find((v) => v.name === 'SOC').value);
-		LiveData.data.Battery.Percent = !isNaN(val)
-			? Math.min(Math.max(0, Math.round(val > 100 ? val / 10 : val)), 100)
-			: 0;
+		if (stateVar) {
+			LiveData.data.Battery.Status = stateMappings[stateVar] || 'OFFLINE';
+		} else {
+			LiveData.data.Battery.Status = 'OFFLINE';
+		}
 
-		LiveData.data.Battery.Power = parseFloat(
-			batteryData.root.inverter.var.find((v) => v.name === 'P').value
-		);
+		const socVar = batteryData.root.inverter.var.find((v: any) => v.name === 'SOC')?.value;
+		if (socVar) {
+			const val = parseFloat(socVar);
+			LiveData.data.Battery.Percent = !isNaN(val)
+				? Math.min(Math.max(0, Math.round(val > 100 ? val / 10 : val)), 100)
+				: 0;
+		}
+
+		const pVar = batteryData.root.inverter.var.find((v: any) => v.name === 'P')?.value;
+
+		if (pVar) {
+			LiveData.data.Battery.Power = parseFloat(pVar);
+		}
 	}
 
 	const result = calculateChargeSettings(config);
@@ -82,7 +92,7 @@ export default async function (): Promise<void> {
 	}
 
 	if (!chargerData || !mainInverterPowerFlow) {
-		infoLog('Stop charging - one not available');
+		infoLog('Stop charging - no charger- or inverterdata available');
 		ChargerService.setChargeStop();
 		WebSocketManager.sendEventLiveData();
 		return;
@@ -96,6 +106,10 @@ export default async function (): Promise<void> {
 	}
 
 	if (chargerData.car !== CAR_NOT_CHARGING) {
+		if (chargerData.car === CAR_WAIT) {
+			infoLog('No car to charger connected, cant charge!');
+			return;
+		}
 		infoLog('Car is not charging, setting charge true!');
 		await ChargerService.setChargeStart();
 	}
@@ -116,8 +130,8 @@ function findClosestValue(key: number, mappingArray: any[]): any {
 	// if length is zero just return a preset value indicating 'None'
 	if (mappingArray.length === 0) {
 		// Find the amp value that matches the available power the closest
-		type MappingItemType = ConfigInterface['Mapping'][0];
-		const response: MappingItemType = { value: 0, amp: 0 }
+		type MappingItemType = InterfaceConfig['Mapping'][0];
+		const response: MappingItemType = { value: 0, amp: 0 };
 		return response;
 	}
 
@@ -131,7 +145,7 @@ function findClosestValue(key: number, mappingArray: any[]): any {
 	});
 }
 
-function calculateChargeSettings(config) {
+function calculateChargeSettings(config: InterfaceConfig) {
 	const availablePower = LiveData.data.Inverter.Export + LiveData.data.Charger.Consumption;
 
 	// Find the amp value that matches the available power the closest

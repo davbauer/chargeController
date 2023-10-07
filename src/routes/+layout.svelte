@@ -1,56 +1,75 @@
 <script lang="ts">
 	import '../app.css';
-	import { toasts } from '$lib/store';
+	import { appInfo, config, toasts } from '$lib/store';
 	import Toast from '$lib/components/Toast.svelte';
 	import { onMount } from 'svelte';
+	import AppInfo from '$lib/api/services/AppInfo';
+	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/StoreToastUtil';
+	import ConfigService from '$lib/api/services/ConfigService';
+	import { dev } from '$app/environment';
 
-	let gitInfo: { branch: string | null; commit: string | null; debug: boolean } = {
-		debug: false,
-		branch: null,
-		commit: null
-	};
+	let initApplication: 'ERROR' | 'SUCCESS' | 'LOADING' = 'LOADING';
+
 	onMount(() => {
-		fetch('/git-info.json')
-			.then((response) => response.json())
-			.then((data) => {
-				gitInfo = data;
+		Promise.all([AppInfo.getAppInfo(), ConfigService.getConfig()])
+			.then(([appInfoResponse, configResponse]) => {
+				appInfo.set(appInfoResponse);
+				config.set(configResponse);
+				newSuccessToast('Loaded app info and config');
+				initApplication = 'SUCCESS';
+			})
+			.catch((_error) => {
+				newErrorToast('Error loading app info or config');
+				initApplication = 'ERROR';
 			});
 	});
 </script>
 
 <svelte:head>
-	<title>{gitInfo.debug ? 'DEBUG-' : ''}chargeController</title>
+	<title>{dev ? 'DEBUG-' : ''}chargeController</title>
 </svelte:head>
 
 <div class="min-h-screen flex flex-col">
-	<div class="w-full navbar bg-neutral flex justify-center items-center">
-		<p class="font-mono text-xl">
-			{gitInfo.debug ? 'DEBUG-' : ''}chargeController
-		</p>
-	</div>
-
-	<div class="flex-grow">
-		<div class="md:container md:mx-auto">
-			<slot />
-		</div>
-	</div>
-	<footer class="footer footer-center p-4 bg-neutral text-base-content">
-		<div class="align-baseline text-l font-mono">
-			<!-- Only works in production not in dev!!-->
-			<button class="underline" on:click={() => (window.location.href = '/api-docs')}
-				>/api-docs</button
-			>
-			<a class="underline" href="https://github.com/davbauer">github/davbauer</a>
-
-			<p class="text-gray-500">
-				Branch: {gitInfo.branch === null ? '/' : gitInfo.branch}
+	{#if initApplication === 'SUCCESS'}
+		<div class="w-full navbar bg-neutral flex justify-center items-center">
+			<p class="font-mono text-xl">
+				{dev ? 'DEBUG-' : ''}chargeController
 			</p>
-			<p class="text-gray-500">
-				CommitId: {gitInfo.commit === null ? '/' : gitInfo.commit}
-			</p>
-			<p />
 		</div>
-	</footer>
+
+		<div class="flex-grow">
+			<div class="md:container md:mx-auto">
+				<slot />
+			</div>
+		</div>
+		<footer class="footer footer-center p-4 bg-neutral text-base-content">
+			<div class="align-baseline text-l font-mono">
+				<!-- Only works in production not in dev!!-->
+				<button class="underline" on:click={() => (window.location.href = '/api-docs')}
+					>/api-docs</button
+				>
+				<a class="underline" href="https://github.com/davbauer">github/davbauer</a>
+
+				<p class="text-gray-500">
+					Branch: {$appInfo.gitBranchName}
+				</p>
+				<p class="text-gray-500">
+					CommitId: {$appInfo.gitCommitId}
+				</p>
+			</div>
+		</footer>
+	{:else if initApplication === 'ERROR' || initApplication === 'LOADING'}
+		<div class="flex justify-center flex-col items-center min-h-screen">
+			{#if initApplication === 'ERROR'}
+				<p class="mb-10 text-3xl">Connection to backend failed</p>
+				<button class="btn btn-lg btn-error" on:click={() => window.location.reload()}
+					>Retry again</button
+				>
+			{:else}
+				<span class="loading loading-spinner h-36 w-36" />
+			{/if}
+		</div>
+	{/if}
 </div>
 <div class="toast toast-end">
 	{#each $toasts as toast}

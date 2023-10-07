@@ -1,4 +1,4 @@
-export default interface InvPowerFlowRealtimeData {
+export default interface InterfaceInvPowerFlowRealtimeData {
 	Body: {
 		Data: {
 			Site: {

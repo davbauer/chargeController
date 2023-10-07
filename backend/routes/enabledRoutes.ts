@@ -1,6 +1,6 @@
 import express from 'express';
 import ConfigFile from '../classes/ConfigFile.js';
-import ConfigInterface from '../models/ConfigInterface.js';
+import InterfaceConfig from '../models/InterfaceConfig.js';
 import LoopHandler from '../classes/LoopHandler.js';
 import loop from '../loop.js';
 import errorLog from '../functions/errorLog.js';
@@ -16,7 +16,7 @@ const r = express.Router();
  *     summary: Update the enabled state
  *     tags:
  *       - Configuration
- *     description: Updates the enabled state and writes it to the configuration file.
+ *     description: Post data based on InterfaceConfig model.
  *     requestBody:
  *       required: true
  *       content:
@@ -30,7 +30,7 @@ const r = express.Router();
  *                 example: true
  *     responses:
  *       200:
- *         description: State updated successfully.
+ *         description: Success
  *         content:
  *           application/json:
  *             schema:
@@ -40,7 +40,7 @@ const r = express.Router();
  *                   type: 'string'
  *                   example: 'success'
  *       500:
- *         description: Error writing to config file.
+ *         description: Error
  *         content:
  *           application/json:
  *             schema:
@@ -52,7 +52,7 @@ const r = express.Router();
  */
 r.post('/enabled', async (req, res) => {
 	const stateData: boolean = req.body.state;
-	const configData: ConfigInterface = ConfigFile.read();
+	const configData: InterfaceConfig = ConfigFile.read();
 	const updateLoop = ConfigFile.read().Enabled !== stateData;
 	configData.Enabled = stateData;
 	const success = ConfigFile.write(configData);
