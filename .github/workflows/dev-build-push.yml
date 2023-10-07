@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -21,14 +21,14 @@ jobs:
           echo "GIT_BRANCH=$(git symbolic-ref --short HEAD)" >> $GITHUB_ENV
 
       - name: Login to Docker registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: registry.zec.one
           username: ${{ secrets.REGISTRY_ZEC_ONE_USERNAME }}
           password: ${{ secrets.REGISTRY_ZEC_ONE_PASSWORD }}
 
       - name: Dockerize and Push Image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           push: true
           tags: registry.zec.one/charge-controller-dev
