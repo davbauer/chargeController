@@ -6,6 +6,7 @@
 	import AppInfo from '$lib/api/services/AppInfo';
 	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/StoreToastUtil';
 	import ConfigService from '$lib/api/services/ConfigService';
+	import { dev } from '$app/environment';
 
 	let initApplication: 'ERROR' | 'SUCCESS' | 'LOADING' = 'LOADING';
 
@@ -25,14 +26,14 @@
 </script>
 
 <svelte:head>
-	<title>chargeController</title>
+	<title>{dev ? 'DEBUG-' : ''}chargeController</title>
 </svelte:head>
 
 <div class="min-h-screen flex flex-col">
 	{#if initApplication === 'SUCCESS'}
 		<div class="w-full navbar bg-neutral flex justify-center items-center">
 			<p class="font-mono text-xl">
-				{$appInfo.environment === 'developement' ? 'DEBUG-' : ''}chargeController
+				{dev ? 'DEBUG-' : ''}chargeController
 			</p>
 		</div>
 
