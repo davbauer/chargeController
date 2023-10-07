@@ -31,8 +31,5 @@ interface setChargeAmp {
 }
 
 interface setChargePhase {
-	psm:
-	0 // Automatic
-	| 1 // Force 1 Phase
-	| 2; // Force 3 Phases
+	psm: 0 | 1 | 2;
 }
