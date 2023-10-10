@@ -108,10 +108,10 @@ export default async function (): Promise<void> {
 	if (chargerData.car !== CAR_NOT_CHARGING) {
 		if (chargerData.car === CAR_WAIT) {
 			infoLog('No car to charger connected, cant charge!');
-			//return;
+			return;
 		}
 		infoLog('Car is not charging, setting charge true!');
-		//await ChargerService.setChargeStart();
+		await ChargerService.setChargeStart();
 	}
 
 
