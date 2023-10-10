@@ -1,5 +1,5 @@
 export default interface InterfaceConfig {
-	Mapping: { amp: number; value: number }[];
+	Mapping: { amp: number; value: number; onePhase: boolean }[];
 	Enabled: boolean;
 	MainInverterHost: string;
 	InverterHost1: string;

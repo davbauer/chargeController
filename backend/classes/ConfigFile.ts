@@ -13,23 +13,38 @@ export default class {
 			Mapping: [
 				{
 					amp: 6,
-					value: 300
+					value: 300,
+					onePhase: false
+				},
+				{
+					amp: 6,
+					value: 100,
+					onePhase: true
 				},
 				{
 					amp: 7,
-					value: 300
+					value: 200,
+					onePhase: true
+				},
+				{
+					amp: 7,
+					value: 300,
+					onePhase: false
 				},
 				{
 					amp: 8,
-					value: 4400
+					value: 4400,
+					onePhase: false
 				},
 				{
 					amp: 9,
-					value: 6000
+					value: 6000,
+					onePhase: false
 				},
 				{
 					amp: 10,
-					value: 6740
+					value: 6740,
+					onePhase: false
 				}
 			],
 			Enabled: false,
@@ -74,7 +89,7 @@ export default class {
 				return this.createDefaultConfig();
 			}
 			errorLog(`ConfigFile.read: Error reading or parsing config: ${error}`);
-			throw '`ConfigFile.read: Error reading or parsing config: ${error}`';
+			throw `ConfigFile.read: Error reading or parsing config: ${error}`;
 		}
 	}
 	static write(config: InterfaceConfig): boolean {
@@ -93,7 +108,10 @@ export default class {
 		return (
 			Array.isArray(data.Mapping) &&
 			data.Mapping.every(
-				(item: any) => typeof item.amp === 'number' && typeof item.value === 'number'
+				(item: any) =>
+					typeof item.amp === 'number' &&
+					typeof item.value === 'number' &&
+					typeof item.onePhase === 'boolean'
 			) &&
 			typeof data.Enabled === 'boolean' &&
 			typeof data.MainInverterHost === 'string' &&

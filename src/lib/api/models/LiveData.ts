@@ -21,6 +21,7 @@ export default interface LiveData {
 		LinkTime: number;
 		ChargedSinceLink: number;
 		PhaseMode: 0 | 1 | 2;
+		PhaseModeCalc: 0 | 1 | 2;
 	};
 	Battery: {
 		// (Busy=0, Ready=1, Charging=2, Discharging=3, Standby=4, Error=5, Service/Update=6, Emergency Power=7)

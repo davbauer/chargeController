@@ -108,10 +108,19 @@ export default async function (): Promise<void> {
 	if (chargerData.car !== CAR_NOT_CHARGING) {
 		if (chargerData.car === CAR_WAIT) {
 			infoLog('No car to charger connected, cant charge!');
-			return;
+			//return;
 		}
 		infoLog('Car is not charging, setting charge true!');
-		await ChargerService.setChargeStart();
+		//await ChargerService.setChargeStart();
+	}
+
+
+	if (chargerData.psm !== LiveData.data.Charger.PhaseModeCalc) {
+		infoLog('Phase was corrected');
+		const response = await ChargerService.setChargePhase(LiveData.data.Charger.PhaseModeCalc);
+		if (response.psm === LiveData.data.Charger.PhaseModeCalc) {
+			LiveData.data.Charger.PhaseMode = LiveData.data.Charger.PhaseModeCalc;
+		}
 	}
 
 	if (chargerData.amp !== LiveData.data.Charger.AmpCalc) {
@@ -129,9 +138,8 @@ export default async function (): Promise<void> {
 function findClosestValue(key: number, mappingArray: any[]): any {
 	// if length is zero just return a preset value indicating 'None'
 	if (mappingArray.length === 0) {
-		// Find the amp value that matches the available power the closest
 		type MappingItemType = InterfaceConfig['Mapping'][0];
-		const response: MappingItemType = { value: 0, amp: 0 };
+		const response: MappingItemType = { value: 0, amp: 0, onePhase: false };
 		return response;
 	}
 
@@ -152,6 +160,7 @@ function calculateChargeSettings(config: InterfaceConfig) {
 	const optimalAmpereMapping = findClosestValue(availablePower, config.Mapping);
 
 	let determinedAmp = optimalAmpereMapping.amp;
+	let determinedPhase = optimalAmpereMapping.onePhase;
 
 	// Ensure the calculated amp value lies between the Minimum and Maximum values
 	if (determinedAmp < config.MinimumAmps) {
@@ -163,12 +172,13 @@ function calculateChargeSettings(config: InterfaceConfig) {
 	let shouldStop = false;
 
 	// If the available power is less than the value for MinimumAmps, then consider stopping
-	if (availablePower < findClosestValue(determinedAmp, config.Mapping).value) {
+	if (availablePower < optimalAmpereMapping.value) {
 		shouldStop = true;
 	}
 	return {
 		Reserved: availablePower,
 		AmpCalc: determinedAmp,
+		PhaseModeCalc: determinedPhase ? 1 : 2,
 		ShouldStop: shouldStop
 	};
 }

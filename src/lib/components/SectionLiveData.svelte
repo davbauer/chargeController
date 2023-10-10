@@ -135,14 +135,14 @@
 	</div>
 
 	<div class="flex flex-row items-center">
-		<p class="pr-10 w-56">Charger Ampere</p>
+		<p class="pr-10 w-56">Ampere</p>
 		<p class="font-mono text-secondary">
 			{$liveData.Charger.Amp !== -1 ? $liveData.Charger.Amp : '?'} Ampere
 		</p>
 	</div>
 
 	<div class="flex flex-row items-center">
-		<p class="pr-10 w-56">Charger Phase Mode</p>
+		<p class="pr-10 w-56">Phase Mode</p>
 		<p class="font-mono badge badge-info gap-2">
 			{#if $liveData.Charger.Amp === -1}
 				?
@@ -193,9 +193,26 @@
 	</div>
 
 	<div class="opacity-60 flex flex-row items-center">
-		<p class="pr-10 w-56">Charger Ampere Calc</p>
+		<p class="pr-10 w-56">Ampere Calc</p>
 		<p class="font-mono">
 			{$liveData.Charger.AmpCalc !== -1 ? $liveData.Charger.AmpCalc : '?'} Ampere
+		</p>
+	</div>
+
+	<div class="opacity-60 flex flex-row items-center">
+		<p class="pr-10 w-56">Phase Calc</p>
+		<p class="font-mono badge badge-info gap-2">
+			{#if $liveData.Charger.AmpCalc === -1}
+				?
+			{:else}
+				{$liveData.Charger.PhaseModeCalc === 0
+					? 'Auto'
+					: $liveData.Charger.PhaseModeCalc === 1
+					? '1P'
+					: $liveData.Charger.PhaseModeCalc === 2
+					? '3P'
+					: 'unknown'}
+			{/if}
 		</p>
 	</div>
 
