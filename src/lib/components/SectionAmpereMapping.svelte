@@ -14,11 +14,7 @@
 		);
 	}
 
-	function handleTableInput(
-		e: Event,
-		index: number,
-		field: keyof (typeof $config.Mapping)[0]
-	): void {
+	function handleTableInput(index: number, field: keyof (typeof $config.Mapping)[0]): void {
 		if (
 			(field === 'amp' || 'onePhase') &&
 			!isRowUnique(
@@ -46,7 +42,7 @@
 		}
 	}
 
-	$: getClassForRow = (row) => {
+	$: getClassForRow = (row: Config['Mapping'][0]) => {
 		const isPhaseMatch =
 			$liveData.Charger.PhaseMode === 0 ||
 			($liveData.Charger.PhaseMode === 1 && row.onePhase) ||
@@ -91,7 +87,7 @@
 						<label class="swap swap-flip flex justify-center">
 							<input
 								bind:checked={row.onePhase}
-								on:change={(e) => handleTableInput(e, index, 'onePhase')}
+								on:change={() => handleTableInput(index, 'onePhase')}
 								type="checkbox"
 							/>
 
@@ -108,7 +104,7 @@
 							min="0"
 							max="32"
 							bind:value={row.amp}
-							on:input={(e) => handleTableInput(e, index, 'amp')}
+							on:input={() => handleTableInput(index, 'amp')}
 							class="input input-bordered w-full"
 							type="number"
 						/>
@@ -118,7 +114,7 @@
 							min="0"
 							max="20000"
 							bind:value={row.value}
-							on:input={(e) => handleTableInput(e, index, 'value')}
+							on:input={() => handleTableInput(index, 'value')}
 							class="input input-bordered w-full"
 							type="number"
 						/>
