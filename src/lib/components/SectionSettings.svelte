@@ -157,7 +157,7 @@
 							type="number"
 							min="0"
 							bind:value={$config.MaximumWatts}
-							max="10000"
+							max="100000"
 							placeholder="8000"
 							class="input input-bordered w-full max-w-xs"
 						/></td
