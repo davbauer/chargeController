@@ -11,7 +11,7 @@
 
 	// Utility function to sort the mapping by amp value
 	function sortMapping(mapping: any[]) {
-		return mapping.sort((a, b) => a.amp - b.amp);
+		return mapping.sort((a, b) => a.value - b.value);
 	}
 
 	// Utility function to ensure there's an empty row at the end
