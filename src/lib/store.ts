@@ -22,8 +22,8 @@ export const config: Writable<Config> = writable({
 	ChargerHost: 'undefined',
 	BatteryHost: 'undefined',
 	CheckSeconds: -1,
-	MinimumAmps: -1,
-	MaximumAmps: -1,
+	MinimumWatts: -1,
+	MaximumWatts: -1,
 	UsePowergrid: false,
 	BatteryCapacity: -1,
 	CarEfficiency: -1
