@@ -32,12 +32,6 @@
 			}
 		}
 
-		// Filter out non-unique amp values (optional but may be a good idea)
-		$config.Mapping = $config.Mapping.filter((row, index, arr) => {
-			const firstIndex = arr.findIndex((r) => r.amp === row.amp);
-			return firstIndex === index;
-		});
-
 		// Sort the mapping and save
 		$config.Mapping = sortMapping($config.Mapping);
 		await ServiceConfig.postConfig($config)
