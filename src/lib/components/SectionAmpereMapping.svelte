@@ -48,16 +48,16 @@
 			($liveData.Charger.PhaseMode === 1 && row.onePhase) ||
 			($liveData.Charger.PhaseMode === 2 && !row.onePhase);
 
-		const isAmpCalcMatch =
+		const isCalcMatch =
 			row.amp === $liveData.Charger.AmpCalc && $liveData.Charger.AmpCalc !== $liveData.Charger.Amp;
 
-		const isAmpMatch = row.amp === $liveData.Charger.Amp;
+		const isMatch = row.amp === $liveData.Charger.Amp;
 
-		const isOutOfRange = row.amp < $config.MinimumAmps || row.amp > $config.MaximumAmps;
+		const isOutOfRange = row.value < $config.MinimumWatts || row.value > $config.MaximumWatts;
 
 		return {
-			isPhaseAndAmpCalcMatch: isPhaseMatch && isAmpCalcMatch,
-			isPhaseAndAmpMatch: isPhaseMatch && isAmpMatch,
+			isPhaseAndCalcMatch: isPhaseMatch && isCalcMatch,
+			isPhaseAndAmpMatch: isPhaseMatch && isMatch,
 			isOutOfRange
 		};
 	};
@@ -78,8 +78,8 @@
 			{#each $config.Mapping as row, index}
 				<tr
 					class="transition-colors duration-300"
-					class:bg-neutral-focus={getClassForRow(row).isPhaseAndAmpCalcMatch}
-					class:border-l-2={getClassForRow(row).isPhaseAndAmpCalcMatch}
+					class:bg-neutral-focus={getClassForRow(row).isPhaseAndCalcMatch}
+					class:border-l-2={getClassForRow(row).isPhaseAndCalcMatch}
 					class:bg-secondary={getClassForRow(row).isPhaseAndAmpMatch}
 					class:opacity-40={getClassForRow(row).isOutOfRange}
 				>

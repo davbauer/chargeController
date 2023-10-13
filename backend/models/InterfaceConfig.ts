@@ -6,8 +6,8 @@ export default interface InterfaceConfig {
 	ChargerHost: string;
 	BatteryHost: string;
 	CheckSeconds: number;
-	MinimumAmps: number;
-	MaximumAmps: number;
+	MinimumWatts: number;
+	MaximumWatts: number;
 	UsePowergrid: boolean;
 	BatteryCapacity: number;
 	CarEfficiency: number;

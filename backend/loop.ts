@@ -161,12 +161,13 @@ function calculateChargeSettings(config: InterfaceConfig) {
 
 	let determinedAmp = optimalAmpereMapping.amp;
 	let determinedPhase = optimalAmpereMapping.onePhase;
+	let determinedValue = optimalAmpereMapping.value
 
-	// Ensure the calculated amp value lies between the Minimum and Maximum values
-	if (determinedAmp < config.MinimumAmps) {
-		determinedAmp = config.MinimumAmps;
-	} else if (determinedAmp > config.MaximumAmps) {
-		determinedAmp = config.MaximumAmps;
+	// Ensure the calculated watt value lies between the Minimum and Maximum values
+	if (determinedValue < config.MinimumWatts) {
+		determinedValue = config.MinimumWatts;
+	} else if (determinedValue > config.MaximumWatts) {
+		determinedValue = config.MaximumWatts;
 	}
 
 	let shouldStop = false;

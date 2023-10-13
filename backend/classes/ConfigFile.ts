@@ -9,7 +9,7 @@ export default class {
 	private static filePath = './config/config.json';
 
 	private static createDefaultConfig(): InterfaceConfig {
-		const defaultConfig = {
+		const defaultConfig: InterfaceConfig = {
 			Mapping: [
 				{
 					amp: 6,
@@ -53,8 +53,8 @@ export default class {
 			ChargerHost: 'myhostname',
 			BatteryHost: 'myhostname',
 			CheckSeconds: 30,
-			MinimumAmps: 6,
-			MaximumAmps: 14,
+			MinimumWatts: 50,
+			MaximumWatts: 100000,
 			UsePowergrid: false,
 			BatteryCapacity: 52000,
 			CarEfficiency: 200
@@ -119,8 +119,8 @@ export default class {
 			typeof data.ChargerHost === 'string' &&
 			typeof data.BatteryHost === 'string' &&
 			typeof data.CheckSeconds === 'number' &&
-			typeof data.MinimumAmps === 'number' &&
-			typeof data.MaximumAmps === 'number' &&
+			typeof data.MinimumWatts === 'number' &&
+			typeof data.MaximumWatts === 'number' &&
 			typeof data.UsePowergrid === 'boolean' &&
 			typeof data.CarEfficiency === 'number' &&
 			typeof data.BatteryCapacity === 'number'

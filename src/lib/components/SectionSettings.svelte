@@ -136,29 +136,29 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="w-1/2 text-left">Minimum Amps</td>
+					<td class="w-1/2 text-left">Minimum Watts</td>
 					<td class="w-1/2 text-left">
 						<input
 							type="number"
 							required
-							min="6"
-							bind:value={$config.MinimumAmps}
-							max="16"
-							placeholder="6"
+							min="0"
+							bind:value={$config.MinimumWatts}
+							max="50000"
+							placeholder="600"
 							class="input input-bordered w-full max-w-xs"
 						/></td
 					>
 				</tr>
 				<tr>
-					<td class="w-1/2 text-left">Maximum Amps</td>
+					<td class="w-1/2 text-left">Maximum Watts</td>
 					<td class="w-1/2 text-left">
 						<input
 							required
 							type="number"
-							min="6"
-							bind:value={$config.MaximumAmps}
-							max="16"
-							placeholder="16"
+							min="0"
+							bind:value={$config.MaximumWatts}
+							max="10000"
+							placeholder="8000"
 							class="input input-bordered w-full max-w-xs"
 						/></td
 					>
