@@ -3,6 +3,7 @@ import { get } from 'svelte/store';
 import { newErrorToast, newInfoToast } from '../Utilities/UtilStoreToast';
 import type LiveData from '../models/LiveData';
 import type BackendLogs from '../models/BackendLogs';
+import type Config from '../models/Config';
 
 export default class {
 	private static RETRY_DELAY = 1000; // Start with 1 second
@@ -34,6 +35,13 @@ export default class {
 					config.set({
 						...get(config),
 						UsePowergrid: message.data.state as boolean
+					});
+					break;
+				case 'preferredPhaseUpdate':
+					newInfoToast('Received ' + message.event);
+					config.set({
+						...get(config),
+						PreferredPhase: (message.data.state as 0 | 1 | 2) ?? 0
 					});
 					break;
 				case 'liveDataUpdate':

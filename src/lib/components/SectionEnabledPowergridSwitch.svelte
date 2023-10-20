@@ -1,10 +1,10 @@
 <script lang="ts">
-	import ServiceEnabledPowergrid from '$lib/api/services/ServiceEnabledPowergrid';
+	import ServiceConfigEnabledPowergrid from '$lib/api/services/ServiceConfigEnabledPowergrid';
 	import { newSuccessToast, newErrorToast } from '$lib/api/Utilities/UtilStoreToast';
 	import { config } from '$lib/store';
 
 	async function onEnabledPowergridChange(event: any) {
-		await ServiceEnabledPowergrid.postEnabledPowergrid(event.target.checked)
+		await ServiceConfigEnabledPowergrid.postEnabledPowergrid(event.target.checked)
 			.then(() => {
 				newSuccessToast('Powergrid state changed: ' + event.target.checked);
 			})

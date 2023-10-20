@@ -12,6 +12,7 @@ import chargeRoutes from './routes/chargeRoutes.js';
 import configRoutes from './routes/configRoutes.js';
 import configEnabledRoutes from './routes/configEnabledRoutes.js';
 import configEnabledPowergridRoutes from './routes/configEnabledPowergridRoutes.js';
+import configPreferredPhase from './routes/configPreferredPhase.js'
 import livedataRoutes from './routes/livedataRoutes.js';
 import appInfoRoutes from './routes/appInfoRoutes.js';
 import AppInfo from './classes/AppInfo.js';
@@ -36,6 +37,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use(express.static('./svelte-build'));
 app.use('/', chargeRoutes);
 app.use('/', configRoutes);
+app.use('/', configPreferredPhase)
 app.use('/', configEnabledRoutes);
 app.use('/', configEnabledPowergridRoutes);
 app.use('/', livedataRoutes);

@@ -7,12 +7,13 @@ import ConfigFile from './classes/ConfigFile.js';
 import InterfaceConfig from './models/InterfaceConfig.js';
 import LiveDataInterface from './models/InterfaceLiveData.js';
 import infoLog from './functions/infoLog.js';
+import errorLog from './functions/errorLog.js';
 
 const CAR_NOT_CHARGING = 2;
 const CAR_WAIT = 3;
 
 export default async function (): Promise<void> {
-	console.log('\n---------------------------------------------------------------');
+	infoLog('\n---------------------------------------------------------------');
 	infoLog('LOOP (' + ConfigFile.read().CheckSeconds + 's) --------------------|');
 
 	LiveData.data = LiveData.defaultData;
@@ -134,23 +135,32 @@ export default async function (): Promise<void> {
 	infoLog('Done');
 }
 
-function findClosestValue(key: number, mappingArray: any[]): any {
-	// if length is zero just return a preset value indicating 'None'
-	if (mappingArray.length === 0) {
+function findClosestValue(availablePower: number, mappingArray: any[]): any {
+	const preferredPhase = ConfigFile.read().PreferredPhase;
+
+	// Filter the mappings based on the preferredPhase first.
+	const filteredMappings = mappingArray.filter(item => {
+		return (preferredPhase === 0) || // 0 for auto (accept all)
+			(preferredPhase === 1 && item.onePhase) || // 1 for phase 1
+			(preferredPhase === 2 && !item.onePhase); // 2 for phase 3
+	});
+
+	// If there are no mappings left after filtering, return a default response.
+	if (filteredMappings.length === 0) {
+		errorLog('No mappings available for the preferred phase.');
 		type MappingItemType = InterfaceConfig['Mapping'][0];
 		const response: MappingItemType = { value: 0, amp: 0, onePhase: false };
 		return response;
 	}
 
-	return mappingArray.reduce((prev, curr) => {
-		// If the current value is closer or the same distance to the key than the previous
-		// and is not more than the key, then consider it as the closest value.
-		if (Math.abs(curr.value - key) <= Math.abs(prev.value - key) && curr.value <= key) {
-			return curr;
-		}
-		return prev;
+	// Find the mapping that is closest to availablePower.
+	const optimalMapping = filteredMappings.reduce((prev, curr) => {
+		return (Math.abs(curr.value - availablePower) < Math.abs(prev.value - availablePower)) ? curr : prev;
 	});
+
+	return optimalMapping;
 }
+
 
 function calculateChargeSettings(config: InterfaceConfig) {
 	const availablePower = LiveData.data.Inverter.Export + LiveData.data.Charger.Consumption;

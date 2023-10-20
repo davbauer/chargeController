@@ -43,22 +43,28 @@
 	}
 
 	$: getClassForRow = (row: Config['Mapping'][0]) => {
-		const isPhaseMatch =
-			$liveData.Charger.PhaseMode === 0 ||
-			($liveData.Charger.PhaseMode === 1 && row.onePhase) ||
-			($liveData.Charger.PhaseMode === 2 && !row.onePhase);
+		const isCurrentPhaseMatch =
+			$liveData.Charger.PhaseMode === 0 || // Match any if PhaseMode is 0
+			($liveData.Charger.PhaseMode === 1 && row.onePhase) || // Match only phase 1
+			($liveData.Charger.PhaseMode === 2 && !row.onePhase); // Match only phase 3
 
-		const isCalcMatch =
-			row.amp === $liveData.Charger.AmpCalc && $liveData.Charger.AmpCalc !== $liveData.Charger.Amp;
+		// Determine if the row matches the calculated phase settings.
+		const isCalcPhaseMatch =
+			$liveData.Charger.PhaseModeCalc === 0 || // Match any if PhaseModeCalc is 0
+			($liveData.Charger.PhaseModeCalc === 1 && row.onePhase) || // Match only phase 1
+			($liveData.Charger.PhaseModeCalc === 2 && !row.onePhase); // Match only phase 3
 
-		const isMatch = row.amp === $liveData.Charger.Amp;
+		// Determine if the row matches the calculated Amp settings.
+		const isCalcAmpMatch = row.amp === $liveData.Charger.AmpCalc;
 
-		const isOutOfRange = row.value < $config.MinimumWatts || row.value > $config.MaximumWatts;
+		// Determine if the row matches the current Amp settings.
+		const isCurrentAmpMatch = row.amp === $liveData.Charger.Amp;
 
 		return {
-			isPhaseAndCalcMatch: isPhaseMatch && isCalcMatch,
-			isPhaseAndAmpMatch: isPhaseMatch && isMatch,
-			isOutOfRange
+			// The row matches both the calculated phase and amp settings.
+			isPhaseAndCalcMatch: isCalcPhaseMatch && isCalcAmpMatch,
+			// The row matches both the current phase and amp settings.
+			isPhaseAndAmpMatch: isCurrentPhaseMatch && isCurrentAmpMatch
 		};
 	};
 </script>
@@ -81,7 +87,6 @@
 					class:bg-neutral-focus={getClassForRow(row).isPhaseAndCalcMatch}
 					class:border-l-2={getClassForRow(row).isPhaseAndCalcMatch}
 					class:bg-secondary={getClassForRow(row).isPhaseAndAmpMatch}
-					class:opacity-40={getClassForRow(row).isOutOfRange}
 				>
 					<td class="w-1/3 text-left">
 						<label class="swap swap-flip flex justify-center">

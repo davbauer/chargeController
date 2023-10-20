@@ -1,6 +1,7 @@
 import * as ws from 'ws';
 import LiveData from './LiveData.js';
 import infoLog from '../functions/infoLog.js';
+import InterfaceConfig from '../models/InterfaceConfig.js';
 
 export default class WebSocketManager {
 	private static wss: ws.WebSocketServer | null = null;
@@ -48,6 +49,10 @@ export default class WebSocketManager {
 
 	public static sendEventBackendTerminal(type: string, msg: string, ts: string) {
 		this.sendEvent('backendTerminalUpdate', { type, msg, ts });
+	}
+
+	public static sendEventPreferredPhase(state: Pick<InterfaceConfig, "PreferredPhase">) {
+		this.sendEvent('preferredPhaseUpdate', { state });
 	}
 
 	public static sendEvent(eventType: string, data: any): void {
