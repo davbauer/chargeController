@@ -114,7 +114,6 @@ export default async function (): Promise<void> {
 		await ChargerService.setChargeStart();
 	}
 
-
 	if (chargerData.psm !== LiveData.data.Charger.PhaseModeCalc) {
 		infoLog('Phase was corrected');
 		const response = await ChargerService.setChargePhase(LiveData.data.Charger.PhaseModeCalc);
@@ -161,7 +160,7 @@ function calculateChargeSettings(config: InterfaceConfig) {
 
 	let determinedAmp = optimalAmpereMapping.amp;
 	let determinedPhase = optimalAmpereMapping.onePhase;
-	let determinedValue = optimalAmpereMapping.value
+	let determinedValue = optimalAmpereMapping.value;
 
 	// Ensure the calculated watt value lies between the Minimum and Maximum values
 	if (determinedValue < config.MinimumWatts) {

@@ -11,6 +11,7 @@ import WebSocketManager from './classes/WebSocketManager.js';
 import chargeRoutes from './routes/chargeRoutes.js';
 import configRoutes from './routes/configRoutes.js';
 import enabledRoutes from './routes/enabledRoutes.js';
+import enabledPowergridRoutes from './routes/enabledPowergridRoutes.js';
 import livedataRoutes from './routes/livedataRoutes.js';
 import appInfoRoutes from './routes/appInfoRoutes.js';
 import AppInfo from './classes/AppInfo.js';
@@ -36,6 +37,7 @@ app.use(express.static('./svelte-build'));
 app.use('/', chargeRoutes);
 app.use('/', configRoutes);
 app.use('/', enabledRoutes);
+app.use('/', enabledPowergridRoutes);
 app.use('/', livedataRoutes);
 app.use('/', appInfoRoutes);
 

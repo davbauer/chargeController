@@ -42,6 +42,10 @@ export default class WebSocketManager {
 		this.sendEvent('enabledStateUpdate', { state });
 	}
 
+	public static sendEventEnabledPowergridState(state: boolean) {
+		this.sendEvent('enabledPowergridStateUpdate', { state });
+	}
+
 	public static sendEvent(eventType: string, data: any): void {
 		const jsonData = JSON.stringify({ event: eventType, data });
 

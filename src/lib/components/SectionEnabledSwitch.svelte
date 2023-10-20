@@ -6,10 +6,10 @@
 	async function onEnabledChange(event: any) {
 		await ServiceEnabled.postEnabled(event.target.checked)
 			.then(() => {
-				newSuccessToast('State changed: ' + event.target.checked);
+				newSuccessToast('Enabled state changed: ' + event.target.checked);
 			})
 			.catch((err) => {
-				newErrorToast('State change error: ' + err.message);
+				newErrorToast('Enabled state change error: ' + err.message);
 			});
 	}
 </script>

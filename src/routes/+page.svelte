@@ -6,6 +6,7 @@
 	import SectionAmpereMapping from '$lib/components/SectionAmpereMapping.svelte';
 	import SectionSettings from '$lib/components/SectionSettings.svelte';
 	import ServiceWebsocket from '$lib/api/services/ServiceWebsocket';
+	import SectionEnabledPowergridSwitch from '$lib/components/SectionEnabledPowergridSwitch.svelte';
 
 	onMount(async () => {
 		ServiceWebsocket.initSocket();
@@ -14,6 +15,8 @@
 
 <div class="m-3 leading-loose text-lg">
 	<SectionEnabledSwitch />
+
+	<SectionEnabledPowergridSwitch />
 
 	<SectionChargeControl />
 

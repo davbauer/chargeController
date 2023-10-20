@@ -22,14 +22,21 @@ export default class {
 			const message = JSON.parse(event.data);
 			switch (message.event) {
 				case 'enabledStateUpdate':
-					newInfoToast('Received enabledStateUpdate');
+					newInfoToast('Received ' + message.event);
 					config.set({
 						...get(config),
 						Enabled: message.data.state as boolean
 					});
 					break;
+				case 'enabledPowergridStateUpdate':
+					newInfoToast('Received ' + message.event);
+					config.set({
+						...get(config),
+						UsePowergrid: message.data.state as boolean
+					});
+					break;
 				case 'liveDataUpdate':
-					newInfoToast('Received liveDataUpdate');
+					newInfoToast('Received ' + message.event);
 					console.log(JSON.stringify(message.data, null, 4));
 					console.info('received: liveDataUpdate');
 					liveData.set(message.data as LiveData);
