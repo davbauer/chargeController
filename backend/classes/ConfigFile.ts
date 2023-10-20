@@ -10,6 +10,18 @@ export default class {
 
 	private static createDefaultConfig(): InterfaceConfig {
 		const defaultConfig: InterfaceConfig = {
+			Enabled: false,
+			UsePowergrid: false,
+			PreferredPhase: 0,
+			CheckSeconds: 30,
+			MainInverterHost: 'myhostname',
+			InverterHost1: 'myhostname',
+			ChargerHost: 'myhostname',
+			BatteryHost: 'myhostname',
+			MinimumWatts: 50,
+			MaximumWatts: 100000,
+			BatteryCapacity: 52000,
+			CarEfficiency: 200,
 			Mapping: [
 				{
 					amp: 6,
@@ -47,17 +59,6 @@ export default class {
 					onePhase: false
 				}
 			],
-			Enabled: false,
-			MainInverterHost: 'myhostname',
-			InverterHost1: 'myhostname',
-			ChargerHost: 'myhostname',
-			BatteryHost: 'myhostname',
-			CheckSeconds: 30,
-			MinimumWatts: 50,
-			MaximumWatts: 100000,
-			UsePowergrid: false,
-			BatteryCapacity: 52000,
-			CarEfficiency: 200
 		};
 		const dirPath = path.dirname(this.filePath);
 		if (!fs.existsSync(dirPath)) {

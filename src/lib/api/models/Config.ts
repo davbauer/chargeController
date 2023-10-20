@@ -11,4 +11,6 @@ export default interface Config {
 	UsePowergrid: boolean;
 	BatteryCapacity: number;
 	CarEfficiency: number;
+	// 0 = Auto, 1 = One Phase, 2 = 3 Phases 
+	PreferredPhase: 0 | 1 | 2
 }

@@ -7,7 +7,8 @@
 	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/UtilStoreToast';
 	import ServiceConfig from '$lib/api/services/ServiceConfig';
 	import { dev } from '$app/environment';
-	import BackendTerminalWindow from '$lib/components/BackendTerminalWindow.svelte';
+	import BackendTerminalWindow from '$lib/components/SectionBackendTerminal.svelte';
+	import SectionBackendTerminal from '$lib/components/SectionBackendTerminal.svelte';
 
 	let initApplication: 'ERROR' | 'SUCCESS' | 'LOADING' = 'LOADING';
 
@@ -73,7 +74,7 @@
 				<span class="loading loading-spinner h-36 w-36" />
 			{/if}
 		</div>
-		<BackendTerminalWindow />
+		<SectionBackendTerminal />
 	{/if}
 </div>
 <div class="toast toast-end">
