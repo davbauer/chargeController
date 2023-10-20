@@ -43,10 +43,11 @@ export default class {
 				case 'backendTerminalUpdate':
 					const type = message.data.type as string;
 					const msg = message.data.msg as string;
+					const ts = message.data.ts as string;
 
 					backendLogs.update((currentLogs: BackendLogs) => {
 						const newCount = currentLogs.count + 1;
-						const newLog = { type, msg };
+						const newLog = { type, msg, ts };
 						const updatedLogs = [...currentLogs.items, newLog];
 						if (updatedLogs.length > 300) {
 							updatedLogs.splice(0, updatedLogs.length - 300);

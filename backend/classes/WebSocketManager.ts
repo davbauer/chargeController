@@ -46,8 +46,8 @@ export default class WebSocketManager {
 		this.sendEvent('enabledPowergridStateUpdate', { state });
 	}
 
-	public static sendEventBackendTerminal(type: string, msg: string) {
-		this.sendEvent('backendTerminalUpdate', { type, msg });
+	public static sendEventBackendTerminal(type: string, msg: string, ts: string) {
+		this.sendEvent('backendTerminalUpdate', { type, msg, ts });
 	}
 
 	public static sendEvent(eventType: string, data: any): void {

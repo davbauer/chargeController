@@ -14,14 +14,13 @@
 		<form method="dialog">
 			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 		</form>
-		<h3 class="font-bold text-lg">Backend</h3>
-		<div class="mockup-code text-left w-full my-10">
+		<h3 class="font-bold text-lg text-center pb-5">Backend</h3>
+		<div class="mockup-window border bg-base-200">
 			{#each [...$backendLogs.items].reverse() as log, index (log)}
-				<pre
-					data-prefix={$backendLogs.count - index}
-					class={log.type === 'error' ? 'text-warning' : ''}>
-                    <code>{log.msg}</code>
-                </pre>
+				<p class="py-1 px-5 font-mono {log.type === 'error' ? 'text-warning' : 'text-info'}">
+					<span class="opacity-60">{log.ts} {$backendLogs.count - index}</span>
+					{log.msg}
+				</p>
 			{/each}
 		</div>
 	</div>
