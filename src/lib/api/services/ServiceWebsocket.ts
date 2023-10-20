@@ -1,7 +1,8 @@
-import { appInfo, config, liveData } from '$lib/store';
+import { appInfo, backendLogs, config, liveData } from '$lib/store';
 import { get } from 'svelte/store';
 import { newErrorToast, newInfoToast } from '../Utilities/UtilStoreToast';
 import type LiveData from '../models/LiveData';
+import type BackendLogs from '../models/BackendLogs';
 
 export default class {
 	private static RETRY_DELAY = 1000; // Start with 1 second
@@ -37,9 +38,24 @@ export default class {
 					break;
 				case 'liveDataUpdate':
 					newInfoToast('Received ' + message.event);
-					console.log(JSON.stringify(message.data, null, 4));
-					console.info('received: liveDataUpdate');
 					liveData.set(message.data as LiveData);
+					break;
+				case 'backendTerminalUpdate':
+					const type = message.data.type as string;
+					const msg = message.data.msg as string;
+
+					backendLogs.update((currentLogs: BackendLogs) => {
+						const newCount = currentLogs.count + 1;
+						const newLog = { type, msg };
+						const updatedLogs = [...currentLogs.items, newLog];
+						if (updatedLogs.length > 300) {
+							updatedLogs.splice(0, updatedLogs.length - 300);
+						}
+						return {
+							count: newCount,
+							items: updatedLogs
+						};
+					});
 					break;
 			}
 		};

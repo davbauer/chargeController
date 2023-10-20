@@ -46,9 +46,16 @@ export default class WebSocketManager {
 		this.sendEvent('enabledPowergridStateUpdate', { state });
 	}
 
-	public static sendEvent(eventType: string, data: any): void {
-		const jsonData = JSON.stringify({ event: eventType, data });
+	public static sendEventBackendTerminal(type: string, msg: string) {
+		this.sendEvent('backendTerminalUpdate', { type, msg });
+	}
 
+	public static sendEvent(eventType: string, data: any): void {
+		// Need to fix this issue later, probably via websocket connection Id, dont dissallow too many connections issue!
+		// 20 Oct. 2023 - David
+		if (process.uptime() < 3) return;
+
+		const jsonData = JSON.stringify({ event: eventType, data });
 		for (let clientWs of this.clients) {
 			if (clientWs.readyState === 1) {
 				// Ensure WebSocket is open before sending
