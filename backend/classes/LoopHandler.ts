@@ -1,3 +1,4 @@
+import infoLog from '../functions/infoLog.js';
 import ConfigFile from './ConfigFile.js';
 
 export default class LoopHandler {
@@ -39,7 +40,7 @@ export default class LoopHandler {
 		const config = ConfigFile.read();
 
 		if (LoopHandler.currentCheckSeconds !== config.CheckSeconds) {
-			console.log('Configuration change detected.');
+			infoLog('Configuration change detected.');
 			LoopHandler.stopLoop();
 
 			if (LoopHandler.lastLoopTimestamp) {

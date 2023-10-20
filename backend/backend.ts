@@ -44,7 +44,7 @@ app.use('/', livedataRoutes);
 app.use('/', appInfoRoutes);
 
 const server = app.listen(EXPRESS_PORT, '0.0.0.0', () => {
-	console.log('');
+	infoLog('');
 	infoLog(`STARTED CHANGECONTROLLER -------------|`);
 	infoLog(`EXPRESS PORT:${EXPRESS_PORT} --------------------|`);
 	WebSocketManager.init(WEBSOCK_PORT);
