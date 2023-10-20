@@ -136,18 +136,22 @@ export default async function (): Promise<void> {
 }
 
 function findClosestValue(availablePower: number, mappingArray: any[]): any {
-	const preferredPhase = ConfigFile.read().PreferredPhase;
+	const configFile = ConfigFile.read();
+	const preferredPhase = configFile.PreferredPhase;
+	const minimumWatts = configFile.MinimumWatts;
+	const maximumWatts = configFile.MaximumWatts;
 
-	// Filter the mappings based on the preferredPhase first.
+	// Filter the mappings based on the preferredPhase and power constraints.
 	const filteredMappings = mappingArray.filter(item => {
-		return (preferredPhase === 0) || // 0 for auto (accept all)
+		return ((preferredPhase === 0) || // 0 for auto (accept all)
 			(preferredPhase === 1 && item.onePhase) || // 1 for phase 1
-			(preferredPhase === 2 && !item.onePhase); // 2 for phase 3
+			(preferredPhase === 2 && !item.onePhase)) && // 2 for phase 3
+			(item.value >= minimumWatts && item.value <= maximumWatts); // within min and max power range
 	});
 
 	// If there are no mappings left after filtering, return a default response.
 	if (filteredMappings.length === 0) {
-		errorLog('No mappings available for the preferred phase.');
+		errorLog('No mappings available for the preferred phase or within the power constraints.');
 		type MappingItemType = InterfaceConfig['Mapping'][0];
 		const response: MappingItemType = { value: 0, amp: 0, onePhase: false };
 		return response;
