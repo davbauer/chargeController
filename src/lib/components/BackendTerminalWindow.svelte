@@ -18,7 +18,7 @@
 		<div class="mockup-window border bg-base-200">
 			{#each [...$backendLogs.items].reverse() as log, index (log)}
 				<p class="py-1 px-5 font-mono {log.type === 'error' ? 'text-warning' : 'text-info'}">
-					<span class="opacity-60">{log.ts} {$backendLogs.count - index}</span>
+					<span class="opacity-50">{log.ts}</span>
 					{log.msg}
 				</p>
 			{/each}

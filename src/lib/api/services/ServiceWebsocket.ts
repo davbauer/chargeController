@@ -44,19 +44,16 @@ export default class {
 					const type = message.data.type as string;
 					const msg = message.data.msg as string;
 					const ts = message.data.ts as string;
-
-					backendLogs.update((currentLogs: BackendLogs) => {
-						const newCount = currentLogs.count + 1;
-						const newLog = { type, msg, ts };
-						const updatedLogs = [...currentLogs.items, newLog];
-						if (updatedLogs.length > 300) {
-							updatedLogs.splice(0, updatedLogs.length - 300);
+					backendLogs.update((currentLogs) => {
+						const updatedLogs = [...currentLogs.items, { type, msg, ts }];
+						if (updatedLogs.length > 200) {
+							updatedLogs.splice(0, updatedLogs.length - 200);
 						}
 						return {
-							count: newCount,
 							items: updatedLogs
 						};
 					});
+
 					break;
 			}
 		};

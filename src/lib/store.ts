@@ -3,7 +3,6 @@ import type { Writable } from 'svelte/store';
 import type AppInfo from './api/models/AppInfo';
 import type Config from './api/models/Config';
 import type LiveData from './api/models/LiveData';
-import type BackendLogLine from './api/models/BackendLogs';
 import type BackendLogs from './api/models/BackendLogs';
 
 export const toasts: Writable<Toast[]> = writable([]);
@@ -62,4 +61,4 @@ export const liveData: Writable<LiveData> = writable({
 	}
 });
 
-export const backendLogs: Writable<BackendLogs> = writable({ count: 0, items: [] });
+export const backendLogs: Writable<BackendLogs> = writable({ items: [] });
