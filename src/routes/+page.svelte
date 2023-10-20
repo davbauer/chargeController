@@ -19,9 +19,9 @@
 
 	<SectionLiveData />
 
-	<div class="mt-3 p-3 bg-neutral rounded-md flex flex-col md:flex-row">
-		<SectionAmpereMapping />
-
+	<div class="mt-3 p-3 bg-neutral rounded-md flex flex-col md:flex-row mx-auto">
 		<SectionSettings />
+
+		<SectionAmpereMapping />
 	</div>
 </div>
