@@ -15,7 +15,7 @@
 </script>
 
 <div class="mt-3 p-3 bg-neutral rounded-md">
-	<p class="text-2xl underline">PreferredPhase</p>
+	<p class="text-2xl underline">Preferred Phase</p>
 	<div class="flex justify-center">
 		<div class="join text-center" on:change={onPreferredPhaseChange}>
 			<input
@@ -39,7 +39,7 @@
 				bind:group={$config.PreferredPhase}
 				value={2}
 				name="options"
-				aria-label="Phase 2"
+				aria-label="Phase 3"
 				class="join-item btn"
 			/>
 		</div>

@@ -60,11 +60,14 @@
 		// Determine if the row matches the current Amp settings.
 		const isCurrentAmpMatch = row.amp === $liveData.Charger.Amp;
 
+		const isOutOfRange = row.value < $config.MinimumWatts || row.value > $config.MaximumWatts;
+
 		return {
 			// The row matches both the calculated phase and amp settings.
 			isPhaseAndCalcMatch: isCalcPhaseMatch && isCalcAmpMatch,
 			// The row matches both the current phase and amp settings.
-			isPhaseAndAmpMatch: isCurrentPhaseMatch && isCurrentAmpMatch
+			isPhaseAndAmpMatch: isCurrentPhaseMatch && isCurrentAmpMatch,
+			isOutOfRange
 		};
 	};
 </script>
@@ -87,6 +90,7 @@
 					class:bg-neutral-focus={getClassForRow(row).isPhaseAndCalcMatch}
 					class:border-l-2={getClassForRow(row).isPhaseAndCalcMatch}
 					class:bg-secondary={getClassForRow(row).isPhaseAndAmpMatch}
+					class:opacity-40={getClassForRow(row).isOutOfRange}
 				>
 					<td class="w-1/3 text-left">
 						<label class="swap swap-flip flex justify-center">
