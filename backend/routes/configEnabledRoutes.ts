@@ -6,6 +6,7 @@ import loop from '../loop.js';
 import errorLog from '../functions/errorLog.js';
 import WebSocketManager from '../classes/WebSocketManager.js';
 import ChargerService from '../api/services/ChargerService.js';
+import infoLog from '../functions/infoLog.js';
 
 const r = express.Router();
 
@@ -62,7 +63,7 @@ r.post('/enabled', async (req, res) => {
 			await ChargerService.setChargeStop();
 		}
 		if (updateLoop) {
-			console.log('Configuration updated. Restarting loop with new settings.');
+			infoLog('Configuration updated. Restarting loop with new settings.');
 			LoopHandler.updateLoop(loop);
 		}
 		res.status(200).json({ msg: 'success' });

@@ -10,7 +10,9 @@ import LoopHandler from './classes/LoopHandler.js';
 import WebSocketManager from './classes/WebSocketManager.js';
 import chargeRoutes from './routes/chargeRoutes.js';
 import configRoutes from './routes/configRoutes.js';
-import enabledRoutes from './routes/enabledRoutes.js';
+import configEnabledRoutes from './routes/configEnabledRoutes.js';
+import configEnabledPowergridRoutes from './routes/configEnabledPowergridRoutes.js';
+import configPreferredPhase from './routes/configPreferredPhase.js'
 import livedataRoutes from './routes/livedataRoutes.js';
 import appInfoRoutes from './routes/appInfoRoutes.js';
 import AppInfo from './classes/AppInfo.js';
@@ -35,12 +37,14 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use(express.static('./svelte-build'));
 app.use('/', chargeRoutes);
 app.use('/', configRoutes);
-app.use('/', enabledRoutes);
+app.use('/', configPreferredPhase)
+app.use('/', configEnabledRoutes);
+app.use('/', configEnabledPowergridRoutes);
 app.use('/', livedataRoutes);
 app.use('/', appInfoRoutes);
 
 const server = app.listen(EXPRESS_PORT, '0.0.0.0', () => {
-	console.log('');
+	infoLog('');
 	infoLog(`STARTED CHANGECONTROLLER -------------|`);
 	infoLog(`EXPRESS PORT:${EXPRESS_PORT} --------------------|`);
 	WebSocketManager.init(WEBSOCK_PORT);

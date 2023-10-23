@@ -1,6 +1,7 @@
 import * as ws from 'ws';
 import LiveData from './LiveData.js';
 import infoLog from '../functions/infoLog.js';
+import InterfaceConfig from '../models/InterfaceConfig.js';
 
 export default class WebSocketManager {
 	private static wss: ws.WebSocketServer | null = null;
@@ -42,9 +43,24 @@ export default class WebSocketManager {
 		this.sendEvent('enabledStateUpdate', { state });
 	}
 
-	public static sendEvent(eventType: string, data: any): void {
-		const jsonData = JSON.stringify({ event: eventType, data });
+	public static sendEventEnabledPowergridState(state: boolean) {
+		this.sendEvent('enabledPowergridStateUpdate', { state });
+	}
 
+	public static sendEventBackendTerminal(type: string, msg: string, ts: string) {
+		this.sendEvent('backendTerminalUpdate', { type, msg, ts });
+	}
+
+	public static sendEventPreferredPhase(state: Pick<InterfaceConfig, "PreferredPhase">) {
+		this.sendEvent('preferredPhaseUpdate', { state });
+	}
+
+	public static sendEvent(eventType: string, data: any): void {
+		// Need to fix this issue later, probably via websocket connection Id, dont dissallow too many connections issue!
+		// 20 Oct. 2023 - David
+		if (process.uptime() < 3) return;
+
+		const jsonData = JSON.stringify({ event: eventType, data });
 		for (let clientWs of this.clients) {
 			if (clientWs.readyState === 1) {
 				// Ensure WebSocket is open before sending

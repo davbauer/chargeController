@@ -4,6 +4,7 @@ import InterfaceConfig from '../models/InterfaceConfig.js';
 import LoopHandler from '../classes/LoopHandler.js';
 import loop from '../loop.js';
 import errorLog from '../functions/errorLog.js';
+import infoLog from '../functions/infoLog.js';
 
 const r = express.Router();
 
@@ -53,7 +54,7 @@ r.post('/config', (req, res) => {
 	const success = ConfigFile.write(configData);
 	if (success) {
 		if (updateLoop) {
-			console.log('Configuration updated. Restarting loop with new settings.');
+			infoLog('Configuration updated. Restarting loop with new settings.');
 			LoopHandler.updateLoop(loop);
 		}
 		res.status(200).json({ msg: 'success' });

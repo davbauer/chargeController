@@ -1,7 +1,9 @@
-import { appInfo, config, liveData } from '$lib/store';
+import { appInfo, backendLogs, config, liveData } from '$lib/store';
 import { get } from 'svelte/store';
 import { newErrorToast, newInfoToast } from '../Utilities/UtilStoreToast';
 import type LiveData from '../models/LiveData';
+import type BackendLogs from '../models/BackendLogs';
+import type Config from '../models/Config';
 
 export default class {
 	private static RETRY_DELAY = 1000; // Start with 1 second
@@ -22,17 +24,44 @@ export default class {
 			const message = JSON.parse(event.data);
 			switch (message.event) {
 				case 'enabledStateUpdate':
-					newInfoToast('Received enabledStateUpdate');
+					newInfoToast('Received ' + message.event);
 					config.set({
 						...get(config),
 						Enabled: message.data.state as boolean
 					});
 					break;
+				case 'enabledPowergridStateUpdate':
+					newInfoToast('Received ' + message.event);
+					config.set({
+						...get(config),
+						UsePowergrid: message.data.state as boolean
+					});
+					break;
+				case 'preferredPhaseUpdate':
+					newInfoToast('Received ' + message.event);
+					config.set({
+						...get(config),
+						PreferredPhase: (message.data.state as 0 | 1 | 2) ?? 0
+					});
+					break;
 				case 'liveDataUpdate':
-					newInfoToast('Received liveDataUpdate');
-					console.log(JSON.stringify(message.data, null, 4));
-					console.info('received: liveDataUpdate');
+					newInfoToast('Received ' + message.event);
 					liveData.set(message.data as LiveData);
+					break;
+				case 'backendTerminalUpdate':
+					const type = message.data.type as string;
+					const msg = message.data.msg as string;
+					const ts = message.data.ts as string;
+					backendLogs.update((currentLogs) => {
+						const updatedLogs = [...currentLogs.items, { type, msg, ts }];
+						if (updatedLogs.length > 200) {
+							updatedLogs.splice(0, updatedLogs.length - 200);
+						}
+						return {
+							items: updatedLogs
+						};
+					});
+
 					break;
 			}
 		};

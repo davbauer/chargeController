@@ -7,12 +7,13 @@ import ConfigFile from './classes/ConfigFile.js';
 import InterfaceConfig from './models/InterfaceConfig.js';
 import LiveDataInterface from './models/InterfaceLiveData.js';
 import infoLog from './functions/infoLog.js';
+import errorLog from './functions/errorLog.js';
 
 const CAR_NOT_CHARGING = 2;
 const CAR_WAIT = 3;
 
 export default async function (): Promise<void> {
-	console.log('\n---------------------------------------------------------------');
+	infoLog('\n---------------------------------------------------------------');
 	infoLog('LOOP (' + ConfigFile.read().CheckSeconds + 's) --------------------|');
 
 	LiveData.data = LiveData.defaultData;
@@ -114,6 +115,14 @@ export default async function (): Promise<void> {
 		await ChargerService.setChargeStart();
 	}
 
+	if (chargerData.psm !== LiveData.data.Charger.PhaseModeCalc) {
+		infoLog('Phase was corrected');
+		const response = await ChargerService.setChargePhase(LiveData.data.Charger.PhaseModeCalc);
+		if (response.psm === LiveData.data.Charger.PhaseModeCalc) {
+			LiveData.data.Charger.PhaseMode = LiveData.data.Charger.PhaseModeCalc;
+		}
+	}
+
 	if (chargerData.amp !== LiveData.data.Charger.AmpCalc) {
 		infoLog('Amp was corrected');
 		const response = await ChargerService.setChargeAmp(LiveData.data.Charger.AmpCalc);
@@ -126,24 +135,36 @@ export default async function (): Promise<void> {
 	infoLog('Done');
 }
 
-function findClosestValue(key: number, mappingArray: any[]): any {
-	// if length is zero just return a preset value indicating 'None'
-	if (mappingArray.length === 0) {
-		// Find the amp value that matches the available power the closest
+function findClosestValue(availablePower: number, mappingArray: any[]): any {
+	const configFile = ConfigFile.read();
+	const preferredPhase = configFile.PreferredPhase;
+	const minimumWatts = configFile.MinimumWatts;
+	const maximumWatts = configFile.MaximumWatts;
+
+	// Filter the mappings based on the preferredPhase and power constraints.
+	const filteredMappings = mappingArray.filter(item => {
+		return ((preferredPhase === 0) || // 0 for auto (accept all)
+			(preferredPhase === 1 && item.onePhase) || // 1 for phase 1
+			(preferredPhase === 2 && !item.onePhase)) && // 2 for phase 3
+			(item.value >= minimumWatts && item.value <= maximumWatts); // within min and max power range
+	});
+
+	// If there are no mappings left after filtering, return a default response.
+	if (filteredMappings.length === 0) {
+		errorLog('No mappings available for the preferred phase or within the power constraints.');
 		type MappingItemType = InterfaceConfig['Mapping'][0];
-		const response: MappingItemType = { value: 0, amp: 0 };
+		const response: MappingItemType = { value: 0, amp: 0, onePhase: false };
 		return response;
 	}
 
-	return mappingArray.reduce((prev, curr) => {
-		// If the current value is closer or the same distance to the key than the previous
-		// and is not more than the key, then consider it as the closest value.
-		if (Math.abs(curr.value - key) <= Math.abs(prev.value - key) && curr.value <= key) {
-			return curr;
-		}
-		return prev;
+	// Find the mapping that is closest to availablePower.
+	const optimalMapping = filteredMappings.reduce((prev, curr) => {
+		return (Math.abs(curr.value - availablePower) < Math.abs(prev.value - availablePower)) ? curr : prev;
 	});
+
+	return optimalMapping;
 }
+
 
 function calculateChargeSettings(config: InterfaceConfig) {
 	const availablePower = LiveData.data.Inverter.Export + LiveData.data.Charger.Consumption;
@@ -152,23 +173,26 @@ function calculateChargeSettings(config: InterfaceConfig) {
 	const optimalAmpereMapping = findClosestValue(availablePower, config.Mapping);
 
 	let determinedAmp = optimalAmpereMapping.amp;
+	let determinedPhase = optimalAmpereMapping.onePhase;
+	let determinedValue = optimalAmpereMapping.value;
 
-	// Ensure the calculated amp value lies between the Minimum and Maximum values
-	if (determinedAmp < config.MinimumAmps) {
-		determinedAmp = config.MinimumAmps;
-	} else if (determinedAmp > config.MaximumAmps) {
-		determinedAmp = config.MaximumAmps;
+	// Ensure the calculated watt value lies between the Minimum and Maximum values
+	if (determinedValue < config.MinimumWatts) {
+		determinedValue = config.MinimumWatts;
+	} else if (determinedValue > config.MaximumWatts) {
+		determinedValue = config.MaximumWatts;
 	}
 
 	let shouldStop = false;
 
 	// If the available power is less than the value for MinimumAmps, then consider stopping
-	if (availablePower < findClosestValue(determinedAmp, config.Mapping).value) {
+	if (availablePower < optimalAmpereMapping.value) {
 		shouldStop = true;
 	}
 	return {
 		Reserved: availablePower,
 		AmpCalc: determinedAmp,
+		PhaseModeCalc: determinedPhase ? 1 : 2,
 		ShouldStop: shouldStop
 	};
 }

@@ -1,15 +1,15 @@
 <script lang="ts">
-	import ServiceEnabled from '$lib/api/services/ServiceEnabled';
+	import ServiceConfigEnabled from '$lib/api/services/ServiceConfigEnabled';
 	import { newSuccessToast, newErrorToast } from '$lib/api/Utilities/UtilStoreToast';
 	import { config } from '$lib/store';
 
 	async function onEnabledChange(event: any) {
-		await ServiceEnabled.postEnabled(event.target.checked)
+		await ServiceConfigEnabled.postEnabled(event.target.checked)
 			.then(() => {
-				newSuccessToast('State changed: ' + event.target.checked);
+				newSuccessToast('Enabled state changed: ' + event.target.checked);
 			})
 			.catch((err) => {
-				newErrorToast('State change error: ' + err.message);
+				newErrorToast('Enabled state change error: ' + err.message);
 			});
 	}
 </script>

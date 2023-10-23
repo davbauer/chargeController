@@ -9,40 +9,56 @@ export default class {
 	private static filePath = './config/config.json';
 
 	private static createDefaultConfig(): InterfaceConfig {
-		const defaultConfig = {
-			Mapping: [
-				{
-					amp: 6,
-					value: 300
-				},
-				{
-					amp: 7,
-					value: 300
-				},
-				{
-					amp: 8,
-					value: 4400
-				},
-				{
-					amp: 9,
-					value: 6000
-				},
-				{
-					amp: 10,
-					value: 6740
-				}
-			],
+		const defaultConfig: InterfaceConfig = {
 			Enabled: false,
+			UsePowergrid: false,
+			PreferredPhase: 0,
+			CheckSeconds: 30,
 			MainInverterHost: 'myhostname',
 			InverterHost1: 'myhostname',
 			ChargerHost: 'myhostname',
 			BatteryHost: 'myhostname',
-			CheckSeconds: 30,
-			MinimumAmps: 6,
-			MaximumAmps: 14,
-			UsePowergrid: false,
+			MinimumWatts: 50,
+			MaximumWatts: 100000,
 			BatteryCapacity: 52000,
-			CarEfficiency: 200
+			CarEfficiency: 200,
+			Mapping: [
+				{
+					amp: 6,
+					value: 300,
+					onePhase: false
+				},
+				{
+					amp: 6,
+					value: 100,
+					onePhase: true
+				},
+				{
+					amp: 7,
+					value: 200,
+					onePhase: true
+				},
+				{
+					amp: 7,
+					value: 300,
+					onePhase: false
+				},
+				{
+					amp: 8,
+					value: 4400,
+					onePhase: false
+				},
+				{
+					amp: 9,
+					value: 6000,
+					onePhase: false
+				},
+				{
+					amp: 10,
+					value: 6740,
+					onePhase: false
+				}
+			],
 		};
 		const dirPath = path.dirname(this.filePath);
 		if (!fs.existsSync(dirPath)) {
@@ -74,7 +90,7 @@ export default class {
 				return this.createDefaultConfig();
 			}
 			errorLog(`ConfigFile.read: Error reading or parsing config: ${error}`);
-			throw '`ConfigFile.read: Error reading or parsing config: ${error}`';
+			throw `ConfigFile.read: Error reading or parsing config: ${error}`;
 		}
 	}
 	static write(config: InterfaceConfig): boolean {
@@ -93,7 +109,10 @@ export default class {
 		return (
 			Array.isArray(data.Mapping) &&
 			data.Mapping.every(
-				(item: any) => typeof item.amp === 'number' && typeof item.value === 'number'
+				(item: any) =>
+					typeof item.amp === 'number' &&
+					typeof item.value === 'number' &&
+					typeof item.onePhase === 'boolean'
 			) &&
 			typeof data.Enabled === 'boolean' &&
 			typeof data.MainInverterHost === 'string' &&
@@ -101,8 +120,8 @@ export default class {
 			typeof data.ChargerHost === 'string' &&
 			typeof data.BatteryHost === 'string' &&
 			typeof data.CheckSeconds === 'number' &&
-			typeof data.MinimumAmps === 'number' &&
-			typeof data.MaximumAmps === 'number' &&
+			typeof data.MinimumWatts === 'number' &&
+			typeof data.MaximumWatts === 'number' &&
 			typeof data.UsePowergrid === 'boolean' &&
 			typeof data.CarEfficiency === 'number' &&
 			typeof data.BatteryCapacity === 'number'

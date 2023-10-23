@@ -11,7 +11,7 @@
 
 	// Utility function to sort the mapping by amp value
 	function sortMapping(mapping: any[]) {
-		return mapping.sort((a, b) => a.amp - b.amp);
+		return mapping.sort((a, b) => a.value - b.value);
 	}
 
 	// Utility function to ensure there's an empty row at the end
@@ -31,12 +31,6 @@
 				$config.Mapping.pop();
 			}
 		}
-
-		// Filter out non-unique amp values (optional but may be a good idea)
-		$config.Mapping = $config.Mapping.filter((row, index, arr) => {
-			const firstIndex = arr.findIndex((r) => r.amp === row.amp);
-			return firstIndex === index;
-		});
 
 		// Sort the mapping and save
 		$config.Mapping = sortMapping($config.Mapping);
@@ -70,12 +64,44 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="w-1/2 text-left">Use Powergrid</td>
+					<td class="w-1/2 text-left">Check Seconds</td>
 					<td class="w-1/2 text-left">
 						<input
-							bind:checked={$config.UsePowergrid}
-							type="checkbox"
-							class="toggle toggle-primary"
+							type="number"
+							min="3"
+							bind:value={$config.CheckSeconds}
+							required
+							max="360"
+							placeholder="30"
+							class="input input-bordered w-full max-w-xs"
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td class="w-1/2 text-left">Minimum Watts</td>
+					<td class="w-1/2 text-left">
+						<input
+							type="number"
+							required
+							min="0"
+							bind:value={$config.MinimumWatts}
+							max="50000"
+							placeholder="600"
+							class="input input-bordered w-full max-w-xs"
+						/></td
+					>
+				</tr>
+				<tr>
+					<td class="w-1/2 text-left">Maximum Watts</td>
+					<td class="w-1/2 text-left">
+						<input
+							required
+							type="number"
+							min="0"
+							bind:value={$config.MaximumWatts}
+							max="100000"
+							placeholder="8000"
+							class="input input-bordered w-full max-w-xs"
 						/></td
 					>
 				</tr>
@@ -123,48 +149,6 @@
 							bind:value={$config.BatteryHost}
 							type="string"
 							placeholder="192.168.0.1"
-							class="input input-bordered w-full max-w-xs"
-						/></td
-					>
-				</tr>
-				<tr>
-					<td class="w-1/2 text-left">Check Seconds</td>
-					<td class="w-1/2 text-left">
-						<input
-							type="number"
-							min="3"
-							bind:value={$config.CheckSeconds}
-							required
-							max="360"
-							placeholder="30"
-							class="input input-bordered w-full max-w-xs"
-						/>
-					</td>
-				</tr>
-				<tr>
-					<td class="w-1/2 text-left">Minimum Amps</td>
-					<td class="w-1/2 text-left">
-						<input
-							type="number"
-							required
-							min="6"
-							bind:value={$config.MinimumAmps}
-							max="16"
-							placeholder="6"
-							class="input input-bordered w-full max-w-xs"
-						/></td
-					>
-				</tr>
-				<tr>
-					<td class="w-1/2 text-left">Maximum Amps</td>
-					<td class="w-1/2 text-left">
-						<input
-							required
-							type="number"
-							min="6"
-							bind:value={$config.MaximumAmps}
-							max="16"
-							placeholder="16"
 							class="input input-bordered w-full max-w-xs"
 						/></td
 					>

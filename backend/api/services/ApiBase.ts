@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 import xml2js from 'xml2js';
+import errorLog from '../../functions/errorLog';
 
 export default class ApiService {
 	private static instance = axios.create({
@@ -44,11 +45,11 @@ export default class ApiService {
 			if (this.isXml(response)) {
 				return this.xmlToJson<T>(response.data);
 			} else {
-				console.log(`API Error on getXML2JSON:${endpoint} (xml check failed)`);
+				errorLog(`API Error on getXML2JSON:${endpoint} (xml check failed)`);
 				throw new Error(`API Error on getXML2JSON: ${endpoint}(xml check failed)`);
 			}
 		} catch (error) {
-			console.error(`API Error on getXML2JSON: ${endpoint}`, error);
+			errorLog(`API Error on getXML2JSON: ${endpoint} ${JSON.stringify(error, null, 4)}`);
 			throw new Error(`API Error on getXML2JSON: ${endpoint}`);
 		}
 	}

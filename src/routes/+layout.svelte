@@ -7,6 +7,8 @@
 	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/UtilStoreToast';
 	import ServiceConfig from '$lib/api/services/ServiceConfig';
 	import { dev } from '$app/environment';
+	import BackendTerminalWindow from '$lib/components/SectionBackendTerminal.svelte';
+	import SectionBackendTerminal from '$lib/components/SectionBackendTerminal.svelte';
 
 	let initApplication: 'ERROR' | 'SUCCESS' | 'LOADING' = 'LOADING';
 
@@ -35,6 +37,9 @@
 			<p class="font-mono text-xl">
 				{dev ? 'DEBUG-' : ''}chargeController
 			</p>
+			<span class="ml-10">
+				<BackendTerminalWindow />
+			</span>
 		</div>
 
 		<div class="flex-grow">
@@ -69,6 +74,7 @@
 				<span class="loading loading-spinner h-36 w-36" />
 			{/if}
 		</div>
+		<SectionBackendTerminal />
 	{/if}
 </div>
 <div class="toast toast-end">

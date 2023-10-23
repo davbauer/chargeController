@@ -10,7 +10,7 @@
 </script>
 
 {#if isVisible}
-	<div transition:fade={{ duration: 300 }} class={`alert ${alertType}`}>
+	<div transition:fade={{ duration: 300 }} class={`alert text-xs ${alertType}`}>
 		<span>{message}</span>
 	</div>
 {/if}
