@@ -2,8 +2,6 @@ import { appInfo, backendLogs, config, liveData } from '$lib/store';
 import { get } from 'svelte/store';
 import { newErrorToast, newInfoToast } from '../Utilities/UtilStoreToast';
 import type LiveData from '../models/LiveData';
-import type BackendLogs from '../models/BackendLogs';
-import type Config from '../models/Config';
 
 export default class {
 	private static RETRY_DELAY = 1000; // Start with 1 second
@@ -15,10 +13,10 @@ export default class {
 		if (this.socket) {
 			const errMsg = `Socket already initialized!`;
 			newErrorToast(errMsg);
-			throw errMsg;
-		}
+		} else {
+			this.socket = new WebSocket(`ws://${window.location.hostname}:${get(appInfo).webSocketPort}`);
+		 }
 
-		this.socket = new WebSocket(`ws://${window.location.hostname}:${get(appInfo).webSocketPort}`);
 
 		this.socket.onmessage = (event) => {
 			const message = JSON.parse(event.data);
