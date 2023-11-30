@@ -27,7 +27,7 @@ const r = express.Router();
 r.post('/charge-start', (_req, res) => {
 	ChargerService.setChargeStart()
 		.then((x) => {
-			if (x.frc === true) {
+			if (x && x.frc === true) {
 				res.status(200).json({ msg: 'success' });
 			} else {
 				throw new AxiosError();
@@ -61,7 +61,7 @@ r.post('/charge-start', (_req, res) => {
 r.post('/charge-stop', (_req, res) => {
 	ChargerService.setChargeStop()
 		.then((x) => {
-			if (x.frc === true) {
+			if (x && x.frc === true) {
 				res.status(200).json({ msg: 'success' });
 			} else {
 				throw new AxiosError();
