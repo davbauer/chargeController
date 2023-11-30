@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import xml2js from 'xml2js';
 import errorLog from '../../functions/errorLog';
 
@@ -19,7 +19,7 @@ export default class ApiService {
 		}
 	}
 
-	protected static async get<T>(baseURL: string, endpoint: string): Promise<T> {
+	protected static async get<T>(baseURL: string, endpoint: string): Promise<T | null> {
 		try {
 			//console.info(`http://${baseURL}/${endpoint}`)
 			const response = await this.instance.get<T>(endpoint, {
@@ -27,13 +27,17 @@ export default class ApiService {
 			});
 			this.handleResponse(response, `get:${endpoint}`);
 			return response.data;
-		} catch (error) {
-			console.error(`API Error on get:${endpoint}`, error);
-			throw new Error(`API Error on get:${endpoint}`);
+		} catch (error: unknown) {
+			errorLog(
+				`API Error on get:${endpoint} | ERR: ${
+					error instanceof AxiosError ? error.message : 'Unexpected error type'
+				}`
+			);
+			return null;
 		}
 	}
 
-	protected static async getXML2JSON<T>(baseURL: string, endpoint: string): Promise<T> {
+	protected static async getXML2JSON<T>(baseURL: string, endpoint: string): Promise<T | null> {
 		try {
 			const response: AxiosResponse<string> = await this.instance.get<string>(endpoint, {
 				baseURL: `http://${baseURL}/`,
@@ -50,7 +54,8 @@ export default class ApiService {
 			}
 		} catch (error) {
 			errorLog(`API Error on getXML2JSON: ${endpoint} ${JSON.stringify(error, null, 4)}`);
-			throw new Error(`API Error on getXML2JSON: ${endpoint}`);
+			return null;
+			//throw new Error(`API Error on getXML2JSON: ${endpoint}`);
 		}
 	}
 

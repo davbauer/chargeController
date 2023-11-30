@@ -3,7 +3,7 @@ import ConfigFile from '../../classes/ConfigFile.js';
 import InterfaceBatData from '../../models/InterfaceBatData.js';
 
 export default class extends ApiBase {
-	static async getEMSDATA(): Promise<InterfaceBatData> {
+	static async getEMSDATA(): Promise<InterfaceBatData | null> {
 		return this.getXML2JSON<InterfaceBatData>(ConfigFile.read().BatteryHost, 'cgi/ems_data.xml');
 	}
 }

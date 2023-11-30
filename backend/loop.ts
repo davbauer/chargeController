@@ -118,7 +118,7 @@ export default async function (): Promise<void> {
 	if (chargerData.psm !== LiveData.data.Charger.PhaseModeCalc) {
 		infoLog('Phase was corrected');
 		const response = await ChargerService.setChargePhase(LiveData.data.Charger.PhaseModeCalc);
-		if (response.psm === LiveData.data.Charger.PhaseModeCalc) {
+		if (response && response.psm === LiveData.data.Charger.PhaseModeCalc) {
 			LiveData.data.Charger.PhaseMode = LiveData.data.Charger.PhaseModeCalc;
 		}
 	}
@@ -126,7 +126,7 @@ export default async function (): Promise<void> {
 	if (chargerData.amp !== LiveData.data.Charger.AmpCalc) {
 		infoLog('Amp was corrected');
 		const response = await ChargerService.setChargeAmp(LiveData.data.Charger.AmpCalc);
-		if (response.amp === true) {
+		if (response && response.amp === true) {
 			LiveData.data.Charger.Amp = LiveData.data.Charger.AmpCalc;
 		}
 	}
