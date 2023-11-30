@@ -51,7 +51,7 @@ export default class WebSocketManager {
 		this.sendEvent('backendTerminalUpdate', { type, msg, ts });
 	}
 
-	public static sendEventPreferredPhase(state: Pick<InterfaceConfig, "PreferredPhase">) {
+	public static sendEventPreferredPhase(state: Pick<InterfaceConfig, 'PreferredPhase'>) {
 		this.sendEvent('preferredPhaseUpdate', { state });
 	}
 

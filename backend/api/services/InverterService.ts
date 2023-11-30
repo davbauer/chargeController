@@ -2,7 +2,9 @@ import ApiBase from './ApiBase.js';
 import InterfaceInvPowerFlowRealtimeData from '../../models/InterfaceInvPowerFlowRealtimeData.js';
 import InterfaceInvMeterRealtimeData from '../../models/InterfaceInvMeterRealtimeData.js';
 export default class extends ApiBase {
-	static async getPowerFlowRealtimeData(host: string): Promise<InterfaceInvPowerFlowRealtimeData | null> {
+	static async getPowerFlowRealtimeData(
+		host: string
+	): Promise<InterfaceInvPowerFlowRealtimeData | null> {
 		return this.get<InterfaceInvPowerFlowRealtimeData>(
 			host,
 			'solar_api/v1/GetPowerFlowRealtimeData.fcgi'

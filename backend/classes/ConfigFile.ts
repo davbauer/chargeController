@@ -58,7 +58,7 @@ export default class {
 					value: 6740,
 					onePhase: false
 				}
-			],
+			]
 		};
 		const dirPath = path.dirname(this.filePath);
 		if (!fs.existsSync(dirPath)) {

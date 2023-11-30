@@ -15,8 +15,7 @@ export default class {
 			newErrorToast(errMsg);
 		} else {
 			this.socket = new WebSocket(`ws://${window.location.hostname}:${get(appInfo).webSocketPort}`);
-		 }
-
+		}
 
 		this.socket.onmessage = (event) => {
 			const message = JSON.parse(event.data);

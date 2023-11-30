@@ -142,11 +142,14 @@ function findClosestValue(availablePower: number, mappingArray: any[]): any {
 	const maximumWatts = configFile.MaximumWatts;
 
 	// Filter the mappings based on the preferredPhase and power constraints.
-	const filteredMappings = mappingArray.filter(item => {
-		return ((preferredPhase === 0) || // 0 for auto (accept all)
-			(preferredPhase === 1 && item.onePhase) || // 1 for phase 1
-			(preferredPhase === 2 && !item.onePhase)) && // 2 for phase 3
-			(item.value >= minimumWatts && item.value <= maximumWatts); // within min and max power range
+	const filteredMappings = mappingArray.filter((item) => {
+		return (
+			(preferredPhase === 0 || // 0 for auto (accept all)
+				(preferredPhase === 1 && item.onePhase) || // 1 for phase 1
+				(preferredPhase === 2 && !item.onePhase)) && // 2 for phase 3
+			item.value >= minimumWatts &&
+			item.value <= maximumWatts
+		); // within min and max power range
 	});
 
 	// If there are no mappings left after filtering, return a default response.
@@ -159,12 +162,13 @@ function findClosestValue(availablePower: number, mappingArray: any[]): any {
 
 	// Find the mapping that is closest to availablePower.
 	const optimalMapping = filteredMappings.reduce((prev, curr) => {
-		return (Math.abs(curr.value - availablePower) < Math.abs(prev.value - availablePower)) ? curr : prev;
+		return Math.abs(curr.value - availablePower) < Math.abs(prev.value - availablePower)
+			? curr
+			: prev;
 	});
 
 	return optimalMapping;
 }
-
 
 function calculateChargeSettings(config: InterfaceConfig) {
 	const availablePower = LiveData.data.Inverter.Export + LiveData.data.Charger.Consumption;

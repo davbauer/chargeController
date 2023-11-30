@@ -2,7 +2,7 @@ import type ResBase from '../models/ResBase';
 import ApiBase from './ApiBase';
 
 export default class extends ApiBase {
-    static async postEnabled(state: 0 | 1 | 2): Promise<ResBase> {
-        return this.post<ResBase>('preferredPhase', { state });
-    }
+	static async postEnabled(state: 0 | 1 | 2): Promise<ResBase> {
+		return this.post<ResBase>('preferredPhase', { state });
+	}
 }

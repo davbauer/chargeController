@@ -47,27 +47,27 @@ const r = express.Router();
  *                   example: 'Error writing to config file'
  */
 r.post('/preferredPhase', async (req, res) => {
-    const stateData = req.body.state;
-    if (stateData !== 0 && stateData !== 1 && stateData !== 2) {
-        res.status(400).json({
-            msg: 'Bad Request: state must be 0, 1, or 2'
-        });
-        return;
-    }
-    const configData = ConfigFile.read();
-    configData.PreferredPhase = stateData;
-    const success = ConfigFile.write(configData);
+	const stateData = req.body.state;
+	if (stateData !== 0 && stateData !== 1 && stateData !== 2) {
+		res.status(400).json({
+			msg: 'Bad Request: state must be 0, 1, or 2'
+		});
+		return;
+	}
+	const configData = ConfigFile.read();
+	configData.PreferredPhase = stateData;
+	const success = ConfigFile.write(configData);
 
-    // It's better to send events after ensuring that data is written successfully.
-    if (success) {
-        WebSocketManager.sendEventPreferredPhase(stateData); // Adjusted position
-        res.status(200).json({ msg: 'success' });
-    } else {
-        errorLog('Error writing preferredPhase state to config file.');
-        res.status(500).json({
-            msg: 'Error writing to config file'
-        });
-    }
+	// It's better to send events after ensuring that data is written successfully.
+	if (success) {
+		WebSocketManager.sendEventPreferredPhase(stateData); // Adjusted position
+		res.status(200).json({ msg: 'success' });
+	} else {
+		errorLog('Error writing preferredPhase state to config file.');
+		res.status(500).json({
+			msg: 'Error writing to config file'
+		});
+	}
 });
 
 export default r;

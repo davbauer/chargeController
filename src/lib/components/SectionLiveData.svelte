@@ -150,10 +150,10 @@
 				{$liveData.Charger.PhaseMode === 0
 					? 'Auto'
 					: $liveData.Charger.PhaseMode === 1
-					? '1P'
-					: $liveData.Charger.PhaseMode === 2
-					? '3P'
-					: 'unknown'}
+					  ? '1P'
+					  : $liveData.Charger.PhaseMode === 2
+					    ? '3P'
+					    : 'unknown'}
 			{/if}
 		</p>
 	</div>
@@ -208,10 +208,10 @@
 				{$liveData.Charger.PhaseModeCalc === 0
 					? 'Auto'
 					: $liveData.Charger.PhaseModeCalc === 1
-					? '1P'
-					: $liveData.Charger.PhaseModeCalc === 2
-					? '3P'
-					: 'unknown'}
+					  ? '1P'
+					  : $liveData.Charger.PhaseModeCalc === 2
+					    ? '3P'
+					    : 'unknown'}
 			{/if}
 		</p>
 	</div>
