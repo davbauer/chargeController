@@ -2,7 +2,7 @@ export default interface AppInfo {
 	webSocketPort: number;
 	gitCommitId: string | null;
 	gitBranchName: string | null;
-	upime: number;
+	uptime: number;
 	environment: string;
 	nodeVersion: string;
 }

@@ -11,7 +11,7 @@ export const appInfo: Writable<AppInfo> = writable({
 	webSocketPort: -1,
 	gitCommitId: 'undefined',
 	gitBranchName: 'undefined',
-	upime: -1,
+	uptime: -1,
 	environment: 'developement',
 	nodeVersion: 'undefined'
 });
@@ -27,7 +27,8 @@ export const config: Writable<Config> = writable({
 	MaximumWatts: -1,
 	UsePowergrid: false,
 	BatteryCapacity: -1,
-	CarEfficiency: -1
+	CarEfficiency: -1,
+	PreferredPhase: 0
 });
 export const liveData: Writable<LiveData> = writable({
 	Timestamp: null,
