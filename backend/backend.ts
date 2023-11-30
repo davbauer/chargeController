@@ -29,6 +29,12 @@ app.use(
 		origin: '*' // Only allow requests from this origin
 	})
 );
+app.use(
+	cors({
+		allowedHeaders: ['Content-Type', 'X-Ws-Connection-Id']
+	})
+);
+
 app.get('/api-docs.json', (_req, res) => {
 	res.setHeader('Content-Type', 'application/json');
 	res.send(swaggerSpecs);

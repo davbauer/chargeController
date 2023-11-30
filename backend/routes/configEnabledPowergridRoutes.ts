@@ -3,6 +3,7 @@ import ConfigFile from '../classes/ConfigFile.js';
 import InterfaceConfig from '../models/InterfaceConfig.js';
 import errorLog from '../functions/errorLog.js';
 import WebSocketManager from '../classes/WebSocketManager.js';
+import getWsConnectionHeaderValue from '../functions/getHeaderValueWsConnectionId.js';
 
 const r = express.Router();
 
@@ -52,7 +53,7 @@ r.post('/enabledPowergrid', async (req, res) => {
 	const configData: InterfaceConfig = ConfigFile.read();
 	configData.UsePowergrid = stateData;
 	const success = ConfigFile.write(configData);
-	WebSocketManager.sendEventEnabledPowergridState(stateData);
+	WebSocketManager.sendEventEnabledPowergridState(stateData, getWsConnectionHeaderValue(req));
 	if (success) {
 		res.status(200).json({ msg: 'success' });
 	} else {

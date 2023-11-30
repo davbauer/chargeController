@@ -1,6 +1,8 @@
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 import { dev } from '$app/environment';
+import { wsConnectionId } from '$lib/store';
+import { get } from 'svelte/store';
 
 export default class ApiService {
 	private static instance = axios.create({
@@ -22,7 +24,9 @@ export default class ApiService {
 
 	protected static async get<T>(endpoint: string): Promise<T> {
 		try {
+			const headers = { 'X-Ws-Connection-Id': get(wsConnectionId) }; // Custom header
 			const response = await this.instance.get<T>(endpoint, {
+				headers,
 				baseURL: `http://${
 					dev ? `${window.location.hostname}:${this.BACKEND_PORT}` : window.location.host
 				}/`
@@ -37,7 +41,9 @@ export default class ApiService {
 
 	protected static async post<T>(endpoint: string, body: any): Promise<T> {
 		try {
+			const headers = { 'X-Ws-Connection-Id': get(wsConnectionId) }; // Custom header
 			const response = await this.instance.post<T>(endpoint, body, {
+				headers,
 				baseURL: `http://${
 					dev ? `${window.location.hostname}:${this.BACKEND_PORT}` : window.location.host
 				}/`

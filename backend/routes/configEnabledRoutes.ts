@@ -7,6 +7,7 @@ import errorLog from '../functions/errorLog.js';
 import WebSocketManager from '../classes/WebSocketManager.js';
 import ChargerService from '../api/services/ChargerService.js';
 import infoLog from '../functions/infoLog.js';
+import getWsConnectionHeaderValue from '../functions/getHeaderValueWsConnectionId.js';
 
 const r = express.Router();
 
@@ -57,7 +58,7 @@ r.post('/enabled', async (req, res) => {
 	const updateLoop = ConfigFile.read().Enabled !== stateData;
 	configData.Enabled = stateData;
 	const success = ConfigFile.write(configData);
-	WebSocketManager.sendEventEnabledState(stateData);
+	WebSocketManager.sendEventEnabledState(stateData, getWsConnectionHeaderValue(req));
 	if (success) {
 		if (stateData === false) {
 			await ChargerService.setChargeStop();

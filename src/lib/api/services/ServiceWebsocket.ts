@@ -1,4 +1,4 @@
-import { appInfo, backendLogs, config, liveData } from '$lib/store';
+import { appInfo, backendLogs, config, liveData, wsConnectionId } from '$lib/store';
 import { get } from 'svelte/store';
 import { newErrorToast, newInfoToast } from '../Utilities/UtilStoreToast';
 import type LiveData from '../models/LiveData';
@@ -19,30 +19,35 @@ export default class {
 
 		this.socket.onmessage = (event) => {
 			const message = JSON.parse(event.data);
+			console.log(message);
+			if (message.wsConnectionId && message.wsConnectionId.length > 0) {
+				wsConnectionId.set(message.wsConnectionId);
+			}
+			const eventName = message.event.toUpperCase();
 			switch (message.event) {
 				case 'enabledStateUpdate':
-					newInfoToast('Received ' + message.event);
+					newInfoToast('Received ' + eventName);
 					config.set({
 						...get(config),
 						Enabled: message.data.state as boolean
 					});
 					break;
 				case 'enabledPowergridStateUpdate':
-					newInfoToast('Received ' + message.event);
+					newInfoToast('Received ' + eventName);
 					config.set({
 						...get(config),
 						UsePowergrid: message.data.state as boolean
 					});
 					break;
 				case 'preferredPhaseUpdate':
-					newInfoToast('Received ' + message.event);
+					newInfoToast('Received ' + eventName.t);
 					config.set({
 						...get(config),
 						PreferredPhase: (message.data.state as 0 | 1 | 2) ?? 0
 					});
 					break;
 				case 'liveDataUpdate':
-					newInfoToast('Received ' + message.event);
+					newInfoToast('Received ' + eventName);
 					liveData.set(message.data as LiveData);
 					break;
 				case 'backendTerminalUpdate':

@@ -7,6 +7,8 @@ import type BackendLogs from './api/models/BackendLogs';
 
 export const toasts: Writable<Toast[]> = writable([]);
 
+export const wsConnectionId: Writable<string> = writable('undefined');
+
 export const appInfo: Writable<AppInfo> = writable({
 	webSocketPort: -1,
 	gitCommitId: 'undefined',

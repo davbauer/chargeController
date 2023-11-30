@@ -2,6 +2,7 @@ import express from 'express';
 import ConfigFile from '../classes/ConfigFile.js';
 import errorLog from '../functions/errorLog.js';
 import WebSocketManager from '../classes/WebSocketManager.js';
+import getWsConnectionHeaderValue from '../functions/getHeaderValueWsConnectionId.js';
 
 const r = express.Router();
 
@@ -60,7 +61,7 @@ r.post('/preferredPhase', async (req, res) => {
 
 	// It's better to send events after ensuring that data is written successfully.
 	if (success) {
-		WebSocketManager.sendEventPreferredPhase(stateData); // Adjusted position
+		WebSocketManager.sendEventPreferredPhase(stateData, getWsConnectionHeaderValue(req)); // Adjusted position
 		res.status(200).json({ msg: 'success' });
 	} else {
 		errorLog('Error writing preferredPhase state to config file.');
