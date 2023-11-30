@@ -58,8 +58,8 @@ r.post('/enabled', async (req, res) => {
 	const updateLoop = ConfigFile.read().Enabled !== stateData;
 	configData.Enabled = stateData;
 	const success = ConfigFile.write(configData);
-	WebSocketManager.sendEventEnabledState(stateData, getWsConnectionHeaderValue(req));
 	if (success) {
+		WebSocketManager.sendEventEnabledState(stateData, getWsConnectionHeaderValue(req));
 		if (stateData === false) {
 			await ChargerService.setChargeStop();
 		}

@@ -58,10 +58,8 @@ r.post('/preferredPhase', async (req, res) => {
 	const configData = ConfigFile.read();
 	configData.PreferredPhase = stateData;
 	const success = ConfigFile.write(configData);
-
-	// It's better to send events after ensuring that data is written successfully.
 	if (success) {
-		WebSocketManager.sendEventPreferredPhase(stateData, getWsConnectionHeaderValue(req)); // Adjusted position
+		WebSocketManager.sendEventPreferredPhase(stateData, getWsConnectionHeaderValue(req));
 		res.status(200).json({ msg: 'success' });
 	} else {
 		errorLog('Error writing preferredPhase state to config file.');

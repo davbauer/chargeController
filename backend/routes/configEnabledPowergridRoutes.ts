@@ -53,8 +53,8 @@ r.post('/enabledPowergrid', async (req, res) => {
 	const configData: InterfaceConfig = ConfigFile.read();
 	configData.UsePowergrid = stateData;
 	const success = ConfigFile.write(configData);
-	WebSocketManager.sendEventEnabledPowergridState(stateData, getWsConnectionHeaderValue(req));
 	if (success) {
+		WebSocketManager.sendEventEnabledPowergridState(stateData, getWsConnectionHeaderValue(req));
 		res.status(200).json({ msg: 'success' });
 	} else {
 		errorLog('Error writing powergrid state to config file.');
