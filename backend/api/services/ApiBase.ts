@@ -69,11 +69,11 @@ export default class ApiService {
 					explicitArray: false,
 					mergeAttrs: true
 				},
-				(err, result) => {
+				(err: Error | null, result: T) => {
 					if (err) {
 						reject(err);
 					} else {
-						resolve(result as T);
+						resolve(result);
 					}
 				}
 			);
