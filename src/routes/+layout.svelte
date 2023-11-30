@@ -92,7 +92,7 @@
 					>Retry again</button
 				>
 			{:else}
-				<span class="loading loading-spinner h-36 w-36" />
+				<span class="loading loading-spinner text-primary h-24 w-24" />
 			{/if}
 		</div>
 		<SectionBackendTerminal />
