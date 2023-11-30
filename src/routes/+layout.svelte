@@ -9,6 +9,7 @@
 	import { dev } from '$app/environment';
 	import BackendTerminalWindow from '$lib/components/SectionBackendTerminal.svelte';
 	import SectionBackendTerminal from '$lib/components/SectionBackendTerminal.svelte';
+	import moment from 'moment';
 
 	let initApplication: 'ERROR' | 'SUCCESS' | 'LOADING' = 'LOADING';
 
@@ -25,6 +26,18 @@
 				initApplication = 'ERROR';
 			});
 	});
+
+	function formatUptime(uptimeSeconds: number): string {
+		const duration = moment.duration(uptimeSeconds, 'seconds');
+		return [
+			...(duration.years() > 0 ? [`${duration.years()}y`] : []),
+			...(duration.months() > 0 || duration.years() > 0 ? [`${duration.months()}mo`] : []),
+			...(duration.days() > 0 || duration.months() > 0 ? [`${duration.days()}d`] : []),
+			...(duration.hours() > 0 || duration.days() > 0 ? [`${duration.hours()}h`] : []),
+			...(duration.minutes() > 0 || duration.hours() > 0 ? [`${duration.minutes()}m`] : []),
+			`${duration.seconds()}s`
+		].join(' ');
+	}
 </script>
 
 <svelte:head>
@@ -60,6 +73,14 @@
 				</p>
 				<p class="text-gray-500">
 					CommitId: {$appInfo.gitCommitId}
+				</p>
+				<p class="text-gray-500">
+					Uptime:
+					{#if $appInfo.uptime === -1}
+						/
+					{:else}
+						{formatUptime($appInfo.uptime)}
+					{/if}
 				</p>
 			</div>
 		</footer>
