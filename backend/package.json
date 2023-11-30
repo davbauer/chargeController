@@ -28,6 +28,8 @@
 	},
 	"devDependencies": {
 		"@types/node": "^20.4.4",
-		"@types/xml2js": "^0.4.11"
+		"@types/uuid": "^9.0.7",
+		"@types/xml2js": "^0.4.11",
+		"uuid": "^9.0.1"
 	}
 }
