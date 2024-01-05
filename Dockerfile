@@ -3,7 +3,7 @@ FROM node:20-alpine as svelte
 WORKDIR /app
 COPY package.json ./
 COPY yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install
 ARG GIT_COMMIT
 ARG GIT_BRANCH
 COPY . .
@@ -14,7 +14,7 @@ FROM node:20-alpine as backend
 WORKDIR /app
 COPY ./backend/package.json ./
 COPY ./backend/yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN yarn install
 COPY ./backend .
 RUN yarn build
 
@@ -24,7 +24,7 @@ ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=backend /app/ ./
 COPY --from=backend /app/yarn.lock ./
-RUN yarn install --frozen-lockfile && yarn cache clean
+RUN yarn install && yarn cache clean
 COPY --from=svelte /app/build ./svelte-build
 ARG GIT_COMMITID
 ARG GIT_BRANCH
