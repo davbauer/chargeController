@@ -9,13 +9,13 @@
 </script>
 
 <button class="btn btn-xs" on:click={showModal}>LIVE BACKEND</button>
-<dialog id="backendLive" class="modal md:w-auto mx-auto">
-	<div class="modal-box w-11/12 max-w-5xl">
+<dialog id="backendLive" class="mx-auto modal md:w-auto">
+	<div class="w-11/12 max-w-5xl modal-box">
 		<form method="dialog">
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+			<button class="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">✕</button>
 		</form>
-		<h3 class="font-bold text-lg text-center pb-5">Backend</h3>
-		<div class="mockup-window border bg-base-200">
+		<h3 class="pb-5 text-lg font-bold text-center">Backend</h3>
+		<div class="border mockup-window bg-base-200">
 			{#each [...$backendLogs.items].reverse() as log, index (log)}
 				<p class="py-1 px-5 font-mono {log.type === 'error' ? 'text-warning' : 'text-info'}">
 					<span class="opacity-50">{log.ts}</span>
