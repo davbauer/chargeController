@@ -1,11 +1,14 @@
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
-import type AppInfo from './api/models/AppInfo';
-import type Config from './api/models/Config';
-import type LiveData from './api/models/LiveData';
-import type BackendLogs from './api/models/BackendLogs';
+import type AppInfo from '$lib/api/models/AppInfo';
+import type Config from '$lib/api/models/Config';
+import type LiveData from '$lib/api/models/LiveData';
+import type BackendLogs from '$lib/api/models/BackendLogs';
+import type SignalState from '$lib/api/models/SignalState';
 
 export const toasts: Writable<Toast[]> = writable([]);
+
+export const activitySignal = writable<SignalState>({});
 
 export const wsConnectionId: Writable<string> = writable('undefined');
 

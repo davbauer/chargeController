@@ -2,6 +2,8 @@ import { appInfo, backendLogs, config, liveData, wsConnectionId } from '$lib/sto
 import { get } from 'svelte/store';
 import { newErrorToast, newInfoToast } from '$lib/utilities/UtilStoreToast';
 import type LiveData from '$lib/api/models/LiveData';
+import { sendActivitySignal } from '$lib/utilities/UtilStoreActivityDot';
+import { SignalStateType } from '$lib/api/models/SignalStateType';
 
 export default class {
 	private static RETRY_DELAY = 1000; // Start with 1 second
@@ -27,6 +29,7 @@ export default class {
 			switch (message.event) {
 				case 'enabledStateUpdate':
 					newInfoToast('Received ' + eventName);
+
 					config.set({
 						...get(config),
 						Enabled: message.data.state as boolean
@@ -40,14 +43,14 @@ export default class {
 					});
 					break;
 				case 'preferredPhaseUpdate':
-					newInfoToast('Received ' + eventName.t);
+					newInfoToast('Received ' + eventName);
 					config.set({
 						...get(config),
 						PreferredPhase: (message.data.state as 0 | 1 | 2) ?? 0
 					});
 					break;
 				case 'liveDataUpdate':
-					newInfoToast('Received ' + eventName);
+					sendActivitySignal(SignalStateType.LIVEDATA);
 					liveData.set(message.data as LiveData);
 					break;
 				case 'backendTerminalUpdate':
