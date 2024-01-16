@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/UtilStoreToast';
+	import { newErrorToast, newSuccessToast } from '$lib/utilities/UtilStoreToast';
 	import ServiceChargeControl from '$lib/api/services/ServiceChargeControl';
 
 	async function startCharge() {
@@ -22,14 +22,14 @@
 	}
 </script>
 
-<div class="mt-3 p-3 bg-neutral rounded-md">
+<div class="p-3 mt-3 rounded-md bg-neutral">
 	<p class="text-2xl underline">Control</p>
 
 	<div class="flex flex-row items-center justify-around pt-5">
-		<button on:click={startCharge} class="btn-lg w-2/5 btn btn-active btn-secondary">
+		<button on:click={startCharge} class="w-2/5 btn-lg btn btn-active btn-secondary">
 			Start Charging
 		</button>
-		<button on:click={stopCharge} class="btn-lg w-2/5 btn btn-active btn-neutral">
+		<button on:click={stopCharge} class="w-2/5 btn-lg btn btn-active btn-neutral">
 			Stop Charging
 		</button>
 	</div>

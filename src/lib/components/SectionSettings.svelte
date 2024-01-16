@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ServiceConfig from '$lib/api/services/ServiceConfig';
-	import { newSuccessToast, newErrorToast } from '$lib/api/Utilities/UtilStoreToast';
+	import { newSuccessToast, newErrorToast } from '$lib/utilities/UtilStoreToast';
 	import { config } from '$lib/store';
 	import { onMount } from 'svelte';
 
@@ -60,7 +60,7 @@
 			<tbody>
 				<tr>
 					<td colspan="2">
-						<button class="w-full flex self-center btn btn-success">Save Settings</button>
+						<button class="flex self-center w-full btn btn-success">Save Settings</button>
 					</td>
 				</tr>
 				<tr>
@@ -73,7 +73,7 @@
 							required
 							max="360"
 							placeholder="30"
-							class="input input-bordered w-full max-w-xs"
+							class="w-full max-w-xs input input-bordered"
 						/>
 					</td>
 				</tr>
@@ -87,7 +87,7 @@
 							bind:value={$config.MinimumWatts}
 							max="50000"
 							placeholder="600"
-							class="input input-bordered w-full max-w-xs"
+							class="w-full max-w-xs input input-bordered"
 						/></td
 					>
 				</tr>
@@ -101,7 +101,7 @@
 							bind:value={$config.MaximumWatts}
 							max="100000"
 							placeholder="8000"
-							class="input input-bordered w-full max-w-xs"
+							class="w-full max-w-xs input input-bordered"
 						/></td
 					>
 				</tr>
@@ -113,7 +113,7 @@
 							required
 							bind:value={$config.MainInverterHost}
 							placeholder="192.168.0.1"
-							class="input input-bordered w-full max-w-xs"
+							class="w-full max-w-xs input input-bordered"
 						/></td
 					>
 				</tr>
@@ -125,7 +125,7 @@
 							required
 							bind:value={$config.InverterHost1}
 							placeholder="192.168.0.1"
-							class="input input-bordered w-full max-w-xs"
+							class="w-full max-w-xs input input-bordered"
 						/></td
 					>
 				</tr>
@@ -137,7 +137,7 @@
 							bind:value={$config.ChargerHost}
 							type="string"
 							placeholder="192.168.0.1"
-							class="input input-bordered w-full max-w-xs"
+							class="w-full max-w-xs input input-bordered"
 						/></td
 					>
 				</tr>
@@ -149,7 +149,7 @@
 							bind:value={$config.BatteryHost}
 							type="string"
 							placeholder="192.168.0.1"
-							class="input input-bordered w-full max-w-xs"
+							class="w-full max-w-xs input input-bordered"
 						/></td
 					>
 				</tr>
@@ -167,7 +167,7 @@
 							bind:value={$config.BatteryCapacity}
 							max="100000"
 							placeholder="52000"
-							class="input input-bordered w-full max-w-xs"
+							class="w-full max-w-xs input input-bordered"
 						/></td
 					>
 				</tr>
@@ -185,7 +185,7 @@
 							bind:value={$config.CarEfficiency}
 							max="1000"
 							placeholder="150"
-							class="input input-bordered w-full max-w-xs"
+							class="w-full max-w-xs input input-bordered"
 						/></td
 					>
 				</tr>

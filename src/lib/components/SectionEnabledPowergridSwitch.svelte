@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ServiceConfigEnabledPowergrid from '$lib/api/services/ServiceConfigEnabledPowergrid';
-	import { newSuccessToast, newErrorToast } from '$lib/api/Utilities/UtilStoreToast';
+	import { newSuccessToast, newErrorToast } from '$lib/utilities/UtilStoreToast';
 	import { config } from '$lib/store';
 
 	async function onEnabledPowergridChange(event: any) {
@@ -14,7 +14,7 @@
 	}
 </script>
 
-<div class="mt-3 p-3 bg-neutral rounded-md">
+<div class="p-3 mt-3 rounded-md bg-neutral">
 	<p class="text-2xl underline">Use Powergrid</p>
 	<div class="flex flex-col items-center">
 		<input

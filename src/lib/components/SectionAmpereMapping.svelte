@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { newErrorToast } from '$lib/api/Utilities/UtilStoreToast';
+	import { newErrorToast } from '$lib/utilities/UtilStoreToast';
 	import type Config from '$lib/api/models/Config';
 	import { liveData, config } from '$lib/store';
 
@@ -93,7 +93,7 @@
 					class:opacity-40={getClassForRow(row).isOutOfRange}
 				>
 					<td class="w-1/3 text-left">
-						<label class="swap swap-flip flex justify-center">
+						<label class="flex justify-center swap swap-flip">
 							<input
 								bind:checked={row.onePhase}
 								on:change={() => handleTableInput(index, 'onePhase')}
@@ -114,7 +114,7 @@
 							max="32"
 							bind:value={row.amp}
 							on:input={() => handleTableInput(index, 'amp')}
-							class="input input-bordered w-full"
+							class="w-full input input-bordered"
 							type="number"
 						/>
 					</td>
@@ -124,7 +124,7 @@
 							max="20000"
 							bind:value={row.value}
 							on:input={() => handleTableInput(index, 'value')}
-							class="input input-bordered w-full"
+							class="w-full input input-bordered"
 							type="number"
 						/>
 					</td>

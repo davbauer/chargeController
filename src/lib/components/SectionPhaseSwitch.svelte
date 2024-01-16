@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { newErrorToast, newSuccessToast } from '$lib/api/Utilities/UtilStoreToast';
+	import { newErrorToast, newSuccessToast } from '$lib/utilities/UtilStoreToast';
 	import ServiceConfigPreferredPhase from '$lib/api/services/ServiceConfigPreferredPhase';
 	import { config } from '$lib/store';
 
@@ -14,10 +14,10 @@
 	}
 </script>
 
-<div class="mt-3 p-3 bg-neutral rounded-md">
+<div class="p-3 mt-3 rounded-md bg-neutral">
 	<p class="text-2xl underline">Preferred Phase</p>
 	<div class="flex justify-center">
-		<div class="join text-center" on:change={onPreferredPhaseChange}>
+		<div class="text-center join" on:change={onPreferredPhaseChange}>
 			<input
 				type="radio"
 				bind:group={$config.PreferredPhase}

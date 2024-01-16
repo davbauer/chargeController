@@ -1,7 +1,7 @@
 import { appInfo, backendLogs, config, liveData, wsConnectionId } from '$lib/store';
 import { get } from 'svelte/store';
-import { newErrorToast, newInfoToast } from '../Utilities/UtilStoreToast';
-import type LiveData from '../models/LiveData';
+import { newErrorToast, newInfoToast } from '$lib/utilities/UtilStoreToast';
+import type LiveData from '$lib/api/models/LiveData';
 
 export default class {
 	private static RETRY_DELAY = 1000; // Start with 1 second
