@@ -26,7 +26,7 @@ export default async function (): Promise<void> {
 	const Inverter1PowerFlow = await InverterService.getPowerFlowRealtimeData(
 		ConfigFile.read().InverterHost1
 	);
-	//const inverterMeter = await InverterService.getMeterRealtimeData();
+
 	const chargerData = await ChargerService.getChargeInfo();
 	const batteryData = await BatteryService.getEMSDATA();
 
@@ -116,7 +116,7 @@ export default async function (): Promise<void> {
 	}
 
 	if (chargerData.psm !== LiveData.data.Charger.PhaseModeCalc) {
-		infoLog('Phase was corrected');
+		infoLog(`Phase was corrected (${chargerData.psm} -> ${LiveData.data.Charger.PhaseModeCalc})`);
 		const response = await ChargerService.setChargePhase(LiveData.data.Charger.PhaseModeCalc);
 		if (response && response.psm === LiveData.data.Charger.PhaseModeCalc) {
 			LiveData.data.Charger.PhaseMode = LiveData.data.Charger.PhaseModeCalc;
@@ -124,7 +124,7 @@ export default async function (): Promise<void> {
 	}
 
 	if (chargerData.amp !== LiveData.data.Charger.AmpCalc) {
-		infoLog('Amp was corrected');
+		infoLog(`Amp was corrected (${chargerData.amp} -> ${LiveData.data.Charger.AmpCalc})`);
 		const response = await ChargerService.setChargeAmp(LiveData.data.Charger.AmpCalc);
 		if (response && response.amp === true) {
 			LiveData.data.Charger.Amp = LiveData.data.Charger.AmpCalc;
@@ -171,7 +171,8 @@ function findClosestValue(availablePower: number, mappingArray: any[]): any {
 }
 
 function calculateChargeSettings(config: InterfaceConfig) {
-	const availablePower = LiveData.data.Inverter.Export + LiveData.data.Charger.Consumption;
+	const availablePower =
+		LiveData.data.Inverter.Export + LiveData.data.Charger.Consumption + config.OffsetWatts;
 
 	// Find the amp value that matches the available power the closest
 	const optimalAmpereMapping = findClosestValue(availablePower, config.Mapping);
