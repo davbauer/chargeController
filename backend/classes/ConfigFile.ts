@@ -13,13 +13,14 @@ export default class {
 			Enabled: false,
 			UsePowergrid: false,
 			PreferredPhase: 0,
-			CheckSeconds: 30,
+			CheckSeconds: 25,
 			MainInverterHost: 'myhostname',
 			InverterHost1: 'myhostname',
 			ChargerHost: 'myhostname',
 			BatteryHost: 'myhostname',
 			MinimumWatts: 50,
 			MaximumWatts: 100000,
+			OffsetWatts: 0,
 			BatteryCapacity: 52000,
 			CarEfficiency: 200,
 			Mapping: [
@@ -124,7 +125,9 @@ export default class {
 			typeof data.MaximumWatts === 'number' &&
 			typeof data.UsePowergrid === 'boolean' &&
 			typeof data.CarEfficiency === 'number' &&
-			typeof data.BatteryCapacity === 'number'
+			typeof data.BatteryCapacity === 'number' &&
+			typeof data.PreferredPhase === 'number' &&
+			typeof data.OffsetWatts === 'number'
 		);
 	}
 }

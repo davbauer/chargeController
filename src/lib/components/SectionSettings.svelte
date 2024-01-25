@@ -72,7 +72,7 @@
 							bind:value={$config.CheckSeconds}
 							required
 							max="360"
-							placeholder="30"
+							placeholder="25"
 							class="w-full max-w-xs input input-bordered"
 						/>
 					</td>
@@ -101,6 +101,26 @@
 							bind:value={$config.MaximumWatts}
 							max="100000"
 							placeholder="8000"
+							class="w-full max-w-xs input input-bordered"
+						/></td
+					>
+				</tr>
+				<tr>
+					<td class="w-1/2 text-left">
+						<span
+							class="tooltip tooltip-info"
+							data-tip="Needed to calculate the reserved power for the charger"
+							>Offset Watts (W)</span
+						></td
+					>
+					<td class="w-1/2 text-left">
+						<input
+							required
+							type="number"
+							bind:value={$config.OffsetWatts}
+							min="-100000"
+							max="100000"
+							placeholder="0"
 							class="w-full max-w-xs input input-bordered"
 						/></td
 					>

@@ -1,4 +1,4 @@
-export default interface Config {
+export default interface InterfaceConfig {
 	Mapping: { amp: number; value: number; onePhase: boolean }[];
 	Enabled: boolean;
 	MainInverterHost: string;
@@ -8,6 +8,7 @@ export default interface Config {
 	CheckSeconds: number;
 	MinimumWatts: number;
 	MaximumWatts: number;
+	OffsetWatts: number;
 	UsePowergrid: boolean;
 	BatteryCapacity: number;
 	CarEfficiency: number;

@@ -195,10 +195,17 @@
 		</p>
 	</div>
 
-	<div class="flex flex-row items-center opacity-60">
-		<p class="w-56 pr-10">Charger Reserved</p>
+	<div class="flex flex-row items-center">
+		<p class="w-56 pr-10 opacity-60">Charger Reserved</p>
 		<p class="font-mono">
-			{$liveData.Charger.Reserved !== -1 ? $liveData.Charger.Reserved.toFixed(2) : '?'} W
+			<span
+				class="tooltip tooltip-info"
+				data-tip={`${$liveData.Inverter.Export.toFixed(2)}(Export) + ${$liveData.Charger.Consumption.toFixed(2)}(Charger Consumption) + ${$config.OffsetWatts.toFixed(2)}(OffsetWatts)`}
+			>
+				<span class="opacity-60"
+					>{$liveData.Charger.Reserved !== -1 ? $liveData.Charger.Reserved.toFixed(2) : '?'} W</span
+				></span
+			>
 		</p>
 	</div>
 

@@ -8,6 +8,7 @@ export default interface InterfaceConfig {
 	CheckSeconds: number;
 	MinimumWatts: number;
 	MaximumWatts: number;
+	OffsetWatts: number;
 	UsePowergrid: boolean;
 	BatteryCapacity: number;
 	CarEfficiency: number;
