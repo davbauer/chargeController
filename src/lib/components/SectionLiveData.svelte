@@ -199,7 +199,7 @@
 		<p class="w-56 pr-10 opacity-60">Charger Reserved</p>
 		<p class="font-mono">
 			<span
-				class="tooltip tooltip-info"
+				class="tooltip tooltip-info before:w-[10rem] before:content-[attr(data-tip)]"
 				data-tip={`${$liveData.Inverter.Export.toFixed(2)}(Export) + ${$liveData.Charger.Consumption.toFixed(2)}(Charger Consumption) + ${$config.OffsetWatts.toFixed(2)}(OffsetWatts)`}
 			>
 				<span class="opacity-60"
