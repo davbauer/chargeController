@@ -125,7 +125,7 @@ export default class {
 			typeof data.OffsetWatts === 'number' &&
 			typeof data.BatteryCapacity === 'number' &&
 			typeof data.CarEfficiency === 'number' &&
-			typeof data.PreferredPhase === 'string'
+			typeof data.PreferredPhase === 'number'
 		);
 	}
 }
