@@ -10,8 +10,7 @@ export default class {
 
 	private static createDefaultConfig(): InterfaceConfig {
 		const defaultConfig: InterfaceConfig = {
-			Enabled: false,
-			UsePowergrid: false,
+			Mode: 'sleep',
 			PreferredPhase: 0,
 			CheckSeconds: 25,
 			MainInverterHost: 'myhostname',
@@ -115,7 +114,7 @@ export default class {
 					typeof item.value === 'number' &&
 					typeof item.onePhase === 'boolean'
 			) &&
-			typeof data.Enabled === 'boolean' &&
+			typeof data.Mode === 'string' &&
 			typeof data.MainInverterHost === 'string' &&
 			typeof data.InverterHost1 === 'string' &&
 			typeof data.ChargerHost === 'string' &&
@@ -126,7 +125,6 @@ export default class {
 			typeof data.UsePowergrid === 'boolean' &&
 			typeof data.CarEfficiency === 'number' &&
 			typeof data.BatteryCapacity === 'number' &&
-			typeof data.PreferredPhase === 'number' &&
 			typeof data.OffsetWatts === 'number'
 		);
 	}

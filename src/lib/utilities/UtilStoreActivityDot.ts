@@ -1,4 +1,4 @@
-import type SignalState from '$lib/api/models/SignalState';
+import type SignalState from '$lib/models/SignalState';
 import { activitySignal } from '$lib/store';
 import { writable } from 'svelte/store';
 

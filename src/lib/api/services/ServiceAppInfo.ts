@@ -1,4 +1,4 @@
-import type AppInfo from '../models/AppInfo';
+import type AppInfo from '../../models/AppInfo';
 import ApiBase from './ApiBase';
 
 export default class extends ApiBase {

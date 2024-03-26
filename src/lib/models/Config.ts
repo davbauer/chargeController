@@ -1,6 +1,10 @@
 export default interface InterfaceConfig {
 	Mapping: { amp: number; value: number; onePhase: boolean }[];
-	Enabled: boolean;
+	Mode:
+		| 'force_off' // -> Always make sure charger stays off
+		| 'sleep' //-> Do not interact with charger at all
+		| 'sun' // -> Only react if power available from sun
+		| 'sun_force'; // -> Charge with minimum, increase when sun provides more power
 	MainInverterHost: string;
 	InverterHost1: string;
 	ChargerHost: string;
@@ -9,9 +13,10 @@ export default interface InterfaceConfig {
 	MinimumWatts: number;
 	MaximumWatts: number;
 	OffsetWatts: number;
-	UsePowergrid: boolean;
 	BatteryCapacity: number;
 	CarEfficiency: number;
-	// 0 = Auto, 1 = One Phase, 2 = 3 Phases
-	PreferredPhase: 0 | 1 | 2;
+	PreferredPhase:
+		| 0 // -> Auto
+		| 1 // -> Phase 2
+		| 2; // -> Phase 3
 }

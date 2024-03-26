@@ -17,6 +17,7 @@
 		Promise.all([ServiceAppInfo.getAppInfo(), ServiceConfig.getConfig()])
 			.then(([appInfoResponse, configResponse]) => {
 				appInfo.set(appInfoResponse);
+				console.log(JSON.stringify(configResponse, null, 2));
 				config.set(configResponse);
 				newSuccessToast('Loaded app info and config');
 				initApplication = 'SUCCESS';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SignalStateType } from '$lib/api/models/SignalStateType';
+	import { SignalStateType } from '$lib/models/SignalStateType';
 	import { liveData, config } from '$lib/store';
 	import { getDerivedSignal } from '$lib/utilities/UtilStoreActivityDot';
 	import moment from 'moment';
