@@ -1,5 +1,5 @@
-import type Config from '../models/Config';
-import type ResBase from '../models/ResBase';
+import type Config from '../../models/Config';
+import type ResBase from '../../models/ResBase';
 import ApiBase from './ApiBase';
 
 export default class extends ApiBase {

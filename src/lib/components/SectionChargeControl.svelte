@@ -26,7 +26,7 @@
 	<p class="text-2xl underline">Control</p>
 
 	<div class="flex flex-row items-center justify-around pt-5">
-		<button on:click={startCharge} class="w-2/5 btn-lg btn btn-active btn-secondary">
+		<button on:click={startCharge} class="w-2/5 btn-lg btn btn-active btn-outline btn-neutral">
 			Start Charging
 		</button>
 		<button on:click={stopCharge} class="w-2/5 btn-lg btn btn-active btn-neutral">

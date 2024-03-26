@@ -1,10 +1,10 @@
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
-import type AppInfo from '$lib/api/models/AppInfo';
-import type Config from '$lib/api/models/Config';
-import type LiveData from '$lib/api/models/LiveData';
-import type BackendLogs from '$lib/api/models/BackendLogs';
-import type SignalState from '$lib/api/models/SignalState';
+import type AppInfo from '$lib/models/AppInfo';
+import type Config from '$lib/models/Config';
+import type LiveData from '$lib/models/LiveData';
+import type BackendLogs from '$lib/models/BackendLogs';
+import type SignalState from '$lib/models/SignalState';
 
 export const toasts: Writable<Toast[]> = writable([]);
 
@@ -22,15 +22,15 @@ export const appInfo: Writable<AppInfo> = writable({
 });
 export const config: Writable<Config> = writable({
 	Mapping: [],
-	Enabled: false,
+	Mode: 'sleep',
 	MainInverterHost: 'undefined',
 	InverterHost1: 'undefined',
 	ChargerHost: 'undefined',
 	BatteryHost: 'undefined',
+	OffsetWatts: 0,
 	CheckSeconds: -1,
 	MinimumWatts: -1,
 	MaximumWatts: -1,
-	UsePowergrid: false,
 	BatteryCapacity: -1,
 	CarEfficiency: -1,
 	PreferredPhase: 0
