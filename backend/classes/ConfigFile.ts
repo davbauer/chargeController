@@ -122,10 +122,10 @@ export default class {
 			typeof data.CheckSeconds === 'number' &&
 			typeof data.MinimumWatts === 'number' &&
 			typeof data.MaximumWatts === 'number' &&
-			typeof data.UsePowergrid === 'boolean' &&
-			typeof data.CarEfficiency === 'number' &&
+			typeof data.OffsetWatts === 'number' &&
 			typeof data.BatteryCapacity === 'number' &&
-			typeof data.OffsetWatts === 'number'
+			typeof data.CarEfficiency === 'number' &&
+			typeof data.PreferredPhase === 'string'
 		);
 	}
 }
