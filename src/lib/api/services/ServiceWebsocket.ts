@@ -1,9 +1,10 @@
 import { appInfo, backendLogs, config, liveData, wsConnectionId } from '$lib/store';
 import { get } from 'svelte/store';
 import { newErrorToast, newInfoToast } from '$lib/utilities/UtilStoreToast';
-import type LiveData from '$lib/api/models/LiveData';
+import type LiveData from '$lib/models/LiveData';
 import { sendActivitySignal } from '$lib/utilities/UtilStoreActivityDot';
-import { SignalStateType } from '$lib/api/models/SignalStateType';
+import type Config from '$lib/models/Config';
+import { SignalStateType } from '$lib/models/SignalStateType';
 
 export default class {
 	private static RETRY_DELAY = 1000; // Start with 1 second
@@ -27,19 +28,12 @@ export default class {
 			}
 			const eventName = message.event.toUpperCase();
 			switch (message.event) {
-				case 'enabledStateUpdate':
+				case 'modeStateUpdate':
 					newInfoToast('Received ' + eventName);
 
 					config.set({
 						...get(config),
-						Enabled: message.data.state as boolean
-					});
-					break;
-				case 'enabledPowergridStateUpdate':
-					newInfoToast('Received ' + eventName);
-					config.set({
-						...get(config),
-						UsePowergrid: message.data.state as boolean
+						Mode: message.data.state as Config['Mode']
 					});
 					break;
 				case 'preferredPhaseUpdate':

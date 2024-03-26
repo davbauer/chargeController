@@ -22,9 +22,9 @@ const r = express.Router();
  *             type: 'object'
  *             properties:
  *               state:
- *                 type: 'string'
+ *                 type: 'integer'
  *                 description: The new preferredPhase state.
- *                 example: true
+ *                 example: 1
  *     responses:
  *       200:
  *         description: Success

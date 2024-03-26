@@ -46,12 +46,8 @@ export default class WebSocketManager {
 		this.sendEvent('liveDataUpdate', LiveData.data);
 	}
 
-	public static sendEventEnabledState(state: boolean, senderWsConnectionId: string) {
-		this.sendEvent('enabledStateUpdate', { state }, senderWsConnectionId);
-	}
-
-	public static sendEventEnabledPowergridState(state: boolean, senderWsConnectionId: string) {
-		this.sendEvent('enabledPowergridStateUpdate', { state }, senderWsConnectionId);
+	public static sendEventModeState(state: InterfaceConfig['Mode'], senderWsConnectionId: string) {
+		this.sendEvent('modeStateUpdate', { state }, senderWsConnectionId);
 	}
 
 	public static sendEventPreferredPhase(

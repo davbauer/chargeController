@@ -9,7 +9,7 @@ import LiveDataInterface from './models/InterfaceLiveData.js';
 import infoLog from './functions/infoLog.js';
 import errorLog from './functions/errorLog.js';
 
-const CAR_NOT_CHARGING = 2;
+const CAR_CHARGING = 2;
 const CAR_WAIT = 3;
 
 export default async function (): Promise<void> {
@@ -86,8 +86,17 @@ export default async function (): Promise<void> {
 
 	const result = calculateChargeSettings(config);
 	Object.assign(LiveData.data.Charger, result);
-	if (!config.Enabled) {
-		infoLog('Control not enabled!');
+	if (config.Mode === 'force_off') {
+		infoLog(`Mode set to '${config.Mode}'`);
+		if (LiveData.data.Charger.Status === CAR_CHARGING) {
+			infoLog('Car is charging -> forcing off!');
+			await ChargerService.setChargeStart();
+		}
+		WebSocketManager.sendEventLiveData();
+		return;
+	}
+	if (config.Mode === 'sleep') {
+		infoLog(`Mode set to '${config.Mode}'`);
 		WebSocketManager.sendEventLiveData();
 		return;
 	}
@@ -99,14 +108,14 @@ export default async function (): Promise<void> {
 		return;
 	}
 
-	if (LiveData.data.Charger.ShouldStop && !config.UsePowergrid) {
-		infoLog('Should stop is true and use powergrid set to false');
+	if (LiveData.data.Charger.ShouldStop && config.Mode === 'sun') {
+		infoLog(`Should stop is true and 'sun_force' not enabled`);
 		await ChargerService.setChargeStop();
 		WebSocketManager.sendEventLiveData();
 		return;
 	}
 
-	if (chargerData.car !== CAR_NOT_CHARGING) {
+	if (chargerData.car !== CAR_CHARGING) {
 		if (chargerData.car === CAR_WAIT) {
 			infoLog('No car to charger connected, cant charge!');
 			return;

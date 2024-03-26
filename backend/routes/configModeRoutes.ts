@@ -13,9 +13,9 @@ const r = express.Router();
 
 /**
  * @swagger
- * /enabled:
+ * /mode:
  *   post:
- *     summary: Update the enabled state
+ *     summary: Update the mode state
  *     tags:
  *       - Configuration
  *     description: Post data based on InterfaceConfig model.
@@ -27,9 +27,9 @@ const r = express.Router();
  *             type: 'object'
  *             properties:
  *               state:
- *                 type: 'boolean'
- *                 description: The new enabled state.
- *                 example: true
+ *                 type: 'string'
+ *                 description: The new mode state.
+ *                 example: 'sleep'
  *     responses:
  *       200:
  *         description: Success
@@ -52,15 +52,15 @@ const r = express.Router();
  *                   type: 'string'
  *                   example: 'Error writing to config file'
  */
-r.post('/enabled', async (req, res) => {
-	const stateData: boolean = req.body.state;
+r.post('/mode', async (req, res) => {
+	const stateData: InterfaceConfig['Mode'] = req.body.state;
 	const configData: InterfaceConfig = ConfigFile.read();
-	const updateLoop = ConfigFile.read().Enabled !== stateData;
-	configData.Enabled = stateData;
+	const updateLoop = ConfigFile.read().Mode !== stateData;
+	configData.Mode = stateData;
 	const success = ConfigFile.write(configData);
 	if (success) {
-		WebSocketManager.sendEventEnabledState(stateData, getWsConnectionHeaderValue(req));
-		if (stateData === false) {
+		WebSocketManager.sendEventModeState(stateData, getWsConnectionHeaderValue(req));
+		if (stateData === 'force_off') {
 			await ChargerService.setChargeStop();
 		}
 		if (updateLoop) {
@@ -69,7 +69,7 @@ r.post('/enabled', async (req, res) => {
 		}
 		res.status(200).json({ msg: 'success' });
 	} else {
-		errorLog('Error writing enabled state to config file.');
+		errorLog('Error writing mode state to config file.');
 		res.status(500).json({
 			msg: 'Error writing to config file'
 		});

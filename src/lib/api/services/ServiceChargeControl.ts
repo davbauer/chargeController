@@ -1,4 +1,4 @@
-import type ResBase from '../models/ResBase';
+import type ResBase from '../../models/ResBase';
 import ApiBase from './ApiBase';
 
 export default class extends ApiBase {
