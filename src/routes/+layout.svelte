@@ -13,6 +13,7 @@
 	import ServiceLiveData from '$lib/api/services/ServiceLiveData';
 	import { sendActivitySignal } from '$lib/utilities/UtilStoreActivityDot';
 	import { SignalStateType } from '$lib/models/SignalStateType';
+	import ServiceWebsocket from '$lib/api/services/ServiceWebsocket';
 
 	let initApplication: 'ERROR' | 'SUCCESS' | 'LOADING' = 'LOADING';
 
@@ -28,6 +29,7 @@
 				liveData.set(liveDataResponse);
 				sendActivitySignal(SignalStateType.LIVEDATA);
 				newSuccessToast('Loaded app info, config and liveData');
+				ServiceWebsocket.initSocket();
 				initApplication = 'SUCCESS';
 			})
 			.catch((_error) => {
