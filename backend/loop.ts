@@ -20,6 +20,8 @@ export default async function (): Promise<void> {
 
 	const config: InterfaceConfig = ConfigFile.read();
 
+	infoLog(`Mode: '${config.Mode}'`);
+
 	const mainInverterPowerFlow = await InverterService.getPowerFlowRealtimeData(
 		ConfigFile.read().MainInverterHost
 	);
@@ -87,7 +89,6 @@ export default async function (): Promise<void> {
 	const result = calculateChargeSettings(config);
 	Object.assign(LiveData.data.Charger, result);
 	if (config.Mode === 'force_off') {
-		infoLog(`Mode set to '${config.Mode}'`);
 		if (LiveData.data.Charger.Status === CAR_CHARGING) {
 			infoLog('Car is charging -> forcing off!');
 			await ChargerService.setChargeStart();
@@ -96,7 +97,6 @@ export default async function (): Promise<void> {
 		return;
 	}
 	if (config.Mode === 'sleep') {
-		infoLog(`Mode set to '${config.Mode}'`);
 		WebSocketManager.sendEventLiveData();
 		return;
 	}

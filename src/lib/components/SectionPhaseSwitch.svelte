@@ -24,24 +24,27 @@
 	<div class="flex justify-center">
 		<div class="text-center join">
 			<button
+				data-tip="Auto"
+				class="join-item btn tooltip"
 				on:click={() => onPreferredPhaseChange(0)}
-				class="join-item btn"
 				class:btn-active={$config.PreferredPhase === 0}
 				class:btn-info={$config.PreferredPhase === 0}
 			>
 				<IconSwitch2 />
 			</button>
 			<button
+				data-tip="Phase 1"
+				class="join-item btn tooltip"
 				on:click={() => onPreferredPhaseChange(1)}
-				class="join-item btn"
 				class:btn-active={$config.PreferredPhase === 1}
 				class:btn-info={$config.PreferredPhase === 1}
 			>
 				<IconNumber1 />
 			</button>
 			<button
+				data-tip="Phase 3"
+				class="join-item btn tooltip"
 				on:click={() => onPreferredPhaseChange(2)}
-				class="join-item btn"
 				class:btn-active={$config.PreferredPhase === 2}
 				class:btn-info={$config.PreferredPhase === 2}
 			>
