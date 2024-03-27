@@ -19,7 +19,7 @@ export default class WebSocketManager {
 
 		this.wss.on('connection', (clientWs: ws.WebSocket) => {
 			const clientWithID = clientWs as WebSocketWithID;
-			clientWithID.id = uuidv4(); // Assign a UUID to the client
+			clientWithID.id = uuidv4();
 
 			this.clients.push(clientWithID);
 			infoLog(`WS Client connection established (Id: ${clientWithID.id})`);
