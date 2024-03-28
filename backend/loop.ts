@@ -91,7 +91,7 @@ export default async function (): Promise<void> {
 	if (config.Mode === 'force_off') {
 		if (LiveData.data.Charger.Status === CAR_CHARGING) {
 			infoLog('Car is charging -> forcing off!');
-			await ChargerService.setChargeStart();
+			await ChargerService.setChargeStop();
 		}
 		WebSocketManager.sendEventLiveData();
 		return;
