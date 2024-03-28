@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { appInfo, config, toasts } from '$lib/store';
+	import { appInfo, config, liveData, toasts } from '$lib/store';
 	import Toast from '$lib/components/Toast.svelte';
 	import { onMount } from 'svelte';
 	import ServiceAppInfo from '$lib/api/services/ServiceAppInfo';
@@ -10,20 +10,30 @@
 	import BackendTerminalWindow from '$lib/components/SectionBackendTerminal.svelte';
 	import SectionBackendTerminal from '$lib/components/SectionBackendTerminal.svelte';
 	import moment from 'moment';
+	import ServiceLiveData from '$lib/api/services/ServiceLiveData';
+	import { sendActivitySignal } from '$lib/utilities/UtilStoreActivityDot';
+	import { SignalStateType } from '$lib/models/SignalStateType';
+	import ServiceWebsocket from '$lib/api/services/ServiceWebsocket';
 
 	let initApplication: 'ERROR' | 'SUCCESS' | 'LOADING' = 'LOADING';
 
 	onMount(() => {
-		Promise.all([ServiceAppInfo.getAppInfo(), ServiceConfig.getConfig()])
-			.then(([appInfoResponse, configResponse]) => {
+		Promise.all([
+			ServiceAppInfo.getAppInfo(),
+			ServiceConfig.getConfig(),
+			ServiceLiveData.getLiveData()
+		])
+			.then(([appInfoResponse, configResponse, liveDataResponse]) => {
 				appInfo.set(appInfoResponse);
-				console.log(JSON.stringify(configResponse, null, 2));
 				config.set(configResponse);
-				newSuccessToast('Loaded app info and config');
+				liveData.set(liveDataResponse);
+				sendActivitySignal(SignalStateType.LIVEDATA);
+				newSuccessToast('Loaded app info, config and liveData');
+				ServiceWebsocket.initSocket();
 				initApplication = 'SUCCESS';
 			})
 			.catch((_error) => {
-				newErrorToast('Error loading app info or config');
+				newErrorToast('Error loading app info, config and liveData');
 				initApplication = 'ERROR';
 			});
 	});

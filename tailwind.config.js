@@ -9,7 +9,7 @@ export default {
 		themes: [
 			{
 				custom: {
-					...require('daisyui/src/theming/themes')['dark'],
+					...require('daisyui/src/theming/themes')['dracula'],
 					'--rounded-badge': '0.8rem'
 				}
 			}
