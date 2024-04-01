@@ -1,6 +1,6 @@
 {
 	"name": "chargecontroller",
-	"version": "1.0.13.1",
+	"version": "1.0.14",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev --host 0.0.0.0",
