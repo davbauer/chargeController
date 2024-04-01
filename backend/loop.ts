@@ -16,8 +16,7 @@ export default async function (): Promise<void> {
 	infoLog('\n---------------------------------------------------------------');
 	infoLog('LOOP (' + ConfigFile.read().CheckSeconds + 's) --------------------|');
 
-	LiveData.data = LiveData.defaultData;
-
+	LiveData.setDefault();
 	const config: InterfaceConfig = ConfigFile.read();
 
 	infoLog(`Mode: '${config.Mode}'`);

@@ -97,7 +97,7 @@ export default class {
 		try {
 			const jsonData = JSON.stringify(config, null, 4);
 			fs.writeFileSync(this.filePath, jsonData, 'utf-8');
-			this.cachedConfig = config;
+			this.cachedConfig = JSON.parse(JSON.stringify(config));
 			return true;
 		} catch (error) {
 			errorLog(`ConfigFile.write: Error writing config: ${error}`);
