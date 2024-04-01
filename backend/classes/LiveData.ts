@@ -1,7 +1,7 @@
 import InterfaceLiveData from '../models/InterfaceLiveData.js';
 
 export default class {
-	static defaultData: InterfaceLiveData = {
+	private static defaultData: InterfaceLiveData = {
 		Timestamp: null,
 		Inverter: {
 			Export: -1,
@@ -32,5 +32,9 @@ export default class {
 			Power: -1
 		}
 	};
+
+	static setDefault(): void {
+		this.data = JSON.parse(JSON.stringify(this.defaultData));
+	}
 	static data: InterfaceLiveData = this.defaultData;
 }
