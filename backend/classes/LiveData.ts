@@ -34,7 +34,7 @@ export default class {
 	};
 
 	static setDefault(): void {
-		this.data = JSON.parse(JSON.stringify(this.defaultData));
+		this.data = structuredClone(this.defaultData);
 	}
 	static data: InterfaceLiveData = this.defaultData;
 }
