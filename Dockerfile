@@ -26,10 +26,10 @@ COPY --from=backend /app/ ./
 COPY --from=backend /app/yarn.lock ./
 RUN yarn install && yarn cache clean
 COPY --from=svelte /app/build ./svelte-build
-ARG GIT_COMMITID
-ARG GIT_BRANCH
-ENV COMMITID=${GIT_COMMITID}
-ENV BRANCH=${GIT_BRANCH}
+ARG COMMITID
+ARG BRANCH
+ENV COMMITID=${COMMITID}
+ENV BRANCH=${BRANCH}
 RUN printenv
 EXPOSE 80
 EXPOSE 81
